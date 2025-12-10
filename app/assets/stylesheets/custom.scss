@@ -2,3 +2,50 @@
 //
 // You can also create SCSS files in the app/assets/stylesheets/custom/
 // folder and they will be loaded automatically.
+
+.locale {
+  .locale-form {
+    select {
+      background: #000000;
+      color: color-pick-contrast(#000000);
+    }
+  }
+}
+
+.subnavigation {
+  @include breakpoint(small only) {
+    li {
+      a,
+      .button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.account-menu.menu {
+  li {
+    @include breakpoint(small only) {
+      a,
+      .button {
+        width: 100%;
+      }
+    }
+    .button {
+      background: #fbe116;
+      color: $black;
+    }
+    a,
+    .button {
+      font-weight: 600;
+    }
+  }
+}
+
+.auth-page {
+  .auth-image {
+    background-image: none !important;
+    background: $white;
+    border-right: 2px solid $brand-secondary;
+  }
+}
