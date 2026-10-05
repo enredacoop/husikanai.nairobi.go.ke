@@ -1,0 +1,15 @@
+sw:
+  activerecord:
+    attributes:
+      budget/investment:
+        group_id: "Kundi la vichwa vya bajeti"
+  admin:
+    budget_investments:
+      index:
+        group_filter_all: Makundi yote
+  budgets:
+    groups:
+      investments_link: "Tazama miradi yote ya uwekezaji katika %{group}"
+    investments:
+      index:
+        by_group: "Miradi ya uwekezaji katika %{group}"

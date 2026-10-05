@@ -1,0 +1,15 @@
+es:
+  activerecord:
+    attributes:
+      budget/investment:
+        group_id: "Grupo de partidas"
+  admin:
+    budget_investments:
+      index:
+        group_filter_all: Todos los grupos
+  budgets:
+    groups:
+      investments_link: "Ver todos los proyectos de gasto de %{group}"
+    investments:
+      index:
+        by_group: "Proyectos de gasto de %{group}"
