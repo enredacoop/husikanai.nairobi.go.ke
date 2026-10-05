@@ -106,6 +106,7 @@ module Consul
       "so",
       "sr",
       "sv",
+      "sw-KE",
       "tr",
       "uk-UA",
       "val",
