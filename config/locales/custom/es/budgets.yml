@@ -2,11 +2,11 @@ es:
   activerecord:
     attributes:
       budget/investment:
-        group_id: "Grupo de partidas"
+        group_id: "Subcondado"
   admin:
     budget_investments:
       index:
-        group_filter_all: Todos los grupos
+        group_filter_all: Todos los subcondados
   budgets:
     groups:
       investments_link: "Ver todos los proyectos de gasto de %{group}"

@@ -6,7 +6,7 @@ describe Admin::BudgetHeadings::HeadingsComponent, :admin do
 
     render_inline Admin::BudgetHeadings::HeadingsComponent.new(group.headings)
 
-    expect(page.text.strip).to eq "There are no headings in the Whole planet group."
+    expect(page.text.strip).to eq "There are no wards in the Whole planet subcounty."
     expect(page).to have_css "strong", exact_text: "Whole planet"
   end
 

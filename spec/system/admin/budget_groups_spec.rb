@@ -10,7 +10,7 @@ describe "Admin budget groups", :admin do
     scenario "finds budget and group by slug" do
       visit edit_admin_budget_group_path("budget_slug", "group_slug")
       expect(page).to have_content(budget.name)
-      expect(page).to have_field "Group name", with: group.name
+      expect(page).to have_field "Subcounty name", with: group.name
     end
   end
 
@@ -18,8 +18,8 @@ describe "Admin budget groups", :admin do
     scenario "Displaying no groups for budget" do
       visit admin_budget_path(budget)
 
-      within "section", text: "Heading groups" do
-        expect(page.text).to eq "Heading groups\nAdd group"
+      within "section", text: "Boroughs, subcounties and wards" do
+        expect(page.text).to eq "Boroughs, subcounties and wards\nAdd borough\nAdd subcounty"
       end
     end
 
@@ -32,7 +32,7 @@ describe "Admin budget groups", :admin do
 
       visit admin_budget_path(budget)
 
-      within "section", text: "Heading groups" do
+      within "section", text: "Boroughs, subcounties and wards" do
         within "section", text: "Above ground" do
           expect(page).to have_css "h4", exact_text: "Above ground"
           expect(page).not_to have_content "Maximum number of headings"
@@ -40,7 +40,7 @@ describe "Admin budget groups", :admin do
 
         within "section", text: "Below ground" do
           expect(page).to have_css "h4", exact_text: "Below ground"
-          expect(page).to have_content "Maximum number of headings in which a user can select projects 1"
+          expect(page).to have_content "Maximum number of wards in which a user can select projects 1"
         end
       end
     end
@@ -54,7 +54,7 @@ describe "Admin budget groups", :admin do
         click_button "Delete Nowhere"
       end
 
-      expect(page).to have_content "Group deleted successfully"
+      expect(page).to have_content "Subcounty deleted successfully"
       expect(page).not_to have_content "Nowhere"
     end
 
@@ -67,7 +67,7 @@ describe "Admin budget groups", :admin do
       accept_confirm("Are you sure? This action will delete \"Everywhere\" and can't be undone.") do
         click_button "Delete Everywhere"
       end
-      expect(page).to have_content "You cannot delete a Group that has associated headings"
+      expect(page).to have_content "You cannot delete a subcounty that has associated wards"
       expect(page).to have_content "Everywhere"
     end
   end
@@ -75,25 +75,25 @@ describe "Admin budget groups", :admin do
   context "New" do
     scenario "Create group" do
       visit admin_budget_path(budget)
-      click_link "Add group"
+      click_link "Add subcounty"
 
-      fill_in "Group name", with: "All City"
+      fill_in "Subcounty name", with: "All City"
 
-      click_button "Create new group"
+      click_button "Create new subcounty"
 
-      expect(page).to have_content "Group created successfully!"
+      expect(page).to have_content "Subcounty created successfully!"
 
-      within "section", text: "Heading groups" do
+      within "section", text: "Boroughs, subcounties and wards" do
         expect(page).to have_css "h4", exact_text: "All City"
       end
     end
 
-    scenario "Group name is mandatory" do
+    scenario "Subcounty name is mandatory" do
       visit new_admin_budget_group_path(budget)
-      click_button "Create new group"
+      click_button "Create new subcounty"
 
-      expect(page).not_to have_content "Group created successfully!"
-      expect(page).to have_css(".is-invalid-label", text: "Group name")
+      expect(page).not_to have_content "Subcounty created successfully!"
+      expect(page).to have_css(".is-invalid-label", text: "Subcounty name")
       expect(page).to have_content "can't be blank"
     end
   end
@@ -107,8 +107,8 @@ describe "Admin budget groups", :admin do
 
       click_link "Edit Everywhere"
 
-      expect(page).to have_field "Group name", with: "Everywhere"
-      expect(page).to have_field "Maximum number of headings in which a user can select projects", with: "2"
+      expect(page).to have_field "Subcounty name", with: "Everywhere"
+      expect(page).to have_field "Maximum number of wards in which a user can select projects", with: "2"
     end
 
     describe "Select for maximum number of headings to select projects" do
@@ -118,7 +118,7 @@ describe "Admin budget groups", :admin do
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).to have_field "Maximum number of headings in which a user can select projects"
+        expect(page).to have_field "Maximum number of wards in which a user can select projects"
       end
 
       scenario "is not present if there's only one heading in the group" do
@@ -127,7 +127,7 @@ describe "Admin budget groups", :admin do
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).not_to have_field "Maximum number of headings in which a user can select projects"
+        expect(page).not_to have_field "Maximum number of wards in which a user can select projects"
       end
 
       scenario "is not present if there are no headings in the group" do
@@ -135,7 +135,7 @@ describe "Admin budget groups", :admin do
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).not_to have_field "Maximum number of headings in which a user can select projects"
+        expect(page).not_to have_field "Maximum number of wards in which a user can select projects"
       end
     end
 
@@ -145,10 +145,10 @@ describe "Admin budget groups", :admin do
       visit edit_admin_budget_group_path(budget, group)
 
       select "Español", from: "Add language"
-      fill_in "Group name", with: "Spanish name"
-      click_button "Save group"
+      fill_in "Subcounty name", with: "Spanish name"
+      click_button "Save subcounty"
 
-      expect(page).to have_content "Group updated successfully"
+      expect(page).to have_content "Subcounty updated successfully"
 
       visit budget_group_path(budget, id: "old-english-name")
 
@@ -157,10 +157,10 @@ describe "Admin budget groups", :admin do
       visit edit_admin_budget_group_path(budget, group)
 
       select "English", from: "Current language"
-      fill_in "Group name", with: "New English Name"
-      click_button "Save group"
+      fill_in "Subcounty name", with: "New English Name"
+      click_button "Save subcounty"
 
-      expect(page).to have_content "Group updated successfully"
+      expect(page).to have_content "Subcounty updated successfully"
 
       visit budget_group_path(budget, id: "new-english-name")
 
@@ -175,30 +175,30 @@ describe "Admin budget groups", :admin do
       2.times { create(:budget_heading, group: group) }
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Group name", with: "All City"
+      expect(page).to have_field "Subcounty name", with: "All City"
 
-      fill_in "Group name", with: "Districts"
-      select "2", from: "Maximum number of headings in which a user can select projects"
-      click_button "Save group"
+      fill_in "Subcounty name", with: "Districts"
+      select "2", from: "Maximum number of wards in which a user can select projects"
+      click_button "Save subcounty"
 
-      expect(page).to have_content "Group updated successfully"
+      expect(page).to have_content "Subcounty updated successfully"
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Group name", with: "Districts"
-      expect(page).to have_field "Maximum number of headings in which a user can select projects", with: "2"
+      expect(page).to have_field "Subcounty name", with: "Districts"
+      expect(page).to have_field "Maximum number of wards in which a user can select projects", with: "2"
     end
 
-    scenario "Group name is already used" do
+    scenario "Subcounty name is already used" do
       create(:budget_group, budget: budget, name: "Districts")
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Group name", with: "All City"
+      expect(page).to have_field "Subcounty name", with: "All City"
 
-      fill_in "Group name", with: "Districts"
-      click_button "Save group"
+      fill_in "Subcounty name", with: "Districts"
+      click_button "Save subcounty"
 
-      expect(page).not_to have_content "Group updated successfully"
-      expect(page).to have_css(".is-invalid-label", text: "Group name")
+      expect(page).not_to have_content "Subcounty updated successfully"
+      expect(page).to have_css(".is-invalid-label", text: "Subcounty name")
       expect(page).to have_css("small.form-error", text: "has already been taken")
     end
   end

@@ -34,7 +34,7 @@ describe Admin::Budgets::IndexComponent, controller: Admin::BudgetsController do
       render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
 
       expect(page.find("thead")).to have_content "Type"
-      expect(page.find("tr", text: "With type")).to have_content "Single heading"
+      expect(page.find("tr", text: "With type")).to have_content "Single ward"
     end
 
     it "displays 'multiple headings' for budgets with multiple headings" do
@@ -43,7 +43,7 @@ describe Admin::Budgets::IndexComponent, controller: Admin::BudgetsController do
       render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
 
       expect(page.find("thead")).to have_content "Type"
-      expect(page.find("tr", text: "With type")).to have_content "Multiple headings"
+      expect(page.find("tr", text: "With type")).to have_content "Multiple wards"
     end
 
     it "displays 'pending: no headings yet' for budgets without headings" do
@@ -52,7 +52,7 @@ describe Admin::Budgets::IndexComponent, controller: Admin::BudgetsController do
       render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
 
       expect(page.find("thead")).to have_content "Type"
-      expect(page.find("tr", text: "Without headings")).to have_content "Pending: No headings yet"
+      expect(page.find("tr", text: "Without headings")).to have_content "Pending: No wards yet"
     end
   end
 end

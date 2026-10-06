@@ -2,11 +2,11 @@ sw-KE:
   activerecord:
     attributes:
       budget/investment:
-        group_id: "Kundi la vichwa vya bajeti"
+        group_id: "Kaunti ndogo"
   admin:
     budget_investments:
       index:
-        group_filter_all: Makundi yote
+        group_filter_all: Kaunti ndogo zote
   budgets:
     groups:
       investments_link: "Tazama miradi yote ya uwekezaji katika %{group}"

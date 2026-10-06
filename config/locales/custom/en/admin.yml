@@ -1,0 +1,126 @@
+en:
+  activerecord:
+    attributes:
+      budget/group:
+        max_votable_headings: "Maximum number of wards in which a user can select projects"
+      budget/group/translation:
+        name: "Subcounty name"
+      budget/heading:
+        name: "Ward name"
+      budget/heading/translation:
+        name: "Ward name"
+      budget/investment:
+        heading_id: "Ward"
+  admin:
+    budgets:
+      actions:
+        confirm:
+          destroy: "Are you sure? This will delete the budget and all its associated boroughs, subcounties and wards. This action cannot be undone."
+        descriptions:
+          destroy: "This will delete the budget and all its associated boroughs, subcounties and wards. This action cannot be undone."
+      index:
+        type_multiple: "Multiple wards"
+        type_pending: "Pending: No wards yet"
+        type_single: "Single ward"
+      new:
+        title_multiple: "New multiple wards budget"
+        title_single: "New single ward budget"
+      help:
+        groups:
+          multiple: "Subcounties are meant to organize wards. After a subcounty is created and it contains wards, it's possible to determine in how many wards a user can vote per subcounty."
+          single: "Subcounties are meant to organize wards, since this budget will only contain one ward, the same name can be used because it will not appear anywhere. You can just continue with the next step."
+        headings:
+          multiple: "Wards are meant to divide the money of the participatory budget. Here you can add wards for this subcounty and assign the amount of money that will be used for each ward."
+          single: "Wards are meant to divide the money of the participatory budget. Since this budget will only contain one ward, this is the place where you establish the money that will be spent in this participatory budget."
+      show:
+        add_group: "Add subcounty"
+        add_heading: "Add ward"
+        groups_and_headings: "Boroughs, subcounties and wards"
+        headings_caption: "Wards in %{group}"
+    budget_groups:
+      headings_name: "Wards"
+      headings_manage: "Wards"
+      no_groups: "There are no subcounties."
+      amount:
+        one: "There is 1 subcounty"
+        other: "There are %{count} subcounties"
+      create:
+        notice: "Subcounty created successfully!"
+      update:
+        notice: "Subcounty updated successfully"
+      destroy:
+        success_notice: "Subcounty deleted successfully"
+        unable_notice: "You cannot delete a subcounty that has associated wards"
+      form:
+        create: "Create new subcounty"
+        edit: "Edit subcounty"
+        max_votable_headings_info: "Only applies to the selecting projects phase. During the voting projects phase users can only vote in one ward per subcounty."
+        submit: "Save subcounty"
+      index:
+        new_button: "Add new subcounty"
+    budget_headings:
+      no_headings: "There are no wards in the <strong>%{group}</strong> subcounty."
+      create:
+        notice: "Ward created successfully!"
+      update:
+        notice: "Ward updated successfully"
+      destroy:
+        success_notice: "Ward deleted successfully"
+        unable_notice: "You cannot delete a ward that has associated investments"
+      form:
+        geozone_info: "When a ward is associated with a geozone, the geozone will appear on this budget's map if the geozone includes GeoJSON data."
+        max_ballot_lines_info: "Maximum number of projects a user can vote on this ward during the \"Voting projects\" phase. Only for budgets using approval voting."
+        population_info: "Ward population field is used for Statistic purposes at the end of the Budget to show for each ward what percentage voted. The field is optional so you can leave it empty if it doesn't apply."
+        coordinates_info: "If latitude and longitude are provided, the investments page for this ward will include a map. This map will be centered using those coordinates."
+        content_blocks_info: "If allow content block is checked, you will be able to create custom content related to this ward from the section Site content > Custom content blocks. This content will appear on the investments page for this ward."
+        create: "Create new ward"
+        edit: "Edit ward"
+        submit: "Save ward"
+      group_switcher:
+        currently_showing: "Showing wards from the <strong>%{group}</strong> subcounty."
+        the_other_group: "Manage wards from the %{group} subcounty."
+      index:
+        back: "Go back to subcounties"
+        new_button: "Add new ward"
+        title: "%{budget} / %{group} wards"
+    budget_investments:
+      index:
+        heading_filter_all: "All wards"
+      show:
+        info: "%{budget_name} - Subcounty: %{group_name} - Investment project %{id}"
+        group: "Subcounty"
+        heading: "Ward"
+      edit:
+        select_heading: "Select ward"
+    budgets_wizard:
+      creation_timeline:
+        groups: "Subcounties"
+        headings: "Wards"
+      budgets:
+        continue: "Continue to subcounties"
+      groups:
+        continue: "Continue to wards"
+      headings:
+        single:
+          back: "Go back to edit subcounty"
+      heading_mode:
+        multiple:
+          link: "Create multiple wards budget"
+          title: "<strong>Multiple wards</strong> budget"
+        single:
+          link: "Create single ward budget"
+          title: "<strong>Single ward</strong> budget"
+      phases:
+        multiple:
+          back: "Go back to wards"
+        single:
+          back: "Go back to edit ward"
+    shared:
+      search:
+        label:
+          budget_investments: "Search investments by title, description or ward"
+    stats:
+      budget_balloting:
+        votes_per_heading: "Votes per ward"
+      budget_supporting:
+        headings: "Wards"

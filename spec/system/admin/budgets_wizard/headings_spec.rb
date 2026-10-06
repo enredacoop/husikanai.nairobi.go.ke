@@ -12,7 +12,7 @@ describe "Budgets wizard, headings step", :admin do
         expect(page).to have_css "[aria-current]", exact_text: "Participatory budgets"
       end
 
-      click_link "Go back to groups"
+      click_link "Go back to subcounties"
 
       expect(page).to have_css "tr", text: "Default group"
       expect(page).to have_css ".creation-timeline"
@@ -35,7 +35,7 @@ describe "Budgets wizard, headings step", :admin do
 
       expect(page).not_to have_link "Health"
 
-      click_link "Manage headings from the Health group."
+      click_link "Manage wards from the Health subcounty."
 
       within(".heading") do
         expect(page).to have_content "Hospitals"
@@ -49,40 +49,40 @@ describe "Budgets wizard, headings step", :admin do
     scenario "cancel creating a heading" do
       visit admin_budgets_wizard_budget_group_headings_path(budget, group)
 
-      expect(page).not_to have_field "Heading name"
+      expect(page).not_to have_field "Ward name"
       expect(page).not_to have_button "Cancel"
       expect(page).to have_content "Continue to phases"
 
-      click_button "Add new heading"
+      click_button "Add new ward"
 
-      expect(page).to have_field "Heading name"
-      expect(page).not_to have_button "Add new heading"
+      expect(page).to have_field "Ward name"
+      expect(page).not_to have_button "Add new ward"
       expect(page).not_to have_content "Continue to phases"
 
       click_button "Cancel"
 
-      expect(page).to have_button "Add new heading"
-      expect(page).not_to have_field "Heading name"
+      expect(page).to have_button "Add new ward"
+      expect(page).not_to have_field "Ward name"
       expect(page).not_to have_button "Cancel"
       expect(page).to have_content "Continue to phases"
     end
 
     scenario "submit the form with errors" do
       visit admin_budgets_wizard_budget_group_headings_path(budget, group)
-      click_button "Add new heading"
+      click_button "Add new ward"
 
-      click_button "Create new heading"
+      click_button "Create new ward"
 
-      expect(page).to have_css(".is-invalid-label", text: "Heading name")
+      expect(page).to have_css(".is-invalid-label", text: "Ward name")
       expect(page).to have_content "can't be blank"
-      expect(page).to have_button "Create new heading"
+      expect(page).to have_button "Create new ward"
       expect(page).to have_button "Cancel"
-      expect(page).not_to have_content "Heading created successfully!"
-      expect(page).not_to have_button "Add new heading"
+      expect(page).not_to have_content "Ward created successfully!"
+      expect(page).not_to have_button "Add new ward"
       expect(page).not_to have_content "Continue to phases"
 
       within ".budgets-help" do
-        expect(page).to have_content "Headings are meant"
+        expect(page).to have_content "Wards are meant"
         expect(page).not_to have_content "{"
       end
     end
@@ -97,40 +97,40 @@ describe "Budgets wizard, headings step", :admin do
       expect(page).to have_css ".creation-timeline"
 
       within("tr", text: "Heading wiht a typo") { click_link "Edit" }
-      fill_in "Heading name", with: ""
-      click_button "Save heading"
+      fill_in "Ward name", with: ""
+      click_button "Save ward"
 
       expect(page).to have_css "#error_explanation"
       expect(page).to have_css ".creation-timeline"
 
-      fill_in "Heading name", with: "Heading without typos"
-      click_button "Save heading"
+      fill_in "Ward name", with: "Heading without typos"
+      click_button "Save ward"
 
-      expect(page).to have_content "Heading updated successfully"
+      expect(page).to have_content "Ward updated successfully"
       expect(page).to have_css ".creation-timeline"
       expect(page).to have_css "td", exact_text: "Heading without typos"
     end
 
-    scenario "update heading in single heading budget" do
+    scenario "update heading in single ward budget" do
       visit admin_budgets_wizard_budget_group_headings_path(budget, group, mode: "single")
-      fill_in "Heading name", with: "Heading wiht typo"
+      fill_in "Ward name", with: "Heading wiht typo"
       fill_in "Money amount", with: "300000"
       click_button "Continue to phases"
 
-      expect(page).to have_content "Heading created successfully"
+      expect(page).to have_content "Ward created successfully"
 
-      click_link "Go back to edit heading"
+      click_link "Go back to edit ward"
 
-      expect(page).to have_field "Heading name", with: "Heading wiht typo"
+      expect(page).to have_field "Ward name", with: "Heading wiht typo"
 
-      fill_in "Heading name", with: "Heading without typos"
+      fill_in "Ward name", with: "Heading without typos"
       click_button "Continue to phases"
 
-      expect(page).to have_content "Heading updated successfully"
+      expect(page).to have_content "Ward updated successfully"
 
       visit admin_budget_path(budget)
 
-      within "section", text: "Heading groups" do
+      within "section", text: "Boroughs, subcounties and wards" do
         within("tbody tr") { expect(page).to have_content "Heading without typos" }
       end
     end
@@ -143,7 +143,7 @@ describe "Budgets wizard, headings step", :admin do
       visit admin_budgets_wizard_budget_group_headings_path(budget, group)
       within("tr", text: "Delete me!") { accept_confirm { click_button "Delete" } }
 
-      expect(page).to have_content "Heading deleted successfully"
+      expect(page).to have_content "Ward deleted successfully"
       expect(page).not_to have_content "Delete me!"
       expect(page).to have_css ".creation-timeline"
     end
@@ -156,7 +156,7 @@ describe "Budgets wizard, headings step", :admin do
 
       within("tr", text: "Don't delete me!") { accept_confirm { click_button "Delete" } }
 
-      expect(page).to have_content "You cannot delete a Heading that has associated investments"
+      expect(page).to have_content "You cannot delete a ward that has associated investments"
       expect(page).to have_content "Don't delete me!"
       expect(page).to have_css ".creation-timeline"
     end

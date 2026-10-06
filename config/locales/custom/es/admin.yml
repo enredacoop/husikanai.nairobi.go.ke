@@ -1,0 +1,126 @@
+es:
+  activerecord:
+    attributes:
+      budget/group:
+        max_votable_headings: "Máximo número de barrios en que un usuario puede seleccionar proyectos"
+      budget/group/translation:
+        name: "Nombre del subcondado"
+      budget/heading:
+        name: "Nombre del barrio"
+      budget/heading/translation:
+        name: "Nombre del barrio"
+      budget/investment:
+        heading_id: "Barrio"
+  admin:
+    budgets:
+      actions:
+        confirm:
+          destroy: "¿Seguro? Esta acción borrará el presupuesto y todos sus municipios, subcondados y barrios. Esta acción no se puede deshacer."
+        descriptions:
+          destroy: "Esta acción borrará el presupuesto y todos sus municipios, subcondados y barrios. Esta acción no se puede deshacer."
+      index:
+        type_multiple: "Múltiples barrios"
+        type_pending: "Pendiente: Aún no hay barrios"
+        type_single: "Barrio único"
+      new:
+        title_multiple: "Nuevo presupuesto de múltiples barrios"
+        title_single: "Nuevo presupuesto de barrio único"
+      help:
+        groups:
+          multiple: "Los subcondados sirven para organizar los barrios del presupuesto. Después de que un subcondado sea creado y éste contenga barrios, es posible determinar el número de barrios a los que un usuario puede votar por subcondado."
+          single: "Los subcondados sirven para organizar los barrios del presupuesto, como este presupuesto sólo contendrá un barrio, se puede usar el mismo nombre y éste no aparecerá en ninguna parte. Puedes continuar con el siguiente paso."
+        headings:
+          multiple: "Los barrios sirven para dividir el dinero del presupuesto participativo. Aquí puedes ir añadiendo barrios para cada subcondado y establecer la cantidad de dinero que se gastará en cada barrio."
+          single: "Los barrios sirven para dividir el dinero del presupuesto participativo. Como este presupuesto solo tendrá un barrio aquí podrás establecer la cantidad de dinero que se gastará en este presupuesto participativo."
+      show:
+        add_group: "Añadir subcondado"
+        add_heading: "Añadir barrio"
+        groups_and_headings: "Municipios, subcondados y barrios"
+        headings_caption: "Barrios del subcondado %{group}"
+    budget_groups:
+      headings_name: "Barrios"
+      headings_manage: "Barrios"
+      no_groups: "No hay subcondados."
+      amount:
+        one: "Hay 1 subcondado"
+        other: "Hay %{count} subcondados"
+      create:
+        notice: "¡Subcondado creado con éxito!"
+      update:
+        notice: "Subcondado actualizado"
+      destroy:
+        success_notice: "Subcondado eliminado correctamente"
+        unable_notice: "No se puede eliminar un subcondado con barrios asociados"
+      form:
+        create: "Crear nuevo subcondado"
+        edit: "Editar subcondado"
+        max_votable_headings_info: "Solo se aplica en la fase de apoyos. Durante la votación final un usuario solo puede votar en un barrio por subcondado."
+        submit: "Guardar subcondado"
+      index:
+        new_button: "Añadir un subcondado nuevo"
+    budget_headings:
+      no_headings: "El subcondado <strong>%{group}</strong> no tiene ningún barrio."
+      create:
+        notice: "¡Barrio creado con éxito!"
+      update:
+        notice: "Barrio actualizado"
+      destroy:
+        success_notice: "Barrio eliminado correctamente"
+        unable_notice: "No se puede eliminar un barrio con proyectos asociados"
+      form:
+        geozone_info: "Cuando se asocia un barrio a una zona, la zona aparecerá en el mapa de este presupuesto si la zona incluye datos de GeoJSON."
+        max_ballot_lines_info: "Máximo número de proyectos que un usuario puede votar en este barrio durante la fase \"Votación final\". Solamente se aplica a presupuestos con votación por aprobación."
+        population_info: "El campo población de los barrios se usa con fines estadísticos únicamente, con el objetivo de mostrar el porcentaje de votos habidos en cada barrio. Es un campo opcional, así que puedes dejarlo en blanco si no aplica."
+        coordinates_info: "Si se añaden los campos latitud y longitud, en la página de proyectos de este barrio aparecerá un mapa, que estará centrado en esas coordenadas."
+        content_blocks_info: "Si se permite el bloque de contenidos, se tendrá la oportunidad de crear bloques de contenido relativos a este barrio desde la sección Contenido del sitio > Personalizar bloques. Este contenido aparecerá en la página de proyectos de este barrio."
+        create: "Crear nuevo barrio"
+        edit: "Editar barrio"
+        submit: "Guardar barrio"
+      group_switcher:
+        currently_showing: "Mostrando los barrios del subcondado <strong>%{group}</strong>."
+        the_other_group: "Ir a barrios del subcondado %{group}."
+      index:
+        back: "Volver a subcondados"
+        new_button: "Añadir un barrio nuevo"
+        title: "Barrios de %{budget} / %{group}"
+    budget_investments:
+      index:
+        heading_filter_all: "Todos los barrios"
+      show:
+        info: "%{budget_name} - Subcondado: %{group_name} - Proyecto de gasto %{id}"
+        group: "Subcondado"
+        heading: "Barrio"
+      edit:
+        select_heading: "Seleccionar barrio"
+    budgets_wizard:
+      creation_timeline:
+        groups: "Subcondados"
+        headings: "Barrios"
+      budgets:
+        continue: "Continuar a subcondados"
+      groups:
+        continue: "Continuar a barrios"
+      headings:
+        single:
+          back: "Volver a editar subcondado"
+      heading_mode:
+        multiple:
+          link: "Crear presupuesto de múltiples barrios"
+          title: "Presupuesto de <strong>múltiples barrios</strong>"
+        single:
+          link: "Crear presupuesto de barrio único"
+          title: "Presupuesto de <strong>barrio único</strong>"
+      phases:
+        multiple:
+          back: "Volver a barrios"
+        single:
+          back: "Volver a editar barrio"
+    shared:
+      search:
+        label:
+          budget_investments: "Buscar proyectos por título, descripción o barrio"
+    stats:
+      budget_balloting:
+        votes_per_heading: "Votos por barrio"
+      budget_supporting:
+        headings: "Barrios"

@@ -2,11 +2,11 @@ en:
   activerecord:
     attributes:
       budget/investment:
-        group_id: "Group of headings"
+        group_id: "Subcounty"
   admin:
     budget_investments:
       index:
-        group_filter_all: All groups
+        group_filter_all: All subcounties
   budgets:
     groups:
       investments_link: "See all investment projects in %{group}"

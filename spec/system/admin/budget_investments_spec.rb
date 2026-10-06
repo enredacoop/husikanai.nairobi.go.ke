@@ -95,28 +95,28 @@ describe "Admin budget investments", :admin do
       expect(page).to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "Parks: Central Park", from: "Heading"
+      select "Parks: Central Park", from: "Ward"
       click_button "Filter"
 
       expect(page).not_to have_link("Realocate visitors")
       expect(page).not_to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "All headings", from: "Heading"
+      select "All wards", from: "Ward"
       click_button "Filter"
 
       expect(page).to have_link("Realocate visitors")
       expect(page).to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "Streets: Main Avenue", from: "Heading"
+      select "Streets: Main Avenue", from: "Ward"
       click_button "Filter"
 
       expect(page).to have_link("Realocate visitors")
       expect(page).not_to have_link("Change name")
       expect(page).not_to have_link("Plant trees")
 
-      select "Streets: Mercy Street", from: "Heading"
+      select "Streets: Mercy Street", from: "Ward"
       click_button "Filter"
 
       expect(page).not_to have_link("Realocate visitors")

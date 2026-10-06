@@ -24,7 +24,7 @@ describe "Admin budgets", :admin do
 
       within "tr", text: budget.name do
         expect(page).to have_content "Accepting projects"
-        expect(page).to have_content "Pending: No headings yet"
+        expect(page).to have_content "Pending: No wards yet"
       end
     end
 
@@ -90,7 +90,7 @@ describe "Admin budgets", :admin do
     scenario "Create budget - Approval voting with hide money" do
       visit admin_budgets_path
       click_button "Create new budget"
-      click_link "Create multiple headings budget"
+      click_link "Create multiple wards budget"
 
       expect(page).to have_select("Final voting style", selected: "Knapsack")
       expect(page).not_to have_css "#budget_hide_money"
@@ -98,7 +98,7 @@ describe "Admin budgets", :admin do
       fill_in "Name", with: "Budget hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to groups"
+      click_button "Continue to subcounties"
 
       expect(page).to have_content "New participatory budget created successfully!"
       expect(page).to have_content "Budget hide money"
@@ -112,47 +112,47 @@ describe "Admin budgets", :admin do
     scenario "Create a budget with hide money by steps" do
       visit admin_budgets_path
       click_button "Create new budget"
-      click_link "Create multiple headings budget"
+      click_link "Create multiple wards budget"
 
-      fill_in "Name", with: "Multiple headings budget with hide money"
+      fill_in "Name", with: "Multiple wards budget with hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to groups"
+      click_button "Continue to subcounties"
 
       expect(page).to have_content "New participatory budget created successfully!"
-      expect(page).to have_content "There are no groups."
+      expect(page).to have_content "There are no subcounties."
 
-      click_button "Add new group"
-      fill_in "Group name", with: "All city"
-      click_button "Create new group"
+      click_button "Add new subcounty"
+      fill_in "Subcounty name", with: "All city"
+      click_button "Create new subcounty"
 
-      expect(page).to have_content "Group created successfully!"
+      expect(page).to have_content "Subcounty created successfully!"
 
       within("#notice") { click_button "Close" }
-      expect(page).not_to have_content "Group created successfully!"
+      expect(page).not_to have_content "Subcounty created successfully!"
 
-      click_button "Add new group"
-      fill_in "Group name", with: "District A"
-      click_button "Create new group"
+      click_button "Add new subcounty"
+      fill_in "Subcounty name", with: "District A"
+      click_button "Create new subcounty"
 
-      expect(page).to have_content "Group created successfully!"
+      expect(page).to have_content "Subcounty created successfully!"
 
       within("table") do
         expect(page).to have_content "All city"
         expect(page).to have_content "District A"
       end
-      expect(page).not_to have_content "There are no groups."
+      expect(page).not_to have_content "There are no subcounties."
 
-      click_link "Continue to headings"
+      click_link "Continue to wards"
 
-      expect(page).to have_content "Showing headings from the All city group."
-      expect(page).to have_link "Manage headings from the District A group."
+      expect(page).to have_content "Showing wards from the All city subcounty."
+      expect(page).to have_link "Manage wards from the District A subcounty."
 
-      click_button "Add new heading"
-      fill_in "Heading name", with: "All city"
-      click_button "Create new heading"
+      click_button "Add new ward"
+      fill_in "Ward name", with: "All city"
+      click_button "Create new ward"
 
-      expect(page).to have_content "Heading created successfully!"
+      expect(page).to have_content "Ward created successfully!"
       expect(page).to have_content "All city"
       expect(page).to have_link "Continue to phases"
       expect(page).not_to have_content "There are no headings."
@@ -194,7 +194,7 @@ describe "Admin budgets", :admin do
       visit admin_budget_path(budget)
 
       message = "Are you sure? " \
-                "This will delete the budget and all its associated groups and headings. " \
+                "This will delete the budget and all its associated boroughs, subcounties and wards. " \
                 "This action cannot be undone."
 
       accept_confirm(message) { click_button "Delete budget" }

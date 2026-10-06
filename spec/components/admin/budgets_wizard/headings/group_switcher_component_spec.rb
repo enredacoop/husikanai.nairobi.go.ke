@@ -16,8 +16,8 @@ describe Admin::BudgetsWizard::Headings::GroupSwitcherComponent do
 
     render_inline Admin::BudgetsWizard::Headings::GroupSwitcherComponent.new(group)
 
-    expect(page).to have_content "Showing headings from the Parks group"
-    expect(page).to have_link "Manage headings from the Recreation group."
+    expect(page).to have_content "Showing wards from the Parks subcounty"
+    expect(page).to have_link "Manage wards from the Recreation subcounty."
     expect(page).not_to have_css "ul"
   end
 
@@ -29,13 +29,13 @@ describe Admin::BudgetsWizard::Headings::GroupSwitcherComponent do
 
     render_inline Admin::BudgetsWizard::Headings::GroupSwitcherComponent.new(group)
 
-    expect(page).to have_content "Showing headings from the Parks group"
+    expect(page).to have_content "Showing wards from the Parks subcounty"
 
     page.find("ul") do |list|
       expect(list).to have_css "li", count: 2
       expect(list).to have_link count: 2
-      expect(list).to have_link "Manage headings from the Recreation group."
-      expect(list).to have_link "Manage headings from the Entertainment group."
+      expect(list).to have_link "Manage wards from the Recreation subcounty."
+      expect(list).to have_link "Manage wards from the Entertainment subcounty."
       expect(list).to have_css "strong", exact_text: "Recreation"
       expect(list).to have_css "strong", exact_text: "Entertainment"
     end
