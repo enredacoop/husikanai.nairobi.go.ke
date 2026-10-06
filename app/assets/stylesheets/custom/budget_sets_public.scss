@@ -1,0 +1,72 @@
+.public .sets-groups-and-headings {
+  $spacing: $line-height * 0.5;
+
+  .budget-sets-list {
+    display: grid;
+    gap: $spacing;
+    grid-template-columns: 1fr;
+    list-style: none;
+    margin-#{$global-left}: 0;
+
+    @include breakpoint(medium) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include breakpoint(large) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .budget-set-button {
+    @include brand-border($width: 2px);
+    background: $white;
+    border-radius: rem-calc(6);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    height: 100%;
+    min-height: rem-calc(110);
+    padding: $line-height;
+    text-align: $global-left;
+    width: 100%;
+
+    strong {
+      @include brand-color;
+      display: block;
+      font-size: rem-calc(22);
+      line-height: 1.2;
+    }
+
+    span {
+      color: $text-medium;
+      display: block;
+      font-size: $small-font-size;
+      margin-top: calc($line-height / 2);
+    }
+
+    &:hover,
+    &:focus {
+      background: $light;
+    }
+
+    &[aria-expanded="true"] {
+      @include brand-background;
+
+      strong,
+      span {
+        color: inherit;
+      }
+    }
+  }
+
+  .budget-set-panel {
+    margin-top: $line-height;
+
+    > h2 {
+      margin-bottom: 0;
+    }
+
+    h3 {
+      margin-top: $line-height;
+    }
+  }
+}

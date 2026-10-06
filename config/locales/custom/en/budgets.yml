@@ -10,6 +10,15 @@ en:
   budgets:
     groups:
       investments_link: "See all investment projects in %{group}"
+    sets:
+      intro: "Choose a borough to see its subcounties and wards."
+      other: "Other subcounties"
+      subcounties:
+        one: "1 subcounty"
+        other: "%{count} subcounties"
+      wards:
+        one: "1 ward"
+        other: "%{count} wards"
     investments:
       index:
         by_group: "Investment projects in %{group}"

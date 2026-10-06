@@ -10,6 +10,15 @@ sw-KE:
   budgets:
     groups:
       investments_link: "Tazama miradi yote ya uwekezaji katika %{group}"
+    sets:
+      intro: "Chagua manispaa ili kuona kaunti ndogo na wadi zake."
+      other: "Kaunti ndogo nyingine"
+      subcounties:
+        one: "Kaunti ndogo 1"
+        other: "Kaunti ndogo %{count}"
+      wards:
+        one: "Wadi 1"
+        other: "Wadi %{count}"
     investments:
       index:
         by_group: "Miradi ya uwekezaji katika %{group}"

@@ -10,6 +10,15 @@ es:
   budgets:
     groups:
       investments_link: "Ver todos los proyectos de gasto de %{group}"
+    sets:
+      intro: "Elige un municipio para ver sus subcondados y barrios."
+      other: "Otros subcondados"
+      subcounties:
+        one: "1 subcondado"
+        other: "%{count} subcondados"
+      wards:
+        one: "1 barrio"
+        other: "%{count} barrios"
     investments:
       index:
         by_group: "Proyectos de gasto de %{group}"
