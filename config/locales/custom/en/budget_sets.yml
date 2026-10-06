@@ -1,0 +1,32 @@
+en:
+  activerecord:
+    models:
+      budget/set:
+        one: "Borough"
+        other: "Boroughs"
+    attributes:
+      budget/group:
+        set_id: "Borough"
+      budget/set/translation:
+        name: "Borough name"
+  admin:
+    budgets:
+      show:
+        add_set: "Add borough"
+    budget_groups:
+      form:
+        no_set: "No borough"
+    budget_sets:
+      groups_without_set: "Subcounties without borough"
+      no_groups: "There are no subcounties in the %{set} borough."
+      create:
+        notice: "Borough created successfully!"
+      update:
+        notice: "Borough updated successfully"
+      destroy:
+        confirm: "Are you sure? This will delete the borough \"%{name}\". Its subcounties and wards will not be deleted."
+        success_notice: "Borough deleted successfully"
+      form:
+        create: "Create new borough"
+        edit: "Edit borough"
+        submit: "Save borough"

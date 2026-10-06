@@ -1,0 +1,15 @@
+<%= translatable_form_for set, url: path, html: { class: "budget-sets-form" } do |f| %>
+  <%= render "shared/globalize_locales", resource: set %>
+
+  <%= render "shared/errors", resource: set %>
+
+  <%= f.translatable_fields do |translations_form| %>
+    <div class="small-12 medium-6 column end">
+      <%= translations_form.text_field :name, maxlength: 50 %>
+    </div>
+  <% end %>
+
+  <div class="clear">
+    <%= f.submit t("admin.budget_sets.form.#{action}"), class: "button hollow" %>
+  </div>
+<% end %>

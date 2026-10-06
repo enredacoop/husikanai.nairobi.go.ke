@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_10_09_085528) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -210,7 +210,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_09_085528) do
     t.integer "max_votable_headings", default: 1
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.bigint "set_id"
     t.index ["budget_id"], name: "index_budget_groups_on_budget_id"
+    t.index ["set_id"], name: "index_budget_groups_on_set_id"
   end
 
   create_table "budget_heading_translations", id: :serial, force: :cascade do |t|
@@ -335,6 +337,24 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_09_085528) do
     t.string "reason"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+  end
+
+  create_table "budget_set_translations", force: :cascade do |t|
+    t.bigint "budget_set_id", null: false
+    t.string "locale", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_set_id"], name: "index_budget_set_translations_on_budget_set_id"
+    t.index ["locale"], name: "index_budget_set_translations_on_locale"
+  end
+
+  create_table "budget_sets", force: :cascade do |t|
+    t.bigint "budget_id"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["budget_id"], name: "index_budget_sets_on_budget_id"
   end
 
   create_table "budget_translations", id: :serial, force: :cascade do |t|
@@ -1772,8 +1792,11 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_09_085528) do
   add_foreign_key "administrators", "users"
   add_foreign_key "budget_administrators", "administrators"
   add_foreign_key "budget_administrators", "budgets"
+  add_foreign_key "budget_groups", "budget_sets", column: "set_id"
   add_foreign_key "budget_headings", "geozones"
   add_foreign_key "budget_investments", "communities"
+  add_foreign_key "budget_set_translations", "budget_sets"
+  add_foreign_key "budget_sets", "budgets"
   add_foreign_key "budget_valuators", "budgets"
   add_foreign_key "budget_valuators", "valuators"
   add_foreign_key "dashboard_administrator_tasks", "users"

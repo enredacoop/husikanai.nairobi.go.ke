@@ -34,4 +34,14 @@ constraints lambda { |request| !Rails.application.multitenancy_management_mode? 
   #
   # If multitenancy management mode is not being used, routes can be included within
   # this block and will still be accessible.
+
+  namespace :admin do
+    resources :budgets, only: [] do
+      resources :sets, except: [:index, :show], controller: "budget_sets"
+    end
+  end
+end
+
+resolve "Budget::Set" do |set, options|
+  [set.budget, :set, options.merge(id: set)]
 end

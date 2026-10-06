@@ -1,0 +1,32 @@
+sw-KE:
+  activerecord:
+    models:
+      budget/set:
+        one: "Manispaa"
+        other: "Manispaa"
+    attributes:
+      budget/group:
+        set_id: "Manispaa"
+      budget/set/translation:
+        name: "Jina la manispaa"
+  admin:
+    budgets:
+      show:
+        add_set: "Ongeza manispaa"
+    budget_groups:
+      form:
+        no_set: "Hakuna manispaa"
+    budget_sets:
+      groups_without_set: "Kaunti ndogo bila manispaa"
+      no_groups: "Hakuna kaunti ndogo katika manispaa %{set}."
+      create:
+        notice: "Manispaa imeundwa!"
+      update:
+        notice: "Manispaa imesasishwa"
+      destroy:
+        confirm: "Una uhakika? Manispaa \"%{name}\" itafutwa. Kaunti ndogo na wadi zake hazitafutwa."
+        success_notice: "Manispaa imefutwa"
+      form:
+        create: "Unda manispaa mpya"
+        edit: "Hariri manispaa"
+        submit: "Hifadhi manispaa"

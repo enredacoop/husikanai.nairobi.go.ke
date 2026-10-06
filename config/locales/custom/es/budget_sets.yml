@@ -1,0 +1,32 @@
+es:
+  activerecord:
+    models:
+      budget/set:
+        one: "Municipio"
+        other: "Municipios"
+    attributes:
+      budget/group:
+        set_id: "Municipio"
+      budget/set/translation:
+        name: "Nombre del municipio"
+  admin:
+    budgets:
+      show:
+        add_set: "Añadir municipio"
+    budget_groups:
+      form:
+        no_set: "Sin municipio"
+    budget_sets:
+      groups_without_set: "Subcondados sin municipio"
+      no_groups: "No hay subcondados en el municipio %{set}."
+      create:
+        notice: "¡Municipio creado correctamente!"
+      update:
+        notice: "Municipio actualizado correctamente"
+      destroy:
+        confirm: "¿Estás seguro? Se borrará el municipio \"%{name}\". Sus subcondados y barrios no se borrarán."
+        success_notice: "Municipio eliminado correctamente"
+      form:
+        create: "Crear nuevo municipio"
+        edit: "Editar municipio"
+        submit: "Guardar municipio"

@@ -1,0 +1,48 @@
+<% sets.each do |set| %>
+  <section id="<%= dom_id(set) %>" class="budget-set" aria-labelledby="<%= dom_id(set, :header) %>">
+    <h4 id="<%= dom_id(set, :header) %>"><%= set.name %></h4>
+
+    <div class="groups-actions">
+      <%= action(:edit, set, path: edit_admin_budget_set_path(budget, set), "aria-label": true) %>
+      <%= action(:destroy,
+                 set,
+                 path: admin_budget_set_path(budget, set),
+                 confirm: method(:destroy_set_confirmation),
+                 "aria-label": true) %>
+      <%= action(:new,
+                 set,
+                 text: t("admin.budgets.show.add_group"),
+                 path: new_admin_budget_group_path(budget, set_id: set.id),
+                 "aria-label": true) %>
+    </div>
+
+    <% if set.groups.any? %>
+      <% set.groups.each do |group| %>
+        <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 5) %>
+      <% end %>
+    <% else %>
+      <div class="callout primary">
+        <%= t("admin.budget_sets.no_groups", set: set.name) %>
+      </div>
+    <% end %>
+  </section>
+<% end %>
+
+<% if sets.any? && groups_without_set.any? %>
+  <section id="groups_without_set" class="budget-set" aria-labelledby="groups_without_set_header">
+    <h4 id="groups_without_set_header"><%= t("admin.budget_sets.groups_without_set") %></h4>
+
+    <% groups_without_set.each do |group| %>
+      <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 5) %>
+    <% end %>
+  </section>
+<% else %>
+  <% groups_without_set.each do |group| %>
+    <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 4) %>
+  <% end %>
+<% end %>
+
+<div class="budget-sets-actions">
+  <%= action(:new, budget, text: t("admin.budgets.show.add_set"), path: new_admin_budget_set_path(budget)) %>
+  <%= action(:new, budget, text: t("admin.budgets.show.add_group"), path: new_admin_budget_group_path(budget)) %>
+</div>

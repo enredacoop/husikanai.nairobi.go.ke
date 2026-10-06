@@ -1,0 +1,29 @@
+.admin .groups-and-headings {
+  .budget-set {
+    border-#{$global-left}: 4px solid $border;
+    padding-#{$global-left}: $line-height;
+
+    > .callout {
+      margin-top: calc($line-height / 2);
+    }
+  }
+
+  .budget-set > .budget-group {
+    margin-top: $line-height;
+  }
+
+  > .budget-group + .budget-group,
+  > .budget-set + .budget-group,
+  > .budget-group + .budget-set {
+    margin-top: $line-height * 1.5;
+  }
+
+  .budget-sets-actions {
+    @include flex-with-gap(calc($line-height / 2));
+    margin-top: $line-height * 1.5;
+
+    .new-link {
+      @include regular-button;
+    }
+  }
+}
