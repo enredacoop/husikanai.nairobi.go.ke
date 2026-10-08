@@ -639,7 +639,7 @@ describe "Budget Investments" do
 
       visit new_budget_investment_path(budget)
 
-      expect(page).to have_select "Heading",
+      expect(page).to have_select "Ward",
                                   options: ["", "More hospitals", "Medical supplies", "Even more hospitals"]
       expect(page).not_to have_content "Health"
     end
@@ -655,13 +655,13 @@ describe "Budget Investments" do
       visit new_budget_investment_path(budget)
 
       expect(page).not_to have_content("#{heading.name} (#{budget.formatted_heading_price(heading)})")
-      expect(page).to have_select "Heading",
+      expect(page).to have_select "Ward",
                                   options: ["",
                                             "Health: More hospitals",
                                             "Health: Medical supplies",
                                             "Education: Schools"]
 
-      select "Health: Medical supplies", from: "Heading"
+      select "Health: Medical supplies", from: "Ward"
 
       fill_in_new_investment_title with: "Build a skyscraper"
       fill_in_ckeditor "Description", with: "I want to live in a high tower over the clouds"
