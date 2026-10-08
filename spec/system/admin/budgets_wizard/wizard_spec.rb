@@ -118,16 +118,9 @@ describe "Budgets creation wizard", :admin do
     click_link "Finish"
 
     within "section", text: "Boroughs, subcounties and wards" do
-      within_table "Wards in All city" do
-        expect(page).to have_css "tbody tr", count: 1
-        expect(page).to have_content "All city"
-      end
+      names = page.all("tr.group-row .tree-name, tr.heading-row .tree-name").map(&:text)
 
-      within_table "Wards in Districts" do
-        expect(page).to have_css "tbody tr", count: 2
-        expect(page).to have_content "North"
-        expect(page).to have_content "South"
-      end
+      expect(names).to eq ["All city", "All city", "Districts", "North", "South"]
     end
   end
 end

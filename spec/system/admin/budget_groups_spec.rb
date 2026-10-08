@@ -33,14 +33,14 @@ describe "Admin budget groups", :admin do
       visit admin_budget_path(budget)
 
       within "section", text: "Boroughs, subcounties and wards" do
-        within "section", text: "Above ground" do
-          expect(page).to have_css "h4", exact_text: "Above ground"
-          expect(page).not_to have_content "Maximum number of headings"
+        within "tr.group-row", text: "Above ground" do
+          expect(page).to have_css "th", text: "Above ground"
+          expect(page).not_to have_content "Maximum number of wards"
         end
 
-        within "section", text: "Below ground" do
-          expect(page).to have_css "h4", exact_text: "Below ground"
-          expect(page).to have_content "Maximum number of wards in which a user can select projects 1"
+        within "tr.group-row", text: "Below ground" do
+          expect(page).to have_css "th", text: "Below ground"
+          expect(page).not_to have_content "Maximum number of wards"
         end
       end
     end
@@ -84,7 +84,7 @@ describe "Admin budget groups", :admin do
       expect(page).to have_content "Subcounty created successfully!"
 
       within "section", text: "Boroughs, subcounties and wards" do
-        expect(page).to have_css "h4", exact_text: "All City"
+        expect(page).to have_css "tr.group-row th", text: "All City"
       end
     end
 

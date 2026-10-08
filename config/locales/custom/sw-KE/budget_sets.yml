@@ -12,6 +12,7 @@ sw-KE:
   admin:
     budgets:
       show:
+        headings_count: "Wadi"
         add_set: "Ongeza manispaa"
     budget_groups:
       form:

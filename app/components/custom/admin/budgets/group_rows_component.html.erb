@@ -1,0 +1,41 @@
+<tr id="<%= dom_id(group) %>" class="group-row <%= level_class(0) %>">
+  <th scope="row"><span class="tree-name"><%= group.name %></span></th>
+  <td><%= headings.size %></td>
+  <% if budget.show_money? %>
+    <td><%= total_price %></td>
+  <% end %>
+  <% if budget.approval_voting? %>
+    <td></td>
+  <% end %>
+  <td></td>
+  <td>
+    <%= render Admin::TableActionsComponent.new(group) do |actions| %>
+      <%= actions.action(:new,
+                         text: t("admin.budgets.show.add_heading"),
+                         path: new_admin_budget_group_heading_path(budget, group)) %>
+    <% end %>
+  </td>
+</tr>
+
+<% if headings.none? %>
+  <tr class="heading-row empty-row <%= level_class(1) %>">
+    <td colspan="<%= columns_count %>">
+      <%= sanitize(t("admin.budget_headings.no_headings", group: group.name)) %>
+    </td>
+  </tr>
+<% end %>
+
+<% headings.each do |heading| %>
+  <tr id="<%= dom_id(heading) %>" class="heading heading-row <%= level_class(1) %>">
+    <th scope="row"><span class="tree-name"><%= heading.name %></span></th>
+    <td></td>
+    <% if budget.show_money? %>
+      <td><%= budget.formatted_heading_price(heading) %></td>
+    <% end %>
+    <% if budget.approval_voting? %>
+      <td><%= heading.max_ballot_lines %></td>
+    <% end %>
+    <td><%= geozone_for(heading) %></td>
+    <td><%= render Admin::TableActionsComponent.new(heading) %></td>
+  </tr>
+<% end %>

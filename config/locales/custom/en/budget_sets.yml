@@ -12,6 +12,7 @@ en:
   admin:
     budgets:
       show:
+        headings_count: "Wards"
         add_set: "Add borough"
     budget_groups:
       form:

@@ -12,6 +12,7 @@ es:
   admin:
     budgets:
       show:
+        headings_count: "Barrios"
         add_set: "Añadir municipio"
     budget_groups:
       form:

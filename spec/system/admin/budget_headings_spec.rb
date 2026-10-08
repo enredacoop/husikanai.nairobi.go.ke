@@ -37,7 +37,7 @@ describe "Admin budget headings", :admin do
 
       within "section", text: "Boroughs, subcounties and wards" do
         within "tbody" do
-          expect(page).to have_css "tr", count: 3
+          expect(page).to have_css "tr.heading-row", count: 3
 
           within("tr", text: "Laptops") { expect(page).to have_content "€1,000" }
           within("tr", text: "Tablets") { expect(page).to have_content "€2,000" }
@@ -83,7 +83,7 @@ describe "Admin budget headings", :admin do
       visit admin_budget_path(budget)
 
       within "section", text: "Boroughs, subcounties and wards" do
-        within("section", text: group.name) { click_link "Add ward" }
+        within("tr.group-row", text: group.name) { click_link "Add ward" }
       end
 
       fill_in "Ward name", with: "All City"

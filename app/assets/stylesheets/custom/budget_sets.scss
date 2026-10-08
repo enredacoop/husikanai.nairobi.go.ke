@@ -1,21 +1,47 @@
 .admin .groups-and-headings {
-  .budget-set {
-    border-#{$global-left}: 4px solid $border;
-    padding-#{$global-left}: $line-height;
-
-    > .callout {
-      margin-top: calc($line-height / 2);
+  .budget-tree-table {
+    th[scope="row"] {
+      font-weight: normal;
+      text-align: $global-left;
     }
-  }
 
-  .budget-set > .budget-group {
-    margin-top: $line-height;
-  }
+    .set-row th[scope="row"],
+    .set-row td {
+      background: $highlight;
+      font-weight: bold;
+    }
 
-  > .budget-group + .budget-group,
-  > .budget-set + .budget-group,
-  > .budget-group + .budget-set {
-    margin-top: $line-height * 1.5;
+    .group-row .tree-name {
+      font-weight: bold;
+    }
+
+    .level-1 th[scope="row"] {
+      padding-#{$global-left}: $line-height * 1.5;
+    }
+
+    .level-2 th[scope="row"] {
+      padding-#{$global-left}: $line-height * 3;
+    }
+
+    .level-1 .tree-name::before,
+    .level-2 .tree-name::before {
+      color: $text-medium;
+      content: "↳ ";
+      font-weight: normal;
+    }
+
+    .empty-row td {
+      color: $text-medium;
+      font-style: italic;
+    }
+
+    .empty-row.level-1 td {
+      padding-#{$global-left}: $line-height * 1.5;
+    }
+
+    .empty-row.level-2 td {
+      padding-#{$global-left}: $line-height * 3;
+    }
   }
 
   .budget-sets-actions {

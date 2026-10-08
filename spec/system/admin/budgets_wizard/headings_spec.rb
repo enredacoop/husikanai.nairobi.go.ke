@@ -131,7 +131,7 @@ describe "Budgets wizard, headings step", :admin do
       visit admin_budget_path(budget)
 
       within "section", text: "Boroughs, subcounties and wards" do
-        within("tbody tr") { expect(page).to have_content "Heading without typos" }
+        within("tr.heading-row") { expect(page).to have_content "Heading without typos" }
       end
     end
   end

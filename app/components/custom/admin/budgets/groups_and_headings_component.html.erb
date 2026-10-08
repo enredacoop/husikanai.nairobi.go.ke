@@ -1,45 +1,72 @@
-<% sets.each do |set| %>
-  <section id="<%= dom_id(set) %>" class="budget-set" aria-labelledby="<%= dom_id(set, :header) %>">
-    <h4 id="<%= dom_id(set, :header) %>"><%= set.name %></h4>
+<% unless empty? %>
+  <table class="budget-tree-table">
+    <thead>
+      <tr>
+        <th scope="col"><%= t("admin.budget_groups.name") %></th>
+        <th scope="col"><%= t("admin.budgets.show.headings_count") %></th>
+        <% if budget.show_money? %>
+          <th scope="col"><%= Budget::Heading.human_attribute_name(:price) %></th>
+        <% end %>
+        <% if budget.approval_voting? %>
+          <th scope="col"><%= Budget::Heading.human_attribute_name(:max_ballot_lines) %></th>
+        <% end %>
+        <th scope="col"><%= Budget::Heading.human_attribute_name(:geozone_id) %></th>
+        <th scope="col"><%= t("admin.actions.actions") %></th>
+      </tr>
+    </thead>
 
-    <div class="groups-actions">
-      <%= action(:edit, set, path: edit_admin_budget_set_path(budget, set), "aria-label": true) %>
-      <%= action(:destroy,
-                 set,
-                 path: admin_budget_set_path(budget, set),
-                 confirm: method(:destroy_set_confirmation),
-                 "aria-label": true) %>
-      <%= action(:new,
-                 set,
-                 text: t("admin.budgets.show.add_group"),
-                 path: new_admin_budget_group_path(budget, set_id: set.id),
-                 "aria-label": true) %>
-    </div>
+    <% sets.each do |set| %>
+      <tbody id="<%= dom_id(set) %>" class="budget-set">
+        <tr class="set-row">
+          <th scope="row"><%= set.name %></th>
+          <td><%= headings_count(groups_for(set)) %></td>
+          <% if budget.show_money? %>
+            <td><%= total_price(groups_for(set)) %></td>
+          <% end %>
+          <% if budget.approval_voting? %>
+            <td></td>
+          <% end %>
+          <td></td>
+          <td>
+            <%= render Admin::TableActionsComponent.new(
+              set,
+              edit_path: edit_admin_budget_set_path(budget, set),
+              destroy_path: admin_budget_set_path(budget, set),
+              destroy_confirmation: method(:destroy_set_confirmation)
+            ) do |actions| %>
+              <%= actions.action(:new,
+                                 text: t("admin.budgets.show.add_group"),
+                                 path: new_admin_budget_group_path(budget, set_id: set.id)) %>
+            <% end %>
+          </td>
+        </tr>
 
-    <% if set.groups.any? %>
-      <% set.groups.each do |group| %>
-        <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 5) %>
-      <% end %>
-    <% else %>
-      <div class="callout primary">
-        <%= t("admin.budget_sets.no_groups", set: set.name) %>
-      </div>
+        <% if groups_for(set).none? %>
+          <tr class="group-row empty-row">
+            <td colspan="<%= columns_count %>"><%= t("admin.budget_sets.no_groups", set: set.name) %></td>
+          </tr>
+        <% end %>
+
+        <% groups_for(set).each do |group| %>
+          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: true) %>
+        <% end %>
+      </tbody>
     <% end %>
-  </section>
-<% end %>
 
-<% if sets.any? && groups_without_set.any? %>
-  <section id="groups_without_set" class="budget-set" aria-labelledby="groups_without_set_header">
-    <h4 id="groups_without_set_header"><%= t("admin.budget_sets.groups_without_set") %></h4>
+    <% if groups_without_set.any? %>
+      <tbody id="groups_without_set" class="<%= "budget-set" if sets.any? %>">
+        <% if sets.any? %>
+          <tr class="set-row">
+            <th scope="row" colspan="<%= columns_count %>"><%= t("admin.budget_sets.groups_without_set") %></th>
+          </tr>
+        <% end %>
 
-    <% groups_without_set.each do |group| %>
-      <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 5) %>
+        <% groups_without_set.each do |group| %>
+          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: sets.any?) %>
+        <% end %>
+      </tbody>
     <% end %>
-  </section>
-<% else %>
-  <% groups_without_set.each do |group| %>
-    <%= render Admin::Budgets::GroupComponent.new(group, heading_level: 4) %>
-  <% end %>
+  </table>
 <% end %>
 
 <div class="budget-sets-actions">
