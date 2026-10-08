@@ -1,0 +1,46 @@
+.admin-sidebar > ul > li > .sectors-link {
+  @include has-fa-icon(tags, solid);
+
+  &::before {
+    @extend %admin-menu-icon;
+  }
+}
+
+.admin .sectors-table .sub-sector td:first-child {
+  color: $text-medium;
+}
+
+.admin .project-details-fields {
+  margin-top: $line-height;
+}
+
+.investment-project-details {
+  margin: $line-height 0;
+
+  dl {
+    display: grid;
+    gap: calc($line-height / 2) $line-height;
+    grid-template-columns: 1fr;
+
+    @include breakpoint(medium) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .project-detail {
+    border-#{$global-left}: 3px solid $border;
+    padding-#{$global-left}: calc($line-height / 2);
+  }
+
+  dt {
+    color: $text-medium;
+    font-size: $small-font-size;
+    font-weight: normal;
+    margin-bottom: 0;
+  }
+
+  dd {
+    font-weight: bold;
+    margin: 0;
+  }
+}

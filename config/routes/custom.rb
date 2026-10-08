@@ -39,6 +39,8 @@ constraints lambda { |request| !Rails.application.multitenancy_management_mode? 
     resources :budgets, only: [] do
       resources :sets, except: [:index, :show], controller: "budget_sets"
     end
+
+    resources :sectors, except: :show
   end
 end
 

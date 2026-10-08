@@ -1,4 +1,7 @@
 sw-KE:
+  date:
+    formats:
+      month_year: "%B %Y"
   activerecord:
     attributes:
       budget/investment:

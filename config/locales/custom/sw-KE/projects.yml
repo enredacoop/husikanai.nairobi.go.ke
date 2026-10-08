@@ -1,0 +1,29 @@
+sw-KE:
+  activerecord:
+    models:
+      sector:
+        one: "Sekta"
+        other: "Sekta"
+    attributes:
+      budget/investment:
+        sector_id: "Sekta"
+        sub_sector_id: "Sekta ndogo"
+        funding_source: "Chanzo cha fedha"
+        actual_cost: "Gharama halisi"
+        start_date: "Tarehe ya kuanza"
+        end_date: "Tarehe ya kumaliza"
+      budget/investment/translation:
+        objectives: "Malengo"
+  budgets:
+    investments:
+      project_details:
+        title: "Maelezo ya mradi"
+        objectives: "Malengo"
+        sector: "Sekta"
+        status: "Hali"
+        implementation: "Utekelezaji"
+        price: "Gharama ya mradi"
+        actual_cost: "Gharama halisi"
+        start_date: "Tarehe ya kuanza"
+        end_date: "Tarehe ya kumaliza"
+        funding_source: "Chanzo cha fedha"

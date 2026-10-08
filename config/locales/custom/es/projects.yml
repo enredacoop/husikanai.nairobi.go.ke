@@ -1,0 +1,65 @@
+es:
+  activerecord:
+    models:
+      sector:
+        one: "Sector"
+        other: "Sectores"
+    attributes:
+      budget/investment:
+        sector_id: "Sector"
+        sub_sector_id: "Subsector"
+        funding_source: "Fuente de financiación"
+        actual_cost: "Coste real"
+        start_date: "Fecha de inicio"
+        end_date: "Fecha de fin"
+      budget/investment/translation:
+        objectives: "Objetivos"
+      sector:
+        name: "Nombre"
+        parent_id: "Sector padre"
+  admin:
+    menu:
+      sectors: "Sectores"
+    budget_investments:
+      edit:
+        project_details: "Datos del proyecto"
+        manage_sectors: "Gestionar sectores y subsectores"
+        select_sector: "Seleccionar sector"
+        select_sub_sector: "Seleccionar subsector"
+    sectors:
+      index:
+        title: "Sectores"
+        help: "Los sectores y subsectores sirven para clasificar los proyectos de gasto. Cada subsector pertenece a un sector."
+        new_sector: "Crear sector"
+        new_sub_sector: "Añadir subsector"
+        table_name: "Nombre"
+        table_sub_sectors: "Subsectores"
+        empty: "Todavía no hay sectores."
+      new:
+        title: "Nuevo sector o subsector"
+      edit:
+        title: "Editar sector"
+      form:
+        no_parent: "Ninguno (es un sector principal)"
+        parent_hint: "Elige un sector padre para crear un subsector."
+        submit: "Guardar sector"
+      create:
+        notice: "Sector creado correctamente"
+      update:
+        notice: "Sector actualizado correctamente"
+      destroy:
+        notice: "Sector eliminado correctamente"
+        unable_notice: "No se puede eliminar este sector porque tiene subsectores o proyectos de gasto"
+  budgets:
+    investments:
+      project_details:
+        title: "Datos del proyecto"
+        objectives: "Objetivos"
+        sector: "Sector"
+        status: "Estado"
+        implementation: "Ejecución"
+        price: "Coste del proyecto"
+        actual_cost: "Coste real"
+        start_date: "Fecha de inicio"
+        end_date: "Fecha de fin"
+        funding_source: "Fuente de financiación"

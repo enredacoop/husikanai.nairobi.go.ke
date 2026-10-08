@@ -1,0 +1,43 @@
+<h2 class="inline-block"><%= t("admin.sectors.index.title") %></h2>
+
+<%= link_to t("admin.sectors.index.new_sector"), new_admin_sector_path, class: "button float-right" %>
+
+<p class="help-text clear"><%= t("admin.sectors.index.help") %></p>
+
+<% if @sectors.any? %>
+  <table class="sectors-table">
+    <thead>
+      <tr>
+        <th><%= t("admin.sectors.index.table_name") %></th>
+        <th><%= t("admin.sectors.index.table_sub_sectors") %></th>
+        <th><%= t("admin.actions.actions") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sectors.each do |sector| %>
+        <tr id="<%= dom_id(sector) %>">
+          <td><strong><%= sector.name %></strong></td>
+          <td><%= sector.sub_sectors.size %></td>
+          <td>
+            <%= render Admin::TableActionsComponent.new(sector) do |actions| %>
+              <%= actions.action(:new,
+                                 text: t("admin.sectors.index.new_sub_sector"),
+                                 path: new_admin_sector_path(parent_id: sector.id)) %>
+            <% end %>
+          </td>
+        </tr>
+        <% sector.sub_sectors.each do |sub_sector| %>
+          <tr id="<%= dom_id(sub_sector) %>" class="sub-sector">
+            <td>&emsp;↳ <%= sub_sector.name %></td>
+            <td></td>
+            <td><%= render Admin::TableActionsComponent.new(sub_sector) %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="callout primary margin-top clear">
+    <%= t("admin.sectors.index.empty") %>
+  </div>
+<% end %>

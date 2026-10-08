@@ -1,0 +1,12 @@
+<section class="investment-project-details" aria-labelledby="project_details_header">
+  <h2 id="project_details_header"><%= t("budgets.investments.project_details.title") %></h2>
+
+  <dl>
+    <% details.each do |field, value| %>
+      <div class="project-detail project-detail-<%= field.to_s.dasherize %>">
+        <dt><%= t("budgets.investments.project_details.#{field}") %></dt>
+        <dd><%= value %></dd>
+      </div>
+    <% end %>
+  </dl>
+</section>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_08_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -249,6 +249,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
     t.string "title"
     t.text "description"
     t.datetime "hidden_at", precision: nil
+    t.text "objectives"
     t.index ["budget_investment_id"], name: "index_budget_investment_translations_on_budget_investment_id"
     t.index ["hidden_at"], name: "index_budget_investment_translations_on_hidden_at"
     t.index ["locale"], name: "index_budget_investment_translations_on_locale"
@@ -293,6 +294,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
     t.datetime "ignored_flag_at", precision: nil
     t.integer "flags_count", default: 0
     t.integer "original_heading_id"
+    t.bigint "actual_cost"
+    t.date "start_date"
+    t.date "end_date"
+    t.string "funding_source"
+    t.bigint "sector_id"
+    t.bigint "sub_sector_id"
     t.index ["administrator_id"], name: "index_budget_investments_on_administrator_id"
     t.index ["author_id"], name: "index_budget_investments_on_author_id"
     t.index ["budget_id"], name: "index_budget_investments_on_budget_id"
@@ -300,7 +307,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
     t.index ["group_id"], name: "index_budget_investments_on_group_id"
     t.index ["heading_id"], name: "index_budget_investments_on_heading_id"
     t.index ["incompatible"], name: "index_budget_investments_on_incompatible"
+    t.index ["sector_id"], name: "index_budget_investments_on_sector_id"
     t.index ["selected"], name: "index_budget_investments_on_selected"
+    t.index ["sub_sector_id"], name: "index_budget_investments_on_sub_sector_id"
     t.index ["tsv"], name: "index_budget_investments_on_tsv", using: :gin
   end
 
@@ -1460,6 +1469,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
     t.index ["goal_id"], name: "index_sdg_targets_on_goal_id"
   end
 
+  create_table "sectors", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id", "name"], name: "index_sectors_on_parent_id_and_name", unique: true
+    t.index ["parent_id"], name: "index_sectors_on_parent_id"
+  end
+
   create_table "settings", id: :serial, force: :cascade do |t|
     t.string "key"
     t.string "value"
@@ -1795,6 +1813,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
   add_foreign_key "budget_groups", "budget_sets", column: "set_id"
   add_foreign_key "budget_headings", "geozones"
   add_foreign_key "budget_investments", "communities"
+  add_foreign_key "budget_investments", "sectors"
+  add_foreign_key "budget_investments", "sectors", column: "sub_sector_id"
   add_foreign_key "budget_set_translations", "budget_sets"
   add_foreign_key "budget_sets", "budgets"
   add_foreign_key "budget_valuators", "budgets"
@@ -1841,6 +1861,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_05_120000) do
   add_foreign_key "related_content_scores", "related_contents"
   add_foreign_key "related_content_scores", "users"
   add_foreign_key "sdg_managers", "users"
+  add_foreign_key "sectors", "sectors", column: "parent_id"
   add_foreign_key "users", "geozones"
   add_foreign_key "valuators", "users"
 end

@@ -1,0 +1,65 @@
+en:
+  activerecord:
+    models:
+      sector:
+        one: "Sector"
+        other: "Sectors"
+    attributes:
+      budget/investment:
+        sector_id: "Sector"
+        sub_sector_id: "Sub-sector"
+        funding_source: "Source of funds"
+        actual_cost: "Actual cost"
+        start_date: "Start date"
+        end_date: "End date"
+      budget/investment/translation:
+        objectives: "Objectives"
+      sector:
+        name: "Name"
+        parent_id: "Parent sector"
+  admin:
+    menu:
+      sectors: "Sectors"
+    budget_investments:
+      edit:
+        project_details: "Project details"
+        manage_sectors: "Manage sectors and sub-sectors"
+        select_sector: "Select sector"
+        select_sub_sector: "Select sub-sector"
+    sectors:
+      index:
+        title: "Sectors"
+        help: "Sectors and sub-sectors are used to classify investment projects. Each sub-sector belongs to a sector."
+        new_sector: "Create sector"
+        new_sub_sector: "Add sub-sector"
+        table_name: "Name"
+        table_sub_sectors: "Sub-sectors"
+        empty: "There are no sectors yet."
+      new:
+        title: "New sector or sub-sector"
+      edit:
+        title: "Edit sector"
+      form:
+        no_parent: "None (this is a main sector)"
+        parent_hint: "Choose a parent sector to create a sub-sector."
+        submit: "Save sector"
+      create:
+        notice: "Sector created successfully"
+      update:
+        notice: "Sector updated successfully"
+      destroy:
+        notice: "Sector deleted successfully"
+        unable_notice: "This sector cannot be deleted because it has sub-sectors or investment projects"
+  budgets:
+    investments:
+      project_details:
+        title: "Project details"
+        objectives: "Objectives"
+        sector: "Sector"
+        status: "Status"
+        implementation: "Implementation"
+        price: "Project cost"
+        actual_cost: "Actual cost"
+        start_date: "Start date"
+        end_date: "End date"
+        funding_source: "Source of funds"

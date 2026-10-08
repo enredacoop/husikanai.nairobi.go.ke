@@ -1,0 +1,19 @@
+<%= form_for [:admin, @sector] do |f| %>
+  <%= render "shared/errors", resource: @sector %>
+
+  <div class="small-12 medium-6">
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="small-12 medium-6">
+    <%= f.select :parent_id,
+                 Sector.main.where.not(id: @sector.id).map { |sector| [sector.name, sector.id] },
+                 { include_blank: t("admin.sectors.form.no_parent"),
+                   hint: t("admin.sectors.form.parent_hint") },
+                 disabled: @sector.sub_sectors.any? %>
+  </div>
+
+  <div class="margin-top">
+    <%= f.submit t("admin.sectors.form.submit"), class: "button success" %>
+  </div>
+<% end %>

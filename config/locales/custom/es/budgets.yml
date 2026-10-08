@@ -1,4 +1,7 @@
 es:
+  date:
+    formats:
+      month_year: "%B de %Y"
   activerecord:
     attributes:
       budget/investment:

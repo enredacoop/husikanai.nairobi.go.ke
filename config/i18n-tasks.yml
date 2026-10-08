@@ -140,6 +140,7 @@ ignore_unused:
   - "activemodel.*"
   - "attributes.*"
   - "date.order"
+  - "date.formats.month_year"
   - "unauthorized.*"
   - "admin.officials.level_*"
   - "admin.hidden_comments.index.filter*"
