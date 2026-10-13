@@ -647,9 +647,9 @@ describe "Ballots" do
         login_as admin_user
         visit edit_admin_budget_group_heading_path(budget, states, new_york)
         fill_in "Money amount", with: 10
-        click_button "Save heading"
+        click_button "Save ward"
 
-        expect(page).to have_content "Heading updated successfully"
+        expect(page).to have_content "Ward updated successfully"
 
         within "tr", text: "New York" do
           expect(page).to have_css "td", exact_text: "€10"

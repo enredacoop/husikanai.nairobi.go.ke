@@ -135,9 +135,9 @@ describe "Admin geozones", :admin do
     visit edit_admin_budget_group_heading_path(budget, group, heading)
     select "Polygon me!", from: "Scope of operation"
 
-    click_button "Save heading"
+    click_button "Save ward"
 
-    expect(page).to have_content "Heading updated successfully"
+    expect(page).to have_content "Ward updated successfully"
 
     visit budget_path(budget)
 

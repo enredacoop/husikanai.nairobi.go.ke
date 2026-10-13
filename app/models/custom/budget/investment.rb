@@ -4,6 +4,8 @@ class Budget
   class Investment
     translates :performance_indicator, touch: true
     translates :target, touch: true
+    # Globalizable only defines the accessors (title_en...) of the attributes translated before
+    globalize_accessors attributes: [:performance_indicator, :target]
 
     belongs_to :sector, optional: true
     belongs_to :sub_sector, class_name: "Sector", optional: true
