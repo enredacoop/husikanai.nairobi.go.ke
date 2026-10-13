@@ -166,6 +166,7 @@ describe "Admin budgets", :admin do
 
     scenario "Can preview budget before it is published" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
       click_link "Preview"
 
       expect(page).to have_current_path budget_path(budget)
@@ -173,6 +174,7 @@ describe "Admin budgets", :admin do
 
     scenario "Can view a budget after it is published" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
 
       accept_confirm { click_button "Publish budget" }
 
@@ -192,6 +194,7 @@ describe "Admin budgets", :admin do
 
     scenario "Destroy a budget without investments" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
 
       message = "Are you sure? " \
                 "This will delete the budget and all its associated boroughs, subcounties and wards. " \
@@ -208,6 +211,8 @@ describe "Admin budgets", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       expect(page).to have_button "Delete budget", disabled: true
       expect(page).to have_content "You cannot delete a budget that has associated investments"
     end
@@ -216,6 +221,8 @@ describe "Admin budgets", :admin do
       create(:poll, budget: budget)
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
 
       expect(page).to have_button "Delete budget", disabled: true
       expect(page).to have_content "You cannot delete a budget that has an associated poll"
@@ -231,6 +238,8 @@ describe "Admin budgets", :admin do
         budget.phases.valuating.update!(enabled: false)
 
         visit admin_budget_path(budget)
+
+        open_groups_and_headings
 
         expect(page).to have_content "The configuration of these phases is used for information purposes " \
                                      "only. Its function is to define the phases information displayed " \
@@ -342,6 +351,8 @@ describe "Admin budgets", :admin do
       heading_2 = create(:budget_heading, group: group)
 
       visit admin_budget_path(budget_hide_money)
+
+      open_groups_and_headings
 
       expect(page).to have_content heading.name
       expect(page).to have_content heading_2.name
@@ -463,6 +474,8 @@ describe "Admin budgets", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       expect(page).not_to have_content "See results"
 
       click_button "Calculate Winner Investments"
@@ -473,6 +486,8 @@ describe "Admin budgets", :admin do
       expect(page).not_to have_content selected.title
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
 
       expect(page).not_to have_link "See results"
 

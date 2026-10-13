@@ -17,6 +17,7 @@ describe "Admin budget groups", :admin do
   context "List of groups from budget page" do
     scenario "Displaying no groups for budget" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
 
       within "section", text: "Boroughs, subcounties and wards" do
         expect(page.text).to eq "Boroughs, subcounties and wards\nAdd borough\nAdd subcounty"
@@ -31,6 +32,8 @@ describe "Admin budget groups", :admin do
       2.times { create(:budget_heading, group: below) }
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
 
       within "section", text: "Boroughs, subcounties and wards" do
         within "tr.group-row", text: "Above ground" do
@@ -50,6 +53,8 @@ describe "Admin budget groups", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       accept_confirm("Are you sure? This action will delete \"Nowhere\" and can't be undone.") do
         click_button "Delete Nowhere"
       end
@@ -64,6 +69,8 @@ describe "Admin budget groups", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       accept_confirm("Are you sure? This action will delete \"Everywhere\" and can't be undone.") do
         click_button "Delete Everywhere"
       end
@@ -75,6 +82,7 @@ describe "Admin budget groups", :admin do
   context "New" do
     scenario "Create group" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
       click_link "Add subcounty"
 
       fill_in "Subcounty name", with: "All City"
@@ -104,6 +112,8 @@ describe "Admin budget groups", :admin do
       2.times { create(:budget_heading, group: group) }
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
 
       click_link "Edit Everywhere"
 

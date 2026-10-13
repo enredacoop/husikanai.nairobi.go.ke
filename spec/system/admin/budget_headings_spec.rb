@@ -23,6 +23,8 @@ describe "Admin budget headings", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       within "section", text: "Boroughs, subcounties and wards" do
         expect(page).to have_content "There are no wards in the Universities subcounty."
       end
@@ -34,6 +36,8 @@ describe "Admin budget headings", :admin do
       create(:budget_heading, name: "Phones", group: group, price: 3000)
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
 
       within "section", text: "Boroughs, subcounties and wards" do
         within "tbody" do
@@ -51,6 +55,8 @@ describe "Admin budget headings", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       within("tr", text: "Lemuria") do
         accept_confirm("Are you sure? This action will delete \"Lemuria\" and can't be undone.") do
           click_button "Delete"
@@ -67,6 +73,8 @@ describe "Admin budget headings", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       within(".heading", text: "Atlantis") do
         accept_confirm("Are you sure? This action will delete \"Atlantis\" and can't be undone.") do
           click_button "Delete"
@@ -81,6 +89,7 @@ describe "Admin budget headings", :admin do
   context "New" do
     scenario "Create heading" do
       visit admin_budget_path(budget)
+      open_groups_and_headings
 
       within "section", text: "Boroughs, subcounties and wards" do
         within("tr.group-row", text: group.name) { click_link "Add ward" }
@@ -166,6 +175,8 @@ describe "Admin budget headings", :admin do
       heading = create(:budget_heading, group: group)
 
       visit admin_budget_path(budget)
+
+      open_groups_and_headings
       within("#budget_heading_#{heading.id}") { click_link "Edit" }
 
       expect(page).to have_field "Ward name", with: heading.name

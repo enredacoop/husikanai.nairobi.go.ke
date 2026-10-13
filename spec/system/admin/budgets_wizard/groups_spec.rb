@@ -99,6 +99,8 @@ describe "Budgets wizard, groups step", :admin do
 
       visit admin_budget_path(budget)
 
+      open_groups_and_headings
+
       within "section", text: "Boroughs, subcounties and wards" do
         expect(page).to have_css "tr.group-row .tree-name", exact_text: "Group without typos"
       end

@@ -1,6 +1,7 @@
 .admin .groups-and-headings {
   .budget-tree-table {
     th[scope="row"] {
+      background: inherit;
       font-weight: normal;
       text-align: $global-left;
     }
@@ -50,6 +51,44 @@
 
     .new-link {
       @include regular-button;
+    }
+  }
+}
+
+.admin .groups-and-headings-details {
+  margin-bottom: $line-height;
+
+  > summary {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      color: $text-medium;
+      content: "▸";
+      margin-#{$global-right}: calc($line-height / 2);
+      transition: transform 0.15s;
+    }
+
+    h3 {
+      margin: 0;
+    }
+
+    &:hover h3 {
+      text-decoration: underline;
+    }
+  }
+
+  &[open] > summary {
+    margin-bottom: calc($line-height / 2);
+
+    &::before {
+      transform: rotate(90deg);
     }
   }
 }

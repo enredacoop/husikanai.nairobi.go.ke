@@ -24,6 +24,8 @@ describe "Budgets creation wizard", :admin do
 
     click_link "Finish"
 
+    open_groups_and_headings
+
     within "section", text: "Boroughs, subcounties and wards" do
       expect(page).to have_content "Single ward budget"
 
@@ -116,6 +118,8 @@ describe "Budgets creation wizard", :admin do
     end
 
     click_link "Finish"
+
+    open_groups_and_headings
 
     within "section", text: "Boroughs, subcounties and wards" do
       names = page.all("tr.group-row .tree-name, tr.heading-row .tree-name").map(&:text)

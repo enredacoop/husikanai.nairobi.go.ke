@@ -12,6 +12,8 @@ describe "Admin budget sets (boroughs)", :admin do
 
     visit admin_budget_path(budget)
 
+    open_groups_and_headings
+
     rows = page.all("table.budget-tree-table tbody tr").map do |row|
       [row[:class].split.sort.join(" "), row.text]
     end
@@ -30,8 +32,33 @@ describe "Admin budget sets (boroughs)", :admin do
     expect(page).to have_content "There are no wards in the Embakasi East subcounty."
   end
 
+  scenario "The section is folded on page load and kept open after changing it" do
+    create(:budget_set, budget: budget, name: "Nairobi West")
+
+    visit admin_budget_path(budget)
+
+    expect(page).to have_css "summary", text: "Boroughs, subcounties and wards"
+    expect(page).not_to have_css "tr.set-row"
+    expect(page).not_to have_link "Add borough"
+
+    open_groups_and_headings
+
+    expect(page).to have_css "tr.set-row", text: "Nairobi West"
+    click_link "Add borough"
+    fill_in "Borough name", with: "Nairobi East"
+    click_button "Create new borough"
+
+    expect(page).to have_content "Borough created successfully!"
+    expect(page).to have_css "tr.set-row", text: "Nairobi East"
+
+    refresh
+
+    expect(page).not_to have_css "tr.set-row"
+  end
+
   scenario "Create a set" do
     visit admin_budget_path(budget)
+    open_groups_and_headings
     click_link "Add borough"
 
     fill_in "Borough name", with: "Nairobi West"
@@ -49,6 +76,8 @@ describe "Admin budget sets (boroughs)", :admin do
     create(:budget_set, budget: budget, name: "Nairobi West")
 
     visit admin_budget_path(budget)
+
+    open_groups_and_headings
     click_link "Edit Nairobi West"
 
     fill_in "Borough name", with: "Nairobi East"
@@ -64,6 +93,8 @@ describe "Admin budget sets (boroughs)", :admin do
 
     visit admin_budget_path(budget)
 
+    open_groups_and_headings
+
     accept_confirm do
       click_button "Delete Nairobi West"
     end
@@ -77,6 +108,8 @@ describe "Admin budget sets (boroughs)", :admin do
     create(:budget_set, budget: budget, name: "Nairobi West")
 
     visit admin_budget_path(budget)
+
+    open_groups_and_headings
 
     within "tbody.budget-set", text: "Nairobi West" do
       click_link "Add subcounty"
@@ -100,6 +133,8 @@ describe "Admin budget sets (boroughs)", :admin do
     create(:budget_group, budget: budget, name: "Westlands")
 
     visit admin_budget_path(budget)
+
+    open_groups_and_headings
 
     within "#groups_without_set" do
       expect(page).to have_css "tr.group-row th", exact_text: "Westlands"
