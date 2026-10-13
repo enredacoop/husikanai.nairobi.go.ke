@@ -9,8 +9,16 @@ require "csv"
 #   implementation_pct, status, funds
 #
 # Running it again updates the existing projects (matched by name and ward).
+#
+# Values which don't match (sector, sub-sector, status, amounts, dates...) are
+# left blank and reported as warnings. Rows whose ward doesn't match are not
+# imported, since every investment must belong to a ward.
 class Nairobi::ProjectsImporter
   AUTHOR_EMAIL = "admin@consul.dev".freeze
+  COLUMNS = %w[sector sub_sector project_name sub_county ward location description performance_indicator
+               target implementing_agency contractor project_cost_ksh actual_cost_ksh start_date end_date
+               implementation_pct status funds].freeze
+  REQUIRED_COLUMNS = %w[project_name ward description].freeze
   MILESTONE_STATUSES = {
     "Awarded" => "Contract awarded, not started yet",
     "Not started" => "Not started yet",
@@ -35,14 +43,27 @@ class Nairobi::ProjectsImporter
     end
   end
 
+  # CSV with the expected columns and an example row
+  def self.template
+    CSV.generate do |csv|
+      csv << COLUMNS
+      csv << ["Business and Hustler Opportunities", "Markets and Trading Services",
+              "Construction of 10 no. of markets", "Dagoretti South", "Mutuini", "Mutuini",
+              "Construction of Market", "No. of markets constructed", "10 markets",
+              "Department of Business and Hustler Opportunities", "Mutuini Builders Ltd",
+              "242592913", "194000000", "2024-02", "2025-02", "85", "Delayed", "NCCG"]
+    end
+  end
+
   def self.find_status(name, with_deleted: false)
     statuses = with_deleted ? Milestone::Status.with_deleted : Milestone::Status
     statuses.find_by("LOWER(name) = ?", name.to_s.downcase)
   end
 
-  def initialize(budget, path)
+  def initialize(budget, path, author: nil)
     @budget = budget
     @path = path
+    @author = author
     @errors = []
     @warnings = []
     @created = 0
@@ -53,25 +74,37 @@ class Nairobi::ProjectsImporter
     self.class.create_milestone_statuses
 
     I18n.with_locale(:en) do
-      rows.each.with_index(2) { |row, line| import_row(row, line) }
-      update_heading_prices
+      parsed_rows = rows
+      missing_columns = REQUIRED_COLUMNS - parsed_rows.headers.compact
+
+      if missing_columns.any?
+        errors << "Missing columns: #{missing_columns.join(", ")}"
+      else
+        parsed_rows.each.with_index(2) do |row, line|
+          import_row(row, line) unless row.fields.all?(&:blank?)
+        end
+        update_heading_prices
+      end
     end
 
     self
+  rescue CSV::MalformedCSVError => e
+    errors << "Invalid CSV file: #{e.message}"
+    self
+  end
+
+  def imported
+    created + updated
   end
 
   private
 
     def rows
-      content = File.read(path, encoding: "bom|utf-8")
-      col_sep = content.lines.first.to_s.include?("\t") ? "\t" : ","
-
-      CSV.parse(content, headers: true, col_sep: col_sep, header_converters: ->(h) { h.to_s.strip.downcase })
-         .reject { |row| row.fields.all?(&:blank?) }
+      Nairobi::CsvFile.parse(path)
     end
 
     def import_row(row, line)
-      data = row.to_h.transform_values { |value| value.to_s.strip.chomp(";").strip }
+      data = Nairobi::CsvFile.clean(row)
       heading = find_heading(data["ward"], data["sub_county"], line)
       return unless heading
 
@@ -79,22 +112,23 @@ class Nairobi::ProjectsImporter
       new_record = investment.new_record?
 
       Budget::Investment.transaction do
-        investment.update!(investment_attributes(data, heading))
-        update_progress(investment, data["implementation_pct"])
-        update_status(investment, data["status"])
+        investment.update!(investment_attributes(data, heading, line))
+        update_progress(investment, data["implementation_pct"], line)
+        update_status(investment, data["status"], line)
       end
 
       new_record ? @created += 1 : @updated += 1
       touched_headings << heading
-    rescue ActiveRecord::RecordInvalid, ArgumentError => e
-      errors << "Line #{line} (#{data&.dig("project_name")}): #{e.message}"
+    rescue ActiveRecord::RecordInvalid => e
+      errors << "Line #{line} (#{data&.dig("project_name")}): #{e.record.errors.full_messages.to_sentence}"
     end
 
-    def investment_attributes(data, heading)
-      sector = Sector.find_or_create_by_name!(data["sector"]) if data["sector"].present?
+    def investment_attributes(data, heading, line)
+      sector = find_sector(data["sector"], nil, line, "sector")
+      sub_sector = find_sector(data["sub_sector"], sector, line, "sub_sector") if sector
 
-      if sector && data["sub_sector"].present?
-        sub_sector = Sector.find_or_create_by_name!(data["sub_sector"], parent: sector)
+      if sector.nil? && data["sub_sector"].present?
+        blank_value_warning(line, "sub_sector", data["sub_sector"])
       end
 
       {
@@ -108,10 +142,10 @@ class Nairobi::ProjectsImporter
         author: author,
         terms_of_service: "1",
         location: data["location"].presence,
-        price: amount(data["project_cost_ksh"]),
-        actual_cost: amount(data["actual_cost_ksh"]),
-        start_date: month(data["start_date"]),
-        end_date: month(data["end_date"]),
+        price: amount(data["project_cost_ksh"], line, "project_cost_ksh"),
+        actual_cost: amount(data["actual_cost_ksh"], line, "actual_cost_ksh"),
+        start_date: month(data["start_date"], line, "start_date"),
+        end_date: month(data["end_date"], line, "end_date"),
         funding_source: data["funds"].presence,
         sector: sector,
         sub_sector: sub_sector,
@@ -139,9 +173,22 @@ class Nairobi::ProjectsImporter
         end
         heading
       else
-        errors << "Line #{line}: ward \"#{ward}\" (#{sub_county}) not found or ambiguous"
+        errors << "Line #{line}: ward \"#{ward}\" (#{sub_county}) not found or ambiguous; " \
+                  "the project was not imported"
         nil
       end
+    end
+
+    def find_sector(name, parent, line, field)
+      return if name.blank?
+
+      sector = Sector.where(parent: parent).find_by("LOWER(name) = ?", name.downcase)
+      blank_value_warning(line, field, name) unless sector
+      sector
+    end
+
+    def blank_value_warning(line, field, value)
+      warnings << "Line #{line}: #{field} \"#{value}\" does not match; left blank"
     end
 
     def find_investment(title, heading)
@@ -150,18 +197,21 @@ class Nairobi::ProjectsImporter
         budget.investments.new
     end
 
-    def update_progress(investment, value)
+    def update_progress(investment, value, line)
       return if value.blank?
 
-      percentage = Float(value.delete("%")).round.clamp(ProgressBar::RANGE)
-      investment.progress_bars.primary.first_or_initialize.update!(percentage: percentage)
+      percentage = Float(value.delete("%"), exception: false)
+      return blank_value_warning(line, "implementation_pct", value) unless percentage
+
+      progress_bar = investment.progress_bars.primary.first_or_initialize
+      progress_bar.update!(percentage: percentage.round.clamp(ProgressBar::RANGE))
     end
 
-    def update_status(investment, name)
+    def update_status(investment, name, line)
       return if name.blank?
 
       unless MILESTONE_STATUSES.keys.any? { |valid_name| valid_name.casecmp?(name) }
-        raise ArgumentError, "unknown status \"#{name}\" (valid: #{MILESTONE_STATUSES.keys.join(", ")})"
+        return blank_value_warning(line, "status", name)
       end
 
       status = self.class.find_status(name)
@@ -187,13 +237,20 @@ class Nairobi::ProjectsImporter
       @author ||= User.find_by!(email: AUTHOR_EMAIL)
     end
 
-    def amount(value)
+    def amount(value, line, field)
       return if value.blank?
 
-      BigDecimal(value.delete(", ")).round.to_i
+      number = BigDecimal(value.delete(", "), exception: false)
+
+      if number
+        number.round.to_i
+      else
+        blank_value_warning(line, field, value)
+        nil
+      end
     end
 
-    def month(value)
+    def month(value, line, field)
       return if value.blank?
 
       if value.match?(/\A\d{4}-\d{1,2}\z/)
@@ -202,5 +259,8 @@ class Nairobi::ProjectsImporter
       else
         Date.iso8601(value)
       end
+    rescue Date::Error
+      blank_value_warning(line, field, value)
+      nil
     end
 end

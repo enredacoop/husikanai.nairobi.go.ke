@@ -12,6 +12,7 @@ var initialize_modules = function() {
   // loading a page.
   App.BudgetSets.initialize();
   App.DependentSelect.initialize();
+  App.FileUpload.initialize();
 };
 
 var destroy_non_idempotent_modules = function() {

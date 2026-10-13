@@ -29,6 +29,35 @@ es:
         manage_sectors: "Gestionar sectores y subsectores"
         select_sector: "Seleccionar sector"
         select_sub_sector: "Seleccionar subsector"
+    budget_investments_imports:
+      new:
+        title: "Importar proyectos"
+        help: "Sube un fichero CSV (separado por comas o tabuladores) con un proyecto por fila y estas columnas:"
+        matching: "Los valores que no coinciden con un sector, subsector o estado existente, o que no son importes o fechas válidos, se dejan en blanco."
+        ward_required: "El barrio es obligatorio: las filas cuyo barrio no coincide con un barrio de este presupuesto no se importan. El subcondado se obtiene del barrio."
+        updates: "Los proyectos que ya existen (mismo nombre y barrio) se actualizan en lugar de duplicarse. El presupuesto de cada barrio se actualiza con la suma de sus proyectos."
+        winners: "Los proyectos importados se marcan como viables, seleccionados y ganadores."
+        download_template: "Descargar una plantilla"
+        submit: "Importar proyectos"
+        importing: "Importando..."
+      create:
+        no_file: "Elige un fichero CSV"
+        invalid_format: "El fichero debe ser un CSV (.csv, .tsv o .txt)"
+        too_big: "El fichero es demasiado grande; el tamaño máximo es %{size}"
+      results:
+        title: "Resultado de la importación"
+        summary: "Creados: %{created}. Actualizados: %{updated}. Errores: %{errors}. Avisos: %{warnings}."
+        see_investments: "Ver los proyectos de gasto"
+        errors: "Errores (filas no importadas)"
+        warnings: "Avisos (valores dejados en blanco)"
+    budgets_wizard:
+      groups_import:
+        title: "Importar subcondados y barrios desde un fichero CSV"
+        help: "Sube un fichero CSV (separado por comas o tabuladores) con un barrio por fila y estas columnas:"
+        updates: "Los subcondados y barrios que no existen se crean. Los existentes (mismo nombre) se reutilizan y se actualiza su presupuesto, así que el fichero se puede volver a importar."
+        submit: "Importar subcondados y barrios"
+        summary: "Subcondados creados: %{groups}. Barrios creados: %{created}. Barrios actualizados: %{updated}. Errores: %{errors}. Avisos: %{warnings}."
+        continue_to_phases: "Continuar a fases"
     sectors:
       index:
         title: "Sectores"

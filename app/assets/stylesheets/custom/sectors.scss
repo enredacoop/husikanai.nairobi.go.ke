@@ -44,3 +44,48 @@
     margin: 0;
   }
 }
+
+.admin .budgets-links .import-link {
+  @include has-fa-icon(file-upload, solid);
+}
+
+.admin .investments-import-results {
+  margin-bottom: $line-height * 1.5;
+
+  .import-errors li {
+    color: $alert-color;
+  }
+}
+
+.admin .investments-import-help code {
+  word-break: break-all;
+}
+
+.admin .groups-import {
+  border-bottom: 1px solid $border;
+  margin-bottom: $line-height;
+  padding-bottom: $line-height;
+
+  code {
+    word-break: break-all;
+  }
+
+  .import-errors li {
+    color: $alert-color;
+  }
+}
+
+.admin .file-upload-form {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc($line-height / 2) $line-height;
+
+  .file-upload-button {
+    margin-bottom: 0;
+
+    &:focus-within {
+      @include focus-outline;
+    }
+  }
+}

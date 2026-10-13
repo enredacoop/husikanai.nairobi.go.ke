@@ -18,13 +18,21 @@ describe Nairobi::ProjectsImporter do
      "2024-02", "2025-02", "85", "Delayed", "NCCG"].join("\t")
   end
 
-  before { create(:administrator, user: create(:user, email: "admin@consul.dev")) }
+  before do
+    create(:administrator, user: create(:user, email: "admin@consul.dev"))
+    sector = create(:sector, name: "Business and Hustler Opportunities")
+    create(:sector, parent: sector, name: "Markets and Trading Services")
+  end
+
+  def csv_file(*lines)
+    Tempfile.new(["projects", ".csv"]).tap do |file|
+      file.write([header, *lines].join("\n"))
+      file.close
+    end
+  end
 
   def import(*lines)
-    file = Tempfile.new(["projects", ".csv"])
-    file.write([header, *lines].join("\n"))
-    file.close
-    Nairobi::ProjectsImporter.new(budget, file.path).import
+    Nairobi::ProjectsImporter.new(budget, csv_file(*lines).path).import
   end
 
   it "imports a project as a winning investment" do
@@ -79,13 +87,83 @@ describe Nairobi::ProjectsImporter do
     expect(Milestone::Status.with_deleted.where(name: "Stalled").count).to eq 1
   end
 
-  it "matches statuses ignoring the case and rejects unknown ones" do
+  it "matches statuses ignoring the case and leaves unknown ones blank" do
     footbridge = row.sub("Construction of 10 no. of markets", "Footbridge").sub("\tDelayed\t", "\tPaused\t")
     importer = import(row.sub("\tDelayed\t", "\tsubstantially complete\t"), footbridge)
 
-    expect(budget.investments.last.milestones.last.status.name).to eq "Substantially Complete"
-    expect(importer.errors.size).to eq 1
-    expect(importer.errors.first).to include "unknown status \"Paused\""
+    expect(importer.errors).to be_empty
+    expect(importer.created).to eq 2
+    expect(budget.investments.find_by!(title: "Footbridge").milestones).to be_empty
+    markets = budget.investments.find_by!(title: "Construction of 10 no. of markets")
+    expect(markets.milestones.last.status.name).to eq "Substantially Complete"
+    expect(importer.warnings).to eq ["Line 3: status \"Paused\" does not match; left blank"]
+  end
+
+  it "leaves sectors and sub-sectors blank when they do not match" do
+    unknown_sector = row.sub("Business and Hustler Opportunities", "Space exploration")
+                        .sub("Construction of 10 no. of markets", "Rocket")
+    unknown_sub_sector = row.sub("Markets and Trading Services", "Street vendors")
+                            .sub("Construction of 10 no. of markets", "Stalls")
+
+    importer = import(unknown_sector, unknown_sub_sector)
+
+    expect(importer.errors).to be_empty
+    expect(Sector.count).to eq 2
+
+    rocket = budget.investments.find_by!(title: "Rocket")
+    expect(rocket.sector).to be nil
+    expect(rocket.sub_sector).to be nil
+
+    stalls = budget.investments.find_by!(title: "Stalls")
+    expect(stalls.sector.name).to eq "Business and Hustler Opportunities"
+    expect(stalls.sub_sector).to be nil
+
+    expect(importer.warnings).to eq [
+      "Line 2: sector \"Space exploration\" does not match; left blank",
+      "Line 2: sub_sector \"Markets and Trading Services\" does not match; left blank",
+      "Line 3: sub_sector \"Street vendors\" does not match; left blank"
+    ]
+  end
+
+  it "leaves invalid amounts, dates and percentages blank" do
+    invalid_row = row.sub("2024-02", "February").sub("194000000", "unknown").sub("\t85\t", "\tabout half\t")
+    importer = import(invalid_row)
+
+    expect(importer.errors).to be_empty
+
+    investment = budget.investments.last
+    expect(investment.start_date).to be nil
+    expect(investment.actual_cost).to be nil
+    expect(investment.primary_progress_bar).to be nil
+    expect(importer.warnings.size).to eq 3
+  end
+
+  it "uses the given author" do
+    author = create(:administrator).user
+
+    Nairobi::ProjectsImporter.new(budget, csv_file(row).path, author: author).import
+
+    expect(budget.investments.last.author).to eq author
+  end
+
+  it "reports missing required columns" do
+    columns.delete("ward")
+
+    importer = import(row)
+
+    expect(importer.errors).to eq ["Missing columns: ward"]
+    expect(budget.investments.count).to eq 0
+  end
+
+  it "reads files encoded in Windows-1252" do
+    file = Tempfile.new(["projects", ".csv"], binmode: true)
+    file.write([header, row.sub("Mutuini Builders Ltd", "Muñoz Builders")].join("\n").encode("Windows-1252"))
+    file.close
+
+    importer = Nairobi::ProjectsImporter.new(budget, file.path).import
+
+    expect(importer.errors).to be_empty
+    expect(budget.investments.last.contractor).to eq "Muñoz Builders"
   end
 
   it "sets the ward budget to the sum of its projects" do
@@ -106,7 +184,6 @@ describe Nairobi::ProjectsImporter do
     investment = budget.investments.last
     expect(investment.primary_progress_bar.percentage).to eq 100
     expect(investment.milestones.map { |milestone| milestone.status.name }).to eq %w[Delayed Completed]
-    expect(Sector.count).to eq 2
   end
 
   it "accepts comma separated files" do
@@ -120,9 +197,9 @@ describe Nairobi::ProjectsImporter do
     expect(budget.investments.count).to eq 1
   end
 
-  it "reports rows with unknown wards or invalid data" do
+  it "does not import rows with unknown wards or invalid projects" do
     importer = import(row.sub("\tMutuini\tMutuini\t", "\tAtlantis\tMutuini\t"),
-                      row.sub("2024-02", "February"))
+                      row.sub("Construction of Market", ""))
 
     expect(importer.errors.size).to eq 2
     expect(importer.errors.first).to include "Line 2: ward \"Atlantis\""

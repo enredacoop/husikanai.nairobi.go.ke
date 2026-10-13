@@ -38,9 +38,21 @@ constraints lambda { |request| !Rails.application.multitenancy_management_mode? 
   namespace :admin do
     resources :budgets, only: [] do
       resources :sets, except: [:index, :show], controller: "budget_sets"
+
+      resource :investments_import, only: [:new, :create], controller: "budget_investments_imports" do
+        get :template
+      end
     end
 
     resources :sectors, except: :show
+
+    namespace :budgets_wizard do
+      resources :budgets, only: [] do
+        resource :groups_import, only: :create do
+          get :template
+        end
+      end
+    end
   end
 end
 

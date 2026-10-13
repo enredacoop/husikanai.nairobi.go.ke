@@ -1,0 +1,54 @@
+<section class="groups-import" aria-labelledby="groups_import_header">
+  <h3 id="groups_import_header"><%= t("admin.budgets_wizard.groups_import.title") %></h3>
+
+  <% if importer %>
+    <div class="callout <%= importer.errors.any? ? "warning" : "success" %>">
+      <p>
+        <%= t("admin.budgets_wizard.groups_import.summary",
+              groups: importer.groups_created,
+              created: importer.headings_created,
+              updated: importer.headings_updated,
+              errors: importer.errors.size,
+              warnings: importer.warnings.size) %>
+      </p>
+
+      <% if importer.errors.any? %>
+        <ul class="import-errors">
+          <% importer.errors.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% if importer.warnings.any? %>
+        <ul class="import-warnings">
+          <% importer.warnings.each do |warning| %>
+            <li><%= warning %></li>
+          <% end %>
+        </ul>
+      <% end %>
+
+      <% if importer.imported? %>
+        <%= link_to t("admin.budgets_wizard.groups_import.continue_to_phases"),
+                    admin_budgets_wizard_budget_budget_phases_path(budget),
+                    class: "button success" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <p><%= t("admin.budgets_wizard.groups_import.help") %> <code><%= columns %></code></p>
+  <p class="help-text"><%= t("admin.budgets_wizard.groups_import.updates") %></p>
+
+  <%= form_tag admin_budgets_wizard_budget_groups_import_path(budget),
+               multipart: true,
+               class: "groups-import-form file-upload-form" do %>
+    <label class="button hollow file-upload-button"
+           data-importing="<%= t("admin.budget_investments_imports.new.importing") %>">
+      <span><%= t("admin.budgets_wizard.groups_import.submit") %></span>
+      <%= file_field_tag :file, id: "groups_import_file", accept: ".csv,.tsv,.txt,text/csv",
+                                class: "show-for-sr js-file-upload" %>
+    </label>
+    <%= link_to t("admin.budget_investments_imports.new.download_template"),
+                template_admin_budgets_wizard_budget_groups_import_path(budget) %>
+  <% end %>
+</section>

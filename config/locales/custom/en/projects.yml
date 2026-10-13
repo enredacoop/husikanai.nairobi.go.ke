@@ -29,6 +29,35 @@ en:
         manage_sectors: "Manage sectors and sub-sectors"
         select_sector: "Select sector"
         select_sub_sector: "Select sub-sector"
+    budget_investments_imports:
+      new:
+        title: "Import projects"
+        help: "Upload a CSV file (comma or tab separated) with one project per row and these columns:"
+        matching: "Values which don't match an existing sector, sub-sector or status, or which are not valid amounts or dates, are left blank."
+        ward_required: "The ward is required: rows whose ward doesn't match a ward of this budget are not imported. The subcounty is taken from the ward."
+        updates: "Projects which already exist (same name and ward) are updated instead of duplicated. Ward budgets are updated to the sum of their projects."
+        winners: "Imported projects are marked as feasible, selected and winners."
+        download_template: "Download a template"
+        submit: "Import projects"
+        importing: "Importing..."
+      create:
+        no_file: "Please choose a CSV file"
+        invalid_format: "The file must be a CSV file (.csv, .tsv or .txt)"
+        too_big: "The file is too big; the maximum size is %{size}"
+      results:
+        title: "Import results"
+        summary: "Created: %{created}. Updated: %{updated}. Errors: %{errors}. Warnings: %{warnings}."
+        see_investments: "See the investment projects"
+        errors: "Errors (rows not imported)"
+        warnings: "Warnings (values left blank)"
+    budgets_wizard:
+      groups_import:
+        title: "Import subcounties and wards from a CSV file"
+        help: "Upload a CSV file (comma or tab separated) with one ward per row and these columns:"
+        updates: "Subcounties and wards which don't exist are created. Existing ones (same name) are reused and their budget is updated, so the file can be imported again."
+        submit: "Import subcounties and wards"
+        summary: "Subcounties created: %{groups}. Wards created: %{created}. Wards updated: %{updated}. Errors: %{errors}. Warnings: %{warnings}."
+        continue_to_phases: "Continue to phases"
     sectors:
       index:
         title: "Sectors"

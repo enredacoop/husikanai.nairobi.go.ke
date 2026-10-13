@@ -1,0 +1,19 @@
+<div class="float-right">
+  <%= link_to t("admin.budget_investments_imports.new.title"),
+              new_admin_budget_investments_import_path(@budget),
+              class: "button medium" %>
+
+  <% if can?(:read_results, @budget) %>
+    <%= link_to t("admin.budget_investments.index.see_results"),
+                budget_results_path(@budget, heading_id: @budget.headings.first),
+                class: "button hollow medium", target: "_blank" %>
+  <% end %>
+</div>
+
+<h2 class="inline-block"><%= @budget.name %> - <%= t("admin.budget_investments.index.title") %></h2>
+
+<%= render Admin::BudgetInvestments::SearchFormComponent.new(@budget) %>
+
+<%= render "/shared/filter_subnav", i18n_namespace: "admin.budget_investments.index" %>
+
+<%= render Admin::BudgetInvestments::InvestmentsComponent.new(@budget, @investments) %>

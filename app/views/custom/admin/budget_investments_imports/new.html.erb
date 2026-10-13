@@ -1,0 +1,62 @@
+<%= back_link_to admin_budget_budget_investments_path(@budget) %>
+
+<h2><%= @budget.name %> - <%= t("admin.budget_investments_imports.new.title") %></h2>
+
+<% if @importer %>
+  <section class="investments-import-results" aria-labelledby="import_results_header">
+    <h3 id="import_results_header"><%= t("admin.budget_investments_imports.results.title") %></h3>
+
+    <div class="callout <%= @importer.errors.any? ? "warning" : "success" %>">
+      <%= t("admin.budget_investments_imports.results.summary",
+            created: @importer.created,
+            updated: @importer.updated,
+            errors: @importer.errors.size,
+            warnings: @importer.warnings.size) %>
+      <% if @importer.imported > 0 %>
+        <%= link_to t("admin.budget_investments_imports.results.see_investments"),
+                    admin_budget_budget_investments_path(@budget) %>
+      <% end %>
+    </div>
+
+    <% if @importer.errors.any? %>
+      <h4><%= t("admin.budget_investments_imports.results.errors") %></h4>
+      <ul class="import-errors">
+        <% @importer.errors.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if @importer.warnings.any? %>
+      <h4><%= t("admin.budget_investments_imports.results.warnings") %></h4>
+      <ul class="import-warnings">
+        <% @importer.warnings.each do |warning| %>
+          <li><%= warning %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+<% end %>
+
+<div class="investments-import-help">
+  <p><%= t("admin.budget_investments_imports.new.help") %></p>
+  <p><code><%= Nairobi::ProjectsImporter::COLUMNS.join(",") %></code></p>
+  <ul>
+    <li><%= t("admin.budget_investments_imports.new.matching") %></li>
+    <li><%= t("admin.budget_investments_imports.new.ward_required") %></li>
+    <li><%= t("admin.budget_investments_imports.new.updates") %></li>
+    <li><%= t("admin.budget_investments_imports.new.winners") %></li>
+  </ul>
+</div>
+
+<%= form_tag admin_budget_investments_import_path(@budget),
+             multipart: true,
+             class: "investments-import-form file-upload-form" do %>
+  <label class="button success file-upload-button"
+         data-importing="<%= t("admin.budget_investments_imports.new.importing") %>">
+    <span><%= t("admin.budget_investments_imports.new.submit") %></span>
+    <%= file_field_tag :file, accept: ".csv,.tsv,.txt,text/csv", class: "show-for-sr js-file-upload" %>
+  </label>
+  <%= link_to t("admin.budget_investments_imports.new.download_template"),
+              template_admin_budget_investments_import_path(@budget) %>
+<% end %>
