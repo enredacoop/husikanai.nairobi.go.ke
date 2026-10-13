@@ -369,7 +369,7 @@ describe "Budgets" do
       expect(page).to have_link "See results"
     end
 
-    scenario "Show investments list" do
+    scenario "Does not show the investments list but links to all investments" do
       budget = create(:budget, phase: "balloting")
       group = create(:budget_group, budget: budget)
       heading = create(:budget_heading, group: group)
@@ -378,16 +378,13 @@ describe "Budgets" do
 
       visit budget_path(budget)
 
-      within(".investments-list") do
-        expect(page).to have_content "List of investments"
-        expect(page).to have_content "PRICE", count: 3
-      end
-
+      expect(page).not_to have_css ".investments-list"
+      expect(page).not_to have_content "List of investments"
       expect(page).to have_link "See all investments",
                                 href: budget_investments_path(budget)
     end
 
-    scenario "Show investments list when budget has multiple headings" do
+    scenario "Links to all investments when budget has multiple headings" do
       budget = create(:budget, phase: "accepting")
       group = create(:budget_group, budget: budget)
       heading_1 = create(:budget_heading, group: group)
@@ -397,7 +394,8 @@ describe "Budgets" do
 
       visit budget_path(budget)
 
-      expect(page).to have_css ".investments-list"
+      expect(page).not_to have_css ".investments-list"
+      expect(page).to have_link "See all investments", href: budget_investments_path(budget)
     end
 
     scenario "Show supports info on selecting phase" do
