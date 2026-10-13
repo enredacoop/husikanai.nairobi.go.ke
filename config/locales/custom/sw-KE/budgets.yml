@@ -23,5 +23,10 @@ sw-KE:
         one: "Wadi 1"
         other: "Wadi %{count}"
     investments:
+      advanced_search:
+        subcounty: "Kaunti ndogo"
+        ward: "Wadi"
+        all_subcounties: "Kaunti ndogo zote"
+        all_wards: "Wadi zote"
       index:
         by_group: "Miradi ya uwekezaji katika %{group}"

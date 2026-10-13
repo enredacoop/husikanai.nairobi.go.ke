@@ -1,0 +1,19 @@
+.advanced-search-form .search-filters-row {
+  @include breakpoint(large) {
+    align-items: flex-start;
+    display: flex;
+
+    > .general-search,
+    > .date-filters,
+    > .filter {
+      flex: 1 1 0;
+      float: none;
+      min-width: 0;
+      width: auto;
+    }
+
+    + .submit {
+      clear: both;
+    }
+  }
+}

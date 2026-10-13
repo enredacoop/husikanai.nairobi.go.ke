@@ -23,5 +23,10 @@ es:
         one: "1 barrio"
         other: "%{count} barrios"
     investments:
+      advanced_search:
+        subcounty: "Subcondado"
+        ward: "Barrio"
+        all_subcounties: "Todos los subcondados"
+        all_wards: "Todos los barrios"
       index:
         by_group: "Proyectos de gasto de %{group}"

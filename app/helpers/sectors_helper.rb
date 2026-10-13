@@ -8,7 +8,7 @@ module SectorsHelper
   def sub_sector_select_options(selected = nil)
     grouped_options = Sector.main.includes(:sub_sectors).map do |sector|
       options = sector.sub_sectors.map do |sub_sector|
-        [sub_sector.name, sub_sector.id, { data: { sector_id: sector.id }}]
+        [sub_sector.name, sub_sector.id, { data: { parent_id: sector.id }}]
       end
 
       [sector.name, options]

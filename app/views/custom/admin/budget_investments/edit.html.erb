@@ -61,14 +61,13 @@
         <%= f.select :sector_id,
                      sector_select_options,
                      { include_blank: t("admin.budget_investments.edit.select_sector") },
-                     class: "js-sector-select", data: { sub_sector_select: "#budget_investment_sub_sector_id" } %>
+                     data: { dependent_select: "#budget_investment_sub_sector_id" } %>
       </div>
 
       <div class="small-12 medium-6 column">
         <%= f.select :sub_sector_id,
                      sub_sector_select_options(@investment.sub_sector_id),
-                     { include_blank: t("admin.budget_investments.edit.select_sub_sector") },
-                     class: "js-sub-sector-select" %>
+                     { include_blank: t("admin.budget_investments.edit.select_sub_sector") } %>
       </div>
 
       <div class="small-12 medium-6 column">

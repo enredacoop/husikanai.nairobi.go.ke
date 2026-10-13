@@ -23,5 +23,10 @@ en:
         one: "1 ward"
         other: "%{count} wards"
     investments:
+      advanced_search:
+        subcounty: "Subcounty"
+        ward: "Ward"
+        all_subcounties: "All subcounties"
+        all_wards: "All wards"
       index:
         by_group: "Investment projects in %{group}"
