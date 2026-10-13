@@ -23,7 +23,7 @@ describe "Budgets" do
       scenario "Show normal index with links publishing prices" do
         budget.update!(phase: "publishing_prices")
 
-        visit budgets_path
+        visit budget_path(budget)
 
         within(".budget-subheader") do
           expect(page).to have_content("Publishing projects prices")
@@ -42,20 +42,39 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show finished budgets list" do
-      budget = create(:budget)
-      finished_budget_1 = create(:budget, :finished)
-      finished_budget_2 = create(:budget, :finished)
-      drafting_budget = create(:budget, :drafting)
+    scenario "Show the list of published budgets instead of the current budget" do
+      budget = create(:budget, :accepting, name: "Current budget")
+      finished_budget = create(:budget, :finished, name: "Finished budget", results_enabled: true)
+      informing_budget = create(:budget, :informing, name: "Informing budget")
+      drafting_budget = create(:budget, :drafting, name: "Drafting budget")
 
       visit budgets_path
 
-      within("#finished_budgets") do
-        expect(page).to     have_content(finished_budget_1.name)
-        expect(page).to     have_content(finished_budget_2.name)
-        expect(page).not_to have_content(budget.name)
-        expect(page).not_to have_content(drafting_budget.name)
+      expect(page).not_to have_css "#budget_info"
+      expect(page).not_to have_content drafting_budget.name
+      expect(informing_budget.name).to appear_before(finished_budget.name)
+      expect(finished_budget.name).to appear_before(budget.name)
+
+      within("#budget_#{budget.id}") do
+        expect(page).to have_css ".budget-phase", text: /accepting projects/i
+        expect(page).to have_link "See budget", href: budget_path(budget)
+        expect(page).to have_link "See investments", href: budget_investments_path(budget)
+        expect(page).not_to have_link "See results"
       end
+
+      within("#budget_#{finished_budget.id}") do
+        expect(page).to have_link "See results", href: budget_results_path(finished_budget)
+        expect(page).to have_link "Milestones", href: budget_executions_path(finished_budget)
+      end
+
+      within("#budget_#{informing_budget.id}") do
+        expect(page).to have_link "See budget"
+        expect(page).not_to have_link "See investments"
+      end
+
+      click_link "Current budget"
+
+      expect(page).to have_current_path budget_path(budget)
     end
 
     scenario "Show headings ordered by name" do
@@ -63,7 +82,7 @@ describe "Budgets" do
       last_heading = create(:budget_heading, group: group, name: "BBB")
       first_heading = create(:budget_heading, group: group, name: "AAA")
 
-      visit budgets_path
+      visit budget_path(budget)
 
       expect(first_heading.name).to appear_before(last_heading.name)
     end
@@ -75,7 +94,7 @@ describe "Budgets" do
       heading1 = create(:budget_heading, group: group1, price: 1_000_000)
       heading2 = create(:budget_heading, group: group2, price: 2_000_000)
 
-      visit budgets_path locale: :es
+      visit budget_path(budget, locale: :es)
 
       within("#budget_info") do
         expect(page).to have_content group1.name
@@ -91,7 +110,7 @@ describe "Budgets" do
       budget.update!(phase: "informing")
       heading = create(:budget_heading, budget: budget)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within("#budget_info") do
         expect(page).not_to have_link heading.name
@@ -103,7 +122,7 @@ describe "Budgets" do
       budget.update!(phase: "finished")
       heading = create(:budget_heading, budget: budget)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within("#budget_info") do
         expect(page).not_to have_link heading.name
@@ -115,7 +134,7 @@ describe "Budgets" do
       budget = create(:budget, :finished, :hide_money)
       heading = create(:budget_heading, budget: budget)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within("#budget_info") do
         expect(page).to have_content heading.name
@@ -129,7 +148,7 @@ describe "Budgets" do
       heading2 = create(:budget_heading, budget: budget)
       heading3 = create(:budget_heading, budget: budget)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within("#budget_info") do
         expect(page).to have_content heading1.name
@@ -151,7 +170,7 @@ describe "Budgets" do
       group = create(:budget_group, budget: budget, name: "Single group")
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       expect(page).not_to have_content "Single group"
 
@@ -166,7 +185,7 @@ describe "Budgets" do
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
       create(:budget_heading, group: group, name: "Other new heading", price: 30_000)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within("#groups_and_headings") do
         expect(page).to have_content "New group"
@@ -212,7 +231,7 @@ describe "Budgets" do
     phases.finished.update!(starts_at: "21-03-2018", ends_at: "30-03-2018", enabled: true,
                             description: "Description of finished phase")
 
-    visit budgets_path
+    visit budget_path(budget)
 
     expect(page).not_to have_link "Reviewing projects"
     expect(page).not_to have_link "Valuating projects"
@@ -262,7 +281,7 @@ describe "Budgets" do
     scenario "Display investment's map location markers" do
       create_list(:budget_investment, 3, :with_map_location, heading: heading)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 3, visible: :all)
@@ -273,7 +292,7 @@ describe "Budgets" do
       budget.update!(phase: :publishing_prices)
       create_list(:budget_investment, 4, :with_map_location, heading: heading)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 4, visible: :all)
@@ -285,7 +304,7 @@ describe "Budgets" do
       create_list(:budget_investment, 2, :selected, :with_map_location, heading: heading)
       create_list(:budget_investment, 2, :with_map_location, heading: heading)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 2, visible: :all)
@@ -312,7 +331,7 @@ describe "Budgets" do
 
       allow_any_instance_of(Budgets::MapComponent).to receive(:coordinates).and_return(coordinates)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within ".map-location" do
         expect(page).to have_css ".map-icon", count: 1, visible: :all
@@ -324,7 +343,7 @@ describe "Budgets" do
       Setting["map.feature.marker_clustering"] = true
       create_list(:budget_investment, 3, :selected, :with_map_location, heading: heading)
 
-      visit budgets_path
+      visit budget_path(budget)
 
       within ".map-location" do
         expect(page).to have_css ".marker-cluster div span", text: "3"

@@ -1,0 +1,31 @@
+<ul class="budgets-list">
+  <% budgets.each do |budget| %>
+    <li id="<%= dom_id(budget) %>" class="budget-card">
+      <h2><%= link_to budget.name, budget_path(budget) %></h2>
+
+      <% if phase_name(budget) %>
+        <p class="budget-phase"><%= phase_name(budget) %></p>
+      <% end %>
+
+      <% if summary(budget) %>
+        <p class="budget-summary"><%= summary(budget) %></p>
+      <% end %>
+
+      <div class="budget-card-actions">
+        <%= link_to t("budgets.index.see_budget"), budget_path(budget), class: "button" %>
+
+        <% if investments?(budget) %>
+          <%= link_to t("budgets.index.see_investments"), budget_investments_path(budget), class: "button hollow" %>
+        <% end %>
+
+        <% if results?(budget) %>
+          <%= link_to t("budgets.index.see_results"), budget_results_path(budget), class: "button hollow" %>
+        <% end %>
+
+        <% if budget.finished? %>
+          <%= link_to t("budgets.index.milestones"), budget_executions_path(budget), class: "button hollow" %>
+        <% end %>
+      </div>
+    </li>
+  <% end %>
+</ul>

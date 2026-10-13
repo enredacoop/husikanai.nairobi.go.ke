@@ -23,22 +23,22 @@ describe "Admin edit translatable records", :admin do
         visit path
 
         select "Français", from: "Add language"
-        fill_in "Heading name", with: "Nom en Français"
-        click_button "Save heading"
+        fill_in "Ward name", with: "Nom en Français"
+        click_button "Save ward"
 
-        expect(page).to have_content "Heading updated successfully"
+        expect(page).to have_content "Ward updated successfully"
 
         visit path
 
-        expect(page).to have_field "Heading name", with: "Heading name in English"
+        expect(page).to have_field "Ward name", with: "Ward name in English"
 
         select "Español", from: "Current language"
 
-        expect(page).to have_field "Heading name", with: "Nombre de la partida en español"
+        expect(page).to have_field "Ward name", with: "Nombre del barrio en español"
 
         select "Français", from: "Current language"
 
-        expect(page).to have_field "Heading name", with: "Nom en Français"
+        expect(page).to have_field "Ward name", with: "Nom en Français"
       end
     end
 
@@ -355,9 +355,9 @@ describe "Admin edit translatable records", :admin do
 
       expect(page).not_to have_select "Current language", with_options: ["Español"]
 
-      click_button "Save group"
+      click_button "Save subcounty"
 
-      expect(page).to have_content "Group updated successfully"
+      expect(page).to have_content "Subcounty updated successfully"
 
       visit path
 
@@ -465,7 +465,7 @@ describe "Admin edit translatable records", :admin do
 
         expect(page).to have_content "Changes saved"
 
-        visit budgets_path
+        visit budget_path(translatable.budget)
         click_link "Name en Français"
 
         expect(page).to have_content "Phase en Français"

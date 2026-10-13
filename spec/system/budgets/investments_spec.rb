@@ -1337,7 +1337,7 @@ describe "Budget Investments" do
 
       first(:link, "Participatory budgeting").click
 
-      click_link "See all investments"
+      click_link "See investments"
 
       within("#budget_investment_#{investment1.id}") do
         expect(page).to have_content investment1.title

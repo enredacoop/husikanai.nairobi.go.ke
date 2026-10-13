@@ -11,6 +11,9 @@ en:
       index:
         group_filter_all: All subcounties
   budgets:
+    index:
+      see_budget: "See budget"
+      see_investments: "See investments"
     groups:
       investments_link: "See all investment projects in %{group}"
     sets:
