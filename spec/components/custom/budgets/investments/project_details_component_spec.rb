@@ -9,6 +9,10 @@ describe Budgets::Investments::ProjectDetailsComponent do
            start_date: Date.new(2024, 2, 1),
            end_date: Date.new(2025, 2, 1),
            funding_source: "NCCG",
+           performance_indicator: "No. of markets constructed",
+           target: "10 markets",
+           implementing_agency: "Department of Business",
+           contractor: "Mutuini Builders Ltd",
            sector: sector,
            sub_sector: create(:sector, parent: sector, name: "Markets and Trading Services"))
   end
@@ -31,6 +35,11 @@ describe Budgets::Investments::ProjectDetailsComponent do
     expect(page).to have_css "dd", exact_text: "February 2024"
     expect(page).to have_css "dd", exact_text: "February 2025"
     expect(page).to have_css "dd", exact_text: "NCCG"
+    expect(page).to have_css "dt", exact_text: "Performance indicator"
+    expect(page).to have_css "dd", exact_text: "No. of markets constructed"
+    expect(page).not_to have_content "10 markets"
+    expect(page).to have_css "dd", exact_text: "Department of Business"
+    expect(page).to have_css "dd", exact_text: "Mutuini Builders Ltd"
   end
 
   it "does not show the costs before prices are published" do

@@ -16,10 +16,13 @@ class Budgets::Investments::ProjectDetailsComponent < ApplicationComponent
         sector: sector,
         status: status&.name,
         implementation: implementation,
+        performance_indicator: investment.performance_indicator.presence,
         price: (money(investment.price) if show_costs?),
         actual_cost: (money(investment.actual_cost) if show_costs? && investment.actual_cost.present?),
         start_date: month(investment.start_date),
         end_date: month(investment.end_date),
+        implementing_agency: investment.implementing_agency.presence,
+        contractor: investment.contractor.presence,
         funding_source: investment.funding_source.presence
       }.compact
     end

@@ -12,8 +12,11 @@ es:
         actual_cost: "Coste real"
         start_date: "Fecha de inicio"
         end_date: "Fecha de fin"
+        implementing_agency: "Organismo ejecutor"
+        contractor: "Contratista"
       budget/investment/translation:
-        objectives: "Objetivos"
+        performance_indicator: "Indicador de rendimiento"
+        target: "Meta"
       sector:
         name: "Nombre"
         parent_id: "Sector padre"
@@ -54,7 +57,6 @@ es:
     investments:
       project_details:
         title: "Datos del proyecto"
-        objectives: "Objetivos"
         sector: "Sector"
         status: "Estado"
         implementation: "Ejecución"
@@ -63,3 +65,7 @@ es:
         start_date: "Fecha de inicio"
         end_date: "Fecha de fin"
         funding_source: "Fuente de financiación"
+        performance_indicator: "Indicador de rendimiento"
+        target: "Meta"
+        implementing_agency: "Organismo ejecutor"
+        contractor: "Contratista"

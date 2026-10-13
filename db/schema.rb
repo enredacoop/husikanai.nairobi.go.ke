@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_10_08_100000) do
+ActiveRecord::Schema[7.1].define(version: 2026_10_13_100000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -249,7 +249,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_08_100000) do
     t.string "title"
     t.text "description"
     t.datetime "hidden_at", precision: nil
-    t.text "objectives"
+    t.text "target"
+    t.text "performance_indicator"
     t.index ["budget_investment_id"], name: "index_budget_investment_translations_on_budget_investment_id"
     t.index ["hidden_at"], name: "index_budget_investment_translations_on_hidden_at"
     t.index ["locale"], name: "index_budget_investment_translations_on_locale"
@@ -300,6 +301,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_10_08_100000) do
     t.string "funding_source"
     t.bigint "sector_id"
     t.bigint "sub_sector_id"
+    t.string "implementing_agency"
+    t.string "contractor"
     t.index ["administrator_id"], name: "index_budget_investments_on_administrator_id"
     t.index ["author_id"], name: "index_budget_investments_on_author_id"
     t.index ["budget_id"], name: "index_budget_investments_on_budget_id"

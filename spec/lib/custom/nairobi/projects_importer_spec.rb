@@ -4,14 +4,17 @@ describe Nairobi::ProjectsImporter do
   let(:budget) { create(:budget, :finished) }
   let(:group) { create(:budget_group, budget: budget, name: "Dagoretti South") }
   let!(:heading) { create(:budget_heading, group: group, name: "Mutuini", price: 1_000) }
-  let(:header) do
-    %w[sector sub_sector project_name sub_county ward location objectives description project_cost_ksh
-       actual_cost_ksh start_date end_date implementation_pct status funds].join("\t")
+  let(:columns) do
+    %w[sector sub_sector project_name sub_county ward location description performance_indicator target
+       implementing_agency contractor project_cost_ksh actual_cost_ksh start_date end_date
+       implementation_pct status funds]
   end
+  let(:header) { columns.join("\t") }
   let(:row) do
     ["Business and Hustler Opportunities", "Markets and Trading Services",
      "Construction of 10 no. of markets", "Dagoretti South / Mutuini", "Mutuini", "Mutuini",
-     "To provide additional decent trading spaces", "Construction of Market", "242592913", "194000000",
+     "Construction of Market", "No. of markets constructed", "10 markets",
+     "Department of Business and Hustler Opportunities", "Mutuini Builders Ltd", "242592913", "194000000",
      "2024-02", "2025-02", "85", "Delayed", "NCCG"].join("\t")
   end
 
@@ -33,7 +36,10 @@ describe Nairobi::ProjectsImporter do
     investment = budget.investments.last
     expect(investment.title).to eq "Construction of 10 no. of markets"
     expect(investment.description).to eq "Construction of Market"
-    expect(investment.objectives).to eq "To provide additional decent trading spaces"
+    expect(investment.performance_indicator).to eq "No. of markets constructed"
+    expect(investment.target).to eq "10 markets"
+    expect(investment.implementing_agency).to eq "Department of Business and Hustler Opportunities"
+    expect(investment.contractor).to eq "Mutuini Builders Ltd"
     expect(investment.heading).to eq heading
     expect(investment.group).to eq group
     expect(investment.author.email).to eq "admin@consul.dev"

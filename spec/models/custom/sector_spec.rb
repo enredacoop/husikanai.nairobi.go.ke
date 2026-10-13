@@ -60,10 +60,13 @@ describe Budget::Investment do
       expect(build(:budget_investment, start_date: "2025-02-01", end_date: "2024-02-01")).not_to be_valid
     end
 
-    it "has translatable objectives" do
-      investment = create(:budget_investment, objectives: "Decent trading spaces")
+    it "has translatable target and performance indicator" do
+      investment = create(:budget_investment, target: "Decent trading spaces",
+                                              performance_indicator: "No. of markets")
 
-      expect(investment.reload.objectives).to eq "Decent trading spaces"
+      expect(Budget::Investment.translated_attribute_names).to include(:target, :performance_indicator)
+      expect(investment.reload.target).to eq "Decent trading spaces"
+      expect(investment.performance_indicator).to eq "No. of markets"
     end
   end
 end

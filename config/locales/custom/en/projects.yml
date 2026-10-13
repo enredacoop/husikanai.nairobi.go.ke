@@ -12,8 +12,11 @@ en:
         actual_cost: "Actual cost"
         start_date: "Start date"
         end_date: "End date"
+        implementing_agency: "Implementing agency"
+        contractor: "Contractor"
       budget/investment/translation:
-        objectives: "Objectives"
+        performance_indicator: "Performance indicator"
+        target: "Target"
       sector:
         name: "Name"
         parent_id: "Parent sector"
@@ -54,7 +57,6 @@ en:
     investments:
       project_details:
         title: "Project details"
-        objectives: "Objectives"
         sector: "Sector"
         status: "Status"
         implementation: "Implementation"
@@ -63,3 +65,7 @@ en:
         start_date: "Start date"
         end_date: "End date"
         funding_source: "Source of funds"
+        performance_indicator: "Performance indicator"
+        target: "Target"
+        implementing_agency: "Implementing agency"
+        contractor: "Contractor"

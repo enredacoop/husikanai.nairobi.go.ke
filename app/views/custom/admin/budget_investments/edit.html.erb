@@ -28,7 +28,11 @@
         </div>
 
         <div class="small-12 column">
-          <%= translations_form.text_area :objectives, rows: 3 %>
+          <%= translations_form.text_area :target, rows: 3 %>
+        </div>
+
+        <div class="small-12 column">
+          <%= translations_form.text_area :performance_indicator, rows: 2 %>
         </div>
       <% end %>
 
@@ -68,6 +72,14 @@
         <%= f.select :sub_sector_id,
                      sub_sector_select_options(@investment.sub_sector_id),
                      { include_blank: t("admin.budget_investments.edit.select_sub_sector") } %>
+      </div>
+
+      <div class="small-12 medium-6 column">
+        <%= f.text_field :implementing_agency %>
+      </div>
+
+      <div class="small-12 medium-6 column">
+        <%= f.text_field :contractor %>
       </div>
 
       <div class="small-12 medium-6 column">

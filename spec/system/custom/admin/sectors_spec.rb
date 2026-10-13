@@ -53,7 +53,10 @@ describe "Admin sectors", :admin do
     expect(page).to have_select "Sub-sector", options: ["Select sub-sector", "Clinics"]
 
     select "Clinics", from: "Sub-sector"
-    fill_in "Objectives", with: "Better health services"
+    fill_in "Performance indicator", with: "No. of patients treated"
+    fill_in "Target", with: "5,000 patients"
+    fill_in "Implementing agency", with: "Department of Health"
+    fill_in "Contractor", with: "Nairobi Builders"
     fill_in "Source of funds", with: "NCCG"
     fill_in "Actual cost", with: "1500"
     fill_in "Start date", with: Date.new(2024, 2, 1)
@@ -65,8 +68,11 @@ describe "Admin sectors", :admin do
     investment.reload
     expect(investment.sector).to eq health
     expect(investment.sub_sector.name).to eq "Clinics"
-    expect(investment.objectives).to eq "Better health services"
     expect(investment.funding_source).to eq "NCCG"
+    expect(investment.performance_indicator).to eq "No. of patients treated"
+    expect(investment.target).to eq "5,000 patients"
+    expect(investment.implementing_agency).to eq "Department of Health"
+    expect(investment.contractor).to eq "Nairobi Builders"
     expect(investment.actual_cost).to eq 1500
     expect(investment.start_date).to eq Date.new(2024, 2, 1)
     expect(investment.end_date).to eq Date.new(2025, 2, 1)

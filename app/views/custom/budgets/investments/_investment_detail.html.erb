@@ -26,9 +26,9 @@
 
 <%= auto_link_already_sanitized_html wysiwyg(investment.description) %>
 
-<% if investment.objectives.present? %>
-  <h2 id="objectives"><%= t("budgets.investments.project_details.objectives") %></h2>
-  <%= simple_format(investment.objectives) %>
+<% if investment.target.present? %>
+  <h2 id="target"><%= t("budgets.investments.project_details.target") %></h2>
+  <%= simple_format(investment.target) %>
 <% end %>
 
 <%= render Budgets::Investments::ProjectDetailsComponent.new(investment) %>

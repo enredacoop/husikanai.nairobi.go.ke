@@ -5,14 +5,14 @@ describe "Investment project details" do
     budget = create(:budget, :finished)
     investment = create(:budget_investment, :winner,
                         budget: budget,
-                        objectives: "To provide additional decent trading spaces",
+                        target: "To provide additional decent trading spaces",
                         funding_source: "NCCG")
     create(:progress_bar, progressable: investment, percentage: 40)
     create(:milestone, milestoneable: investment, status: create(:milestone_status, name: "Ongoing"))
 
     visit budget_investment_path(budget, investment)
 
-    within "#objectives + p" do
+    within "#target + p" do
       expect(page).to have_content "To provide additional decent trading spaces"
     end
 

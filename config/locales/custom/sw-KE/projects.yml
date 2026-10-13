@@ -12,13 +12,15 @@ sw-KE:
         actual_cost: "Gharama halisi"
         start_date: "Tarehe ya kuanza"
         end_date: "Tarehe ya kumaliza"
+        implementing_agency: "Wakala wa utekelezaji"
+        contractor: "Mkandarasi"
       budget/investment/translation:
-        objectives: "Malengo"
+        performance_indicator: "Kiashiria cha utendaji"
+        target: "Lengo"
   budgets:
     investments:
       project_details:
         title: "Maelezo ya mradi"
-        objectives: "Malengo"
         sector: "Sekta"
         status: "Hali"
         implementation: "Utekelezaji"
@@ -27,3 +29,7 @@ sw-KE:
         start_date: "Tarehe ya kuanza"
         end_date: "Tarehe ya kumaliza"
         funding_source: "Chanzo cha fedha"
+        performance_indicator: "Kiashiria cha utendaji"
+        target: "Lengo"
+        implementing_agency: "Wakala wa utekelezaji"
+        contractor: "Mkandarasi"

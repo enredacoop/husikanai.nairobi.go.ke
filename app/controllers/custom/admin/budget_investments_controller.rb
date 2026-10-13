@@ -6,7 +6,8 @@ class Admin::BudgetInvestmentsController
     alias_method :consul_allowed_params, :allowed_params
 
     def allowed_params
-      project_attributes = [:sector_id, :sub_sector_id, :funding_source, :actual_cost, :start_date, :end_date]
+      project_attributes = [:sector_id, :sub_sector_id, :funding_source, :actual_cost, :start_date, :end_date,
+                            :implementing_agency, :contractor]
 
       [*project_attributes, *consul_allowed_params]
     end

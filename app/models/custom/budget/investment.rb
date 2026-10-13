@@ -2,7 +2,8 @@ load Rails.root.join("app", "models", "budget", "investment.rb")
 
 class Budget
   class Investment
-    translates :objectives, touch: true
+    translates :performance_indicator, touch: true
+    translates :target, touch: true
 
     belongs_to :sector, optional: true
     belongs_to :sub_sector, class_name: "Sector", optional: true

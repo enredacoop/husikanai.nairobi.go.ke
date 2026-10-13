@@ -3,8 +3,9 @@ require "csv"
 # Imports Nairobi City County projects (already in progress) as winning
 # investments of a budget. Expected columns:
 #
-#   sector, sub_sector, project_name, sub_county, ward, location, objectives,
-#   description, project_cost_ksh, actual_cost_ksh, start_date, end_date,
+#   sector, sub_sector, project_name, sub_county, ward, location, description,
+#   performance_indicator, target, implementing_agency, contractor,
+#   project_cost_ksh, actual_cost_ksh, start_date, end_date,
 #   implementation_pct, status, funds
 #
 # Running it again updates the existing projects (matched by name and ward).
@@ -99,7 +100,10 @@ class Nairobi::ProjectsImporter
       {
         title: data["project_name"],
         description: data["description"],
-        objectives: data["objectives"].presence,
+        performance_indicator: data["performance_indicator"].presence,
+        target: data["target"].presence,
+        implementing_agency: data["implementing_agency"].presence,
+        contractor: data["contractor"].presence,
         heading: heading,
         author: author,
         terms_of_service: "1",
