@@ -32,4 +32,5 @@ sw-KE:
         all_subcounties: "Kaunti ndogo zote"
         all_wards: "Wadi zote"
       index:
+        budget_name: "Bajeti shirikishi:"
         by_group: "Miradi ya uwekezaji katika %{group}"

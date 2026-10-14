@@ -32,4 +32,5 @@ en:
         all_subcounties: "All subcounties"
         all_wards: "All wards"
       index:
+        budget_name: "Participatory budget:"
         by_group: "Investment projects in %{group}"
