@@ -3,7 +3,19 @@ class Admin::Budgets::GroupsAndHeadingsComponent < ApplicationComponent; end
 load Rails.root.join("app", "components", "admin", "budgets", "groups_and_headings_component.rb")
 
 class Admin::Budgets::GroupsAndHeadingsComponent
+  attr_reader :wizard
+
+  # With wizard: true, the links return to the "zones" step of the budgets wizard
+  def initialize(budget, wizard: false)
+    @budget = budget
+    @wizard = wizard
+  end
+
   private
+
+    def wizard_params
+      wizard ? { wizard: true } : {}
+    end
 
     def sets
       @sets ||= budget.sets.includes(:translations, groups: [:translations, { headings: :translations }])

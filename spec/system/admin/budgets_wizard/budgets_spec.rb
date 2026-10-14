@@ -11,7 +11,7 @@ describe "Budgets wizard, first step", :admin do
       fill_in "Text on the link", with: "Participate now!"
       fill_in "The link takes you to (add a link)", with: "https://consuldemocracy.org"
 
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_content "New participatory budget created successfully!"
 
@@ -37,7 +37,7 @@ describe "Budgets wizard, first step", :admin do
 
       fill_in "Name", with: "M30 - Summer campaign"
       select "Approval", from: "Final voting style"
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_content "New participatory budget created successfully!"
 
@@ -53,7 +53,7 @@ describe "Budgets wizard, first step", :admin do
 
     scenario "Submit the form with errors" do
       visit new_admin_budgets_wizard_budget_path
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_css ".is-invalid-label", text: "Name"
       expect(page).to have_css ".creation-timeline"
@@ -65,7 +65,7 @@ describe "Budgets wizard, first step", :admin do
 
       visit new_admin_budgets_wizard_budget_path
       fill_in "Name", with: "Existing Name"
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_css(".is-invalid-label", text: "Name")
       expect(page).to have_css("small.form-error", text: "has already been taken")
@@ -93,12 +93,12 @@ describe "Budgets wizard, first step", :admin do
       expect(page).to have_field "Name", with: "Budget wiht typo"
 
       fill_in "Name", with: ""
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_css "#error_explanation"
 
       fill_in "Name", with: "Budget without typos"
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_content "Participatory budget updated successfully"
       expect(page).to have_content "Budget without typos"

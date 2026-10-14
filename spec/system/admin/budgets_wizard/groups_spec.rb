@@ -3,59 +3,80 @@ require "rails_helper"
 describe "Budgets wizard, groups step", :admin do
   let(:budget) { create(:budget, :drafting) }
 
-  describe "New" do
-    scenario "create group with errors and then without errors" do
+  describe "Zones step" do
+    scenario "shows the zones step with boroughs, subcounties and wards" do
+      group = create(:budget_group, budget: budget, set: create(:budget_set, budget: budget, name: "West"))
+      create(:budget_heading, group: group, name: "Mutuini")
+
       visit admin_budgets_wizard_budget_groups_path(budget)
 
       within "#side_menu" do
         expect(page).to have_css "[aria-current]", exact_text: "Participatory budgets"
       end
 
-      expect(page).to have_content "Continue to wards"
-      expect(page).not_to have_link "Continue to wards"
+      within ".creation-timeline" do
+        expect(page).to have_css "li", count: 3
+        expect(page).to have_css "[aria-current]", text: /\Azones\z/i
+      end
 
-      click_button "Add new subcounty"
+      expect(page).to have_css "tr.set-row", text: "West"
+      expect(page).to have_css "tr.group-row", text: group.name
+      expect(page).to have_css "tr.heading-row", text: "Mutuini"
+      expect(page).to have_link "Continue to phases"
+    end
 
+    scenario "cannot continue without wards" do
+      visit admin_budgets_wizard_budget_groups_path(budget)
+
+      expect(page).to have_content "Continue to phases"
+      expect(page).not_to have_link "Continue to phases"
+    end
+
+    scenario "create a borough, a subcounty and a ward and come back to the wizard" do
+      visit admin_budgets_wizard_budget_groups_path(budget)
+
+      click_link "Add borough"
+      fill_in "Borough name", with: "Western Borough"
+      click_button "Create new borough"
+
+      expect(page).to have_content "Borough created successfully!"
+      expect(page).to have_css ".creation-timeline"
+
+      within("tr.set-row", text: "Western Borough") { click_link "Add subcounty" }
+
+      expect(page).to have_select "Borough", selected: "Western Borough"
+
+      fill_in "Subcounty name", with: ""
       click_button "Create new subcounty"
 
-      expect(page).to have_css ".is-invalid-label", text: "Subcounty name"
-      expect(page).to have_css ".creation-timeline"
-      expect(page).to have_content "can't be blank"
-      expect(page).to have_button "Create new subcounty"
-      expect(page).to have_button "Cancel"
-      expect(page).not_to have_content "Subcounty created successfully!"
-      expect(page).not_to have_button "Add new subcounty"
-      expect(page).not_to have_content "Continue to wards"
+      expect(page).to have_css "#error_explanation"
 
-      fill_in "Subcounty name", with: "All City"
-
+      fill_in "Subcounty name", with: "Dagoretti South"
       click_button "Create new subcounty"
 
       expect(page).to have_content "Subcounty created successfully!"
-      expect(page).to have_content "All City"
-      expect(page).to have_button "Add new subcounty"
-      expect(page).to have_link "Continue to wards"
+      expect(page).to have_css ".creation-timeline"
+
+      within("tr.group-row", text: "Dagoretti South") { click_link "Add ward" }
+      fill_in "Ward name", with: "Mutuini"
+      fill_in "Money amount", with: "230000000"
+      click_button "Create new ward"
+
+      expect(page).to have_content "Ward created successfully!"
+      expect(page).to have_css ".creation-timeline"
+      expect(page).to have_css "tr.heading-row", text: "Mutuini"
+
+      click_link "Continue to phases"
+
+      expect(page).to have_css ".budget-phases-table"
     end
 
-    scenario "cancel creating a group" do
+    scenario "go back to the wizard from the forms" do
       visit admin_budgets_wizard_budget_groups_path(budget)
+      click_link "Add subcounty"
+      click_link "Go back"
 
-      expect(page).not_to have_field "Subcounty name"
-      expect(page).not_to have_button "Cancel"
-      expect(page).to have_content "Continue to wards"
-
-      click_button "Add new subcounty"
-
-      expect(page).to have_field "Subcounty name"
-      expect(page).not_to have_button "Add new subcounty"
-      expect(page).not_to have_content "Continue to wards"
-
-      click_button "Cancel"
-
-      expect(page).to have_button "Add new subcounty"
-      expect(page).not_to have_field "Subcounty name"
-      expect(page).not_to have_button "Cancel"
-      expect(page).to have_content "Continue to wards"
+      expect(page).to have_css ".creation-timeline"
     end
   end
 
@@ -65,9 +86,7 @@ describe "Budgets wizard, groups step", :admin do
 
       visit admin_budgets_wizard_budget_groups_path(budget)
 
-      expect(page).to have_css ".creation-timeline"
-
-      within("tr", text: "Group wiht a typo") { click_link "Edit" }
+      within("tr.group-row", text: "Group wiht a typo") { click_link "Edit" }
       fill_in "Subcounty name", with: ""
       click_button "Save subcounty"
 
@@ -78,7 +97,7 @@ describe "Budgets wizard, groups step", :admin do
 
       expect(page).to have_content "Subcounty updated successfully"
       expect(page).to have_css ".creation-timeline"
-      expect(page).to have_css "td", exact_text: "Group without typos"
+      expect(page).to have_css "tr.group-row .tree-name", exact_text: "Group without typos"
     end
 
     scenario "update group in single ward budget" do
@@ -112,7 +131,7 @@ describe "Budgets wizard, groups step", :admin do
       create(:budget_group, budget: budget, name: "Delete me!")
 
       visit admin_budgets_wizard_budget_groups_path(budget)
-      within("tr", text: "Delete me!") { accept_confirm { click_button "Delete" } }
+      within("tr.group-row", text: "Delete me!") { accept_confirm { click_button "Delete" } }
 
       expect(page).to have_content "Subcounty deleted successfully"
       expect(page).not_to have_content "Delete me!"
@@ -125,7 +144,7 @@ describe "Budgets wizard, groups step", :admin do
 
       visit admin_budgets_wizard_budget_groups_path(budget)
 
-      within("tr", text: "Don't delete me!") { accept_confirm { click_button "Delete" } }
+      within("tr.group-row", text: "Don't delete me!") { accept_confirm { click_button "Delete" } }
 
       expect(page).to have_content "You cannot delete a subcounty that has associated wards"
       expect(page).to have_content "Don't delete me!"

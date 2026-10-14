@@ -1,17 +1,22 @@
 # Table rows of a group (subcounty) and its headings (wards) in the admin budget page
 class Admin::Budgets::GroupRowsComponent < ApplicationComponent
-  attr_reader :group, :headings, :nested
+  attr_reader :group, :headings, :nested, :wizard
 
-  def initialize(group, headings, nested:)
+  def initialize(group, headings, nested:, wizard: false)
     @group = group
     @headings = headings
     @nested = nested
+    @wizard = wizard
   end
 
   private
 
     def budget
       group.budget
+    end
+
+    def wizard_params
+      wizard ? { wizard: true } : {}
     end
 
     def level_class(level)

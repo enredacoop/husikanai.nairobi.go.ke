@@ -98,7 +98,7 @@ describe "Admin budgets", :admin do
       fill_in "Name", with: "Budget hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_content "New participatory budget created successfully!"
       expect(page).to have_content "Budget hide money"
@@ -117,45 +117,36 @@ describe "Admin budgets", :admin do
       fill_in "Name", with: "Multiple wards budget with hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to subcounties"
+      click_button "Continue to zones"
 
       expect(page).to have_content "New participatory budget created successfully!"
       expect(page).to have_content "There are no subcounties."
 
-      click_button "Add new subcounty"
+      click_link "Add subcounty"
       fill_in "Subcounty name", with: "All city"
       click_button "Create new subcounty"
 
       expect(page).to have_content "Subcounty created successfully!"
 
-      within("#notice") { click_button "Close" }
-      expect(page).not_to have_content "Subcounty created successfully!"
-
-      click_button "Add new subcounty"
+      click_link "Add subcounty"
       fill_in "Subcounty name", with: "District A"
       click_button "Create new subcounty"
 
       expect(page).to have_content "Subcounty created successfully!"
-
-      within("table") do
-        expect(page).to have_content "All city"
-        expect(page).to have_content "District A"
-      end
+      expect(page).to have_css "tr.group-row", text: "All city"
+      expect(page).to have_css "tr.group-row", text: "District A"
       expect(page).not_to have_content "There are no subcounties."
 
-      click_link "Continue to wards"
+      within("tr.group-row", text: "All city") { click_link "Add ward" }
 
-      expect(page).to have_content "Showing wards from the All city subcounty."
-      expect(page).to have_link "Manage wards from the District A subcounty."
+      expect(page).not_to have_field "Money amount"
 
-      click_button "Add new ward"
       fill_in "Ward name", with: "All city"
       click_button "Create new ward"
 
       expect(page).to have_content "Ward created successfully!"
-      expect(page).to have_content "All city"
+      expect(page).to have_css "tr.heading-row", text: "All city"
       expect(page).to have_link "Continue to phases"
-      expect(page).not_to have_content "There are no headings."
       expect(page).not_to have_content "Money amount"
       expect(page).not_to have_content "€"
     end
@@ -310,7 +301,7 @@ describe "Admin budgets", :admin do
 
       expect(page).to have_content "Participatory budget updated successfully"
 
-      visit budgets_path
+      visit budget_path(budget)
       expect(page).to have_link("Participate now", href: "https://consuldemocracy.org")
     end
 

@@ -9,10 +9,14 @@
   <% end %>
   <td></td>
   <td>
-    <%= render Admin::TableActionsComponent.new(group) do |actions| %>
+    <%= render Admin::TableActionsComponent.new(
+      group,
+      edit_path: edit_admin_budget_group_path(budget, group, wizard_params),
+      destroy_path: admin_budget_group_path(budget, group, wizard_params)
+    ) do |actions| %>
       <%= actions.action(:new,
                          text: t("admin.budgets.show.add_heading"),
-                         path: new_admin_budget_group_heading_path(budget, group)) %>
+                         path: new_admin_budget_group_heading_path(budget, group, wizard_params)) %>
     <% end %>
   </td>
 </tr>
@@ -36,6 +40,12 @@
       <td><%= heading.max_ballot_lines %></td>
     <% end %>
     <td><%= geozone_for(heading) %></td>
-    <td><%= render Admin::TableActionsComponent.new(heading) %></td>
+    <td>
+      <%= render Admin::TableActionsComponent.new(
+        heading,
+        edit_path: edit_admin_budget_group_heading_path(budget, group, heading, wizard_params),
+        destroy_path: admin_budget_group_heading_path(budget, group, heading, wizard_params)
+      ) %>
+    </td>
   </tr>
 <% end %>

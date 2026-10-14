@@ -41,8 +41,8 @@ class Admin::BudgetSetsController < Admin::BaseController
 
     # Keeps the boroughs, subcounties and wards section open after changing them
     def budget_path_with_open_section
-      session[:open_groups_and_headings] = true
-      admin_budget_path(@budget)
+      session[:open_groups_and_headings] = true unless helpers.wizard_return?
+      helpers.groups_and_headings_return_path(@budget)
     end
 
     def load_budget

@@ -14,9 +14,9 @@ describe "Budgets wizard, phases step", :admin do
         expect(page).to have_css "[aria-current]", exact_text: "Participatory budgets"
       end
 
-      click_link "Go back to wards"
+      click_link "Go back to zones"
 
-      expect(page).to have_css "tr", text: "Main Park"
+      expect(page).to have_css "tr.heading-row", text: "Main Park"
       expect(page).to have_css ".creation-timeline"
     end
 

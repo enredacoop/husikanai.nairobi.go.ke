@@ -30,13 +30,13 @@
           <td>
             <%= render Admin::TableActionsComponent.new(
               set,
-              edit_path: edit_admin_budget_set_path(budget, set),
-              destroy_path: admin_budget_set_path(budget, set),
+              edit_path: edit_admin_budget_set_path(budget, set, wizard_params),
+              destroy_path: admin_budget_set_path(budget, set, wizard_params),
               destroy_confirmation: method(:destroy_set_confirmation)
             ) do |actions| %>
               <%= actions.action(:new,
                                  text: t("admin.budgets.show.add_group"),
-                                 path: new_admin_budget_group_path(budget, set_id: set.id)) %>
+                                 path: new_admin_budget_group_path(budget, set_id: set.id, **wizard_params)) %>
             <% end %>
           </td>
         </tr>
@@ -48,7 +48,7 @@
         <% end %>
 
         <% groups_for(set).each do |group| %>
-          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: true) %>
+          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: true, wizard: wizard) %>
         <% end %>
       </tbody>
     <% end %>
@@ -62,7 +62,7 @@
         <% end %>
 
         <% groups_without_set.each do |group| %>
-          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: sets.any?) %>
+          <%= render Admin::Budgets::GroupRowsComponent.new(group, headings_for(group), nested: sets.any?, wizard: wizard) %>
         <% end %>
       </tbody>
     <% end %>
@@ -70,6 +70,9 @@
 <% end %>
 
 <div class="budget-sets-actions">
-  <%= action(:new, budget, text: t("admin.budgets.show.add_set"), path: new_admin_budget_set_path(budget)) %>
-  <%= action(:new, budget, text: t("admin.budgets.show.add_group"), path: new_admin_budget_group_path(budget)) %>
+  <%= action(:new, budget, text: t("admin.budgets.show.add_set"), path: new_admin_budget_set_path(budget, wizard_params)) %>
+  <%= action(:new,
+             budget,
+             text: t("admin.budgets.show.add_group"),
+             path: new_admin_budget_group_path(budget, wizard_params)) %>
 </div>

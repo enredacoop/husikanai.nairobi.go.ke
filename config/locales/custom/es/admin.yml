@@ -96,8 +96,9 @@ es:
       creation_timeline:
         groups: "Subcondados"
         headings: "Barrios"
+        zones: "Zonas"
       budgets:
-        continue: "Continuar a subcondados"
+        continue: "Continuar a zonas"
       groups:
         continue: "Continuar a barrios"
       headings:
@@ -110,9 +111,12 @@ es:
         single:
           link: "Crear presupuesto de barrio único"
           title: "Presupuesto de <strong>barrio único</strong>"
+      zones:
+        continue: "Continuar a fases"
+        help: "Crea los municipios, subcondados y barrios del presupuesto, o impórtalos desde un fichero CSV."
       phases:
         multiple:
-          back: "Volver a barrios"
+          back: "Volver a zonas"
         single:
           back: "Volver a editar barrio"
     shared:

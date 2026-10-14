@@ -1,3 +1,3 @@
 <%= render "header", action: "edit" %>
 
-<%= render "form", set: @set, path: admin_budget_set_path(@budget, @set), action: "submit" %>
+<%= render "form", set: @set, path: admin_budget_set_path(@budget, @set, wizard_return_params), action: "submit" %>

@@ -52,12 +52,11 @@ es:
         warnings: "Avisos (valores dejados en blanco)"
     budgets_wizard:
       groups_import:
-        title: "Importar subcondados y barrios desde un fichero CSV"
+        title: "Importar municipios, subcondados y barrios desde un fichero CSV"
         help: "Sube un fichero CSV (separado por comas o tabuladores) con un barrio por fila y estas columnas:"
-        updates: "Los subcondados y barrios que no existen se crean. Los existentes (mismo nombre) se reutilizan y se actualiza su presupuesto, así que el fichero se puede volver a importar."
-        submit: "Importar subcondados y barrios"
-        summary: "Subcondados creados: %{groups}. Barrios creados: %{created}. Barrios actualizados: %{updated}. Errores: %{errors}. Avisos: %{warnings}."
-        continue_to_phases: "Continuar a fases"
+        updates: "Los municipios, subcondados y barrios que no existen se crean. Los existentes (mismo nombre) se reutilizan y se actualiza el presupuesto de los barrios, así que el fichero se puede volver a importar. La columna borough es opcional."
+        submit: "Importar municipios, subcondados y barrios"
+        summary: "Municipios creados: %{sets}. Subcondados creados: %{groups}. Barrios creados: %{created}. Barrios actualizados: %{updated}. Errores: %{errors}. Avisos: %{warnings}."
     sectors:
       index:
         title: "Sectores"

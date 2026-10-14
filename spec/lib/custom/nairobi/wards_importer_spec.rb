@@ -50,6 +50,48 @@ describe Nairobi::WardsImporter do
     expect(importer.warnings).to eq ["Line 2: budget_ksh \"lots\" is not a valid amount; left unchanged"]
   end
 
+  describe "boroughs" do
+    def import_with_boroughs(*rows)
+      import(*rows, header: "borough,sub_county,ward,budget_ksh")
+    end
+
+    it "creates the boroughs and assigns their subcounties" do
+      importer = import_with_boroughs("Western Borough,Dagoretti South,Mutuini,230000000",
+                                      "western borough,Dagoretti North,Kilimani,100000000",
+                                      "Northern Borough,Westlands,Parklands,95000000")
+
+      expect(importer.errors).to be_empty
+      expect(importer.sets_created).to eq 2
+      expect(budget.sets.count).to eq 2
+
+      western = budget.sets.find_by!(slug: "western-borough")
+      expect(western.groups.map(&:name)).to match_array ["Dagoretti South", "Dagoretti North"]
+      expect(budget.groups.find_by!(slug: "westlands").set.name).to eq "Northern Borough"
+    end
+
+    it "reuses existing boroughs and moves subcounties to the borough of the file" do
+      western = create(:budget_set, budget: budget, name: "Western Borough")
+      northern = create(:budget_set, budget: budget, name: "Northern Borough")
+      group = create(:budget_group, budget: budget, set: northern, name: "Dagoretti South")
+
+      importer = import_with_boroughs("Western Borough,Dagoretti South,Mutuini,230000000")
+
+      expect(importer.sets_created).to eq 0
+      expect(group.reload.set).to eq western
+      expect(importer.warnings).to eq [
+        "Line 2: Dagoretti South moved from Northern Borough to Western Borough"
+      ]
+    end
+
+    it "leaves subcounties without borough when the borough is blank" do
+      importer = import_with_boroughs(",Westlands,Parklands,95000000")
+
+      expect(importer.errors).to be_empty
+      expect(budget.sets.count).to eq 0
+      expect(budget.groups.find_by!(slug: "westlands").set).to be nil
+    end
+  end
+
   it "reports rows without subcounty or ward" do
     importer = import(",Mutuini,1000", "Westlands,,1000")
 

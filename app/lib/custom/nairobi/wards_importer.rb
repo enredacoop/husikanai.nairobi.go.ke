@@ -1,19 +1,22 @@
-# Imports the subcounties (groups) and wards (headings) of a budget from a CSV
-# file with the columns sub_county, ward and budget_ksh.
+# Imports the boroughs (sets), subcounties (groups) and wards (headings) of a
+# budget from a CSV file with the columns borough, sub_county, ward and
+# budget_ksh. The borough column is optional.
 #
-# Existing subcounties and wards (matched by name) are reused, and the budget
-# of existing wards is updated, so the same file can be imported again.
+# Existing boroughs, subcounties and wards (matched by name) are reused, and
+# the budget of existing wards is updated, so the same file can be imported
+# again.
 class Nairobi::WardsImporter
-  COLUMNS = %w[sub_county ward budget_ksh].freeze
+  COLUMNS = %w[borough sub_county ward budget_ksh].freeze
   REQUIRED_COLUMNS = %w[sub_county ward].freeze
 
-  attr_reader :budget, :path, :errors, :warnings, :groups_created, :headings_created, :headings_updated
+  attr_reader :budget, :path, :errors, :warnings,
+              :sets_created, :groups_created, :headings_created, :headings_updated
 
   def self.template
     CSV.generate do |csv|
       csv << COLUMNS
-      csv << ["Dagoretti South", "Mutuini", "230000000"]
-      csv << ["Dagoretti South", "Ngando", "230000000"]
+      csv << ["Western Borough", "Dagoretti South", "Mutuini", "230000000"]
+      csv << ["Western Borough", "Dagoretti South", "Ngando", "230000000"]
     end
   end
 
@@ -22,6 +25,7 @@ class Nairobi::WardsImporter
     @path = path
     @errors = []
     @warnings = []
+    @sets_created = 0
     @groups_created = 0
     @headings_created = 0
     @headings_updated = 0
@@ -48,7 +52,7 @@ class Nairobi::WardsImporter
   end
 
   def imported?
-    groups_created + headings_created + headings_updated > 0
+    sets_created + groups_created + headings_created + headings_updated > 0
   end
 
   private
@@ -58,8 +62,11 @@ class Nairobi::WardsImporter
         return errors << "Line #{line}: sub_county and ward are required"
       end
 
+      set = find_set(data["borough"]) || (budget.sets.new(name: data["borough"]) if data["borough"].present?)
+      new_set = set&.new_record?
       group = find_group(data["sub_county"]) || budget.groups.new(name: data["sub_county"])
       new_group = group.new_record?
+      move_group_warning(group, set, line) if set && !new_group && group.set_id && group.set_id != set.id
       heading = (find_heading(group, data["ward"]) unless new_group) ||
                 Budget::Heading.new(group: group, name: data["ward"])
       new_heading = heading.new_record?
@@ -68,16 +75,29 @@ class Nairobi::WardsImporter
       heading.price = price || heading.price || 0
 
       Budget::Heading.transaction do
+        set&.save!
+        group.set = set if set
         group.save!
         heading.group = group
         heading.save!
       end
 
+      @sets_created += 1 if new_set
       @groups_created += 1 if new_group
       new_heading ? @headings_created += 1 : @headings_updated += 1
     rescue ActiveRecord::RecordInvalid => e
       errors << "Line #{line} (#{data["sub_county"]} / #{data["ward"]}): " \
                 "#{e.record.errors.full_messages.to_sentence}"
+    end
+
+    def find_set(name)
+      return if name.blank?
+
+      budget.sets.joins(:translations).find_by("LOWER(budget_set_translations.name) = ?", name.downcase)
+    end
+
+    def move_group_warning(group, set, line)
+      warnings << "Line #{line}: #{group.name} moved from #{group.set.name} to #{set.name}"
     end
 
     def find_group(name)

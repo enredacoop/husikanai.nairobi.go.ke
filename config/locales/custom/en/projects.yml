@@ -52,12 +52,11 @@ en:
         warnings: "Warnings (values left blank)"
     budgets_wizard:
       groups_import:
-        title: "Import subcounties and wards from a CSV file"
+        title: "Import boroughs, subcounties and wards from a CSV file"
         help: "Upload a CSV file (comma or tab separated) with one ward per row and these columns:"
-        updates: "Subcounties and wards which don't exist are created. Existing ones (same name) are reused and their budget is updated, so the file can be imported again."
-        submit: "Import subcounties and wards"
-        summary: "Subcounties created: %{groups}. Wards created: %{created}. Wards updated: %{updated}. Errors: %{errors}. Warnings: %{warnings}."
-        continue_to_phases: "Continue to phases"
+        updates: "Boroughs, subcounties and wards which don't exist are created. Existing ones (same name) are reused and the budget of the wards is updated, so the file can be imported again. The borough column is optional."
+        submit: "Import boroughs, subcounties and wards"
+        summary: "Boroughs created: %{sets}. Subcounties created: %{groups}. Wards created: %{created}. Wards updated: %{updated}. Errors: %{errors}. Warnings: %{warnings}."
     sectors:
       index:
         title: "Sectors"

@@ -96,8 +96,9 @@ en:
       creation_timeline:
         groups: "Subcounties"
         headings: "Wards"
+        zones: "Zones"
       budgets:
-        continue: "Continue to subcounties"
+        continue: "Continue to zones"
       groups:
         continue: "Continue to wards"
       headings:
@@ -110,9 +111,12 @@ en:
         single:
           link: "Create single ward budget"
           title: "<strong>Single ward</strong> budget"
+      zones:
+        continue: "Continue to phases"
+        help: "Create the boroughs, subcounties and wards of the budget, or import them from a CSV file."
       phases:
         multiple:
-          back: "Go back to wards"
+          back: "Go back to zones"
         single:
           back: "Go back to edit ward"
     shared:
