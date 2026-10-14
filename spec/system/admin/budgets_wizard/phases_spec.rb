@@ -5,7 +5,7 @@ describe "Budgets wizard, phases step", :admin do
   let!(:heading) { create(:budget_heading, budget: budget) }
 
   describe "Index" do
-    scenario "back to a previous step" do
+    scenario "back to a previous step", :consul do
       heading.update!(name: "Main Park")
 
       visit admin_budgets_wizard_budget_budget_phases_path(budget)
@@ -14,9 +14,9 @@ describe "Budgets wizard, phases step", :admin do
         expect(page).to have_css "[aria-current]", exact_text: "Participatory budgets"
       end
 
-      click_link "Go back to zones"
+      click_link "Go back to headings"
 
-      expect(page).to have_css "tr.heading-row", text: "Main Park"
+      expect(page).to have_css "tr", text: "Main Park"
       expect(page).to have_css ".creation-timeline"
     end
 
@@ -82,7 +82,7 @@ describe "Budgets wizard, phases step", :admin do
       within_table("Phases") { expect(page).to have_content "Choosing projects" }
     end
 
-    scenario "update phase in single ward budget" do
+    scenario "update phase in single heading budget", :consul do
       visit admin_budgets_wizard_budget_budget_phases_path(budget, mode: "single")
 
       expect(page).to have_css ".creation-timeline"
@@ -94,7 +94,7 @@ describe "Budgets wizard, phases step", :admin do
       expect(page).to have_content "Changes saved"
       expect(page).to have_css ".creation-timeline"
       within_table("Phases") { expect(page).to have_content "Choosing projects" }
-      expect(page).to have_link "Go back to edit ward"
+      expect(page).to have_link "Go back to edit heading"
     end
   end
 end

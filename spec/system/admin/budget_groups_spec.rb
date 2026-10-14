@@ -7,24 +7,23 @@ describe "Admin budget groups", :admin do
     let!(:budget) { create(:budget, slug: "budget_slug") }
     let!(:group)  { create(:budget_group, slug: "group_slug", budget: budget) }
 
-    scenario "finds budget and group by slug" do
+    scenario "finds budget and group by slug", :consul do
       visit edit_admin_budget_group_path("budget_slug", "group_slug")
       expect(page).to have_content(budget.name)
-      expect(page).to have_field "Subcounty name", with: group.name
+      expect(page).to have_field "Group name", with: group.name
     end
   end
 
   context "List of groups from budget page" do
-    scenario "Displaying no groups for budget" do
+    scenario "Displaying no groups for budget", :consul do
       visit admin_budget_path(budget)
-      open_groups_and_headings
 
-      within "section", text: "Boroughs, subcounties and wards" do
-        expect(page.text).to eq "Boroughs, subcounties and wards\nAdd borough\nAdd subcounty"
+      within "section", text: "Heading groups" do
+        expect(page.text).to eq "Heading groups\nAdd group"
       end
     end
 
-    scenario "Displaying groups" do
+    scenario "Displaying groups", :consul do
       above = create(:budget_group, budget: budget, name: "Above ground")
       below = create(:budget_group, budget: budget, name: "Below ground")
 
@@ -33,102 +32,93 @@ describe "Admin budget groups", :admin do
 
       visit admin_budget_path(budget)
 
-      open_groups_and_headings
-
-      within "section", text: "Boroughs, subcounties and wards" do
-        within "tr.group-row", text: "Above ground" do
-          expect(page).to have_css "th", text: "Above ground"
-          expect(page).not_to have_content "Maximum number of wards"
+      within "section", text: "Heading groups" do
+        within "section", text: "Above ground" do
+          expect(page).to have_css "h4", exact_text: "Above ground"
+          expect(page).not_to have_content "Maximum number of headings"
         end
 
-        within "tr.group-row", text: "Below ground" do
-          expect(page).to have_css "th", text: "Below ground"
-          expect(page).not_to have_content "Maximum number of wards"
+        within "section", text: "Below ground" do
+          expect(page).to have_css "h4", exact_text: "Below ground"
+          expect(page).to have_content "Maximum number of headings in which a user can select projects 1"
         end
       end
     end
 
-    scenario "Delete a group without headings" do
+    scenario "Delete a group without headings", :consul do
       create(:budget_group, budget: budget, name: "Nowhere")
 
       visit admin_budget_path(budget)
-
-      open_groups_and_headings
 
       accept_confirm("Are you sure? This action will delete \"Nowhere\" and can't be undone.") do
         click_button "Delete Nowhere"
       end
 
-      expect(page).to have_content "Subcounty deleted successfully"
+      expect(page).to have_content "Group deleted successfully"
       expect(page).not_to have_content "Nowhere"
     end
 
-    scenario "Try to delete a group with headings" do
+    scenario "Try to delete a group with headings", :consul do
       group = create(:budget_group, budget: budget, name: "Everywhere")
       create(:budget_heading, group: group, name: "Everything")
 
       visit admin_budget_path(budget)
 
-      open_groups_and_headings
-
       accept_confirm("Are you sure? This action will delete \"Everywhere\" and can't be undone.") do
         click_button "Delete Everywhere"
       end
-      expect(page).to have_content "You cannot delete a subcounty that has associated wards"
+      expect(page).to have_content "You cannot delete a Group that has associated headings"
       expect(page).to have_content "Everywhere"
     end
   end
 
   context "New" do
-    scenario "Create group" do
+    scenario "Create group", :consul do
       visit admin_budget_path(budget)
-      open_groups_and_headings
-      click_link "Add subcounty"
+      click_link "Add group"
 
-      fill_in "Subcounty name", with: "All City"
+      fill_in "Group name", with: "All City"
 
-      click_button "Create new subcounty"
+      click_button "Create new group"
 
-      expect(page).to have_content "Subcounty created successfully!"
+      expect(page).to have_content "Group created successfully!"
 
-      within "section", text: "Boroughs, subcounties and wards" do
-        expect(page).to have_css "tr.group-row th", text: "All City"
+      within "section", text: "Heading groups" do
+        expect(page).to have_css "h4", exact_text: "All City"
       end
     end
 
-    scenario "Subcounty name is mandatory" do
+    scenario "Group name is mandatory", :consul do
       visit new_admin_budget_group_path(budget)
-      click_button "Create new subcounty"
+      click_button "Create new group"
 
-      expect(page).not_to have_content "Subcounty created successfully!"
-      expect(page).to have_css(".is-invalid-label", text: "Subcounty name")
+      expect(page).not_to have_content "Group created successfully!"
+      expect(page).to have_css(".is-invalid-label", text: "Group name")
       expect(page).to have_content "can't be blank"
     end
   end
 
   context "Edit" do
-    scenario "Show group information" do
+    scenario "Show group information", :consul do
       group = create(:budget_group, budget: budget, name: "Everywhere", max_votable_headings: 2)
       2.times { create(:budget_heading, group: group) }
 
       visit admin_budget_path(budget)
 
-      open_groups_and_headings
-
       click_link "Edit Everywhere"
 
-      expect(page).to have_field "Subcounty name", with: "Everywhere"
-      expect(page).to have_field "Maximum number of wards in which a user can select projects", with: "2"
+      expect(page).to have_field "Group name", with: "Everywhere"
+      expect(page).to have_field "Maximum number of headings in which a user can select projects", with: "2"
     end
 
     describe "Select for maximum number of headings to select projects" do
-      scenario "is present if there are several headings in the group" do
+      scenario "is present if there are several headings in the group", :consul do
         group = create(:budget_group, budget: budget)
         2.times { create(:budget_heading, group: group) }
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).to have_field "Maximum number of wards in which a user can select projects"
+        expect(page).to have_field "Maximum number of headings in which a user can select projects"
       end
 
       scenario "is not present if there's only one heading in the group" do
@@ -137,7 +127,7 @@ describe "Admin budget groups", :admin do
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).not_to have_field "Maximum number of wards in which a user can select projects"
+        expect(page).not_to have_field "Maximum number of headings in which a user can select projects"
       end
 
       scenario "is not present if there are no headings in the group" do
@@ -145,20 +135,20 @@ describe "Admin budget groups", :admin do
 
         visit edit_admin_budget_group_path(budget, group)
 
-        expect(page).not_to have_field "Maximum number of wards in which a user can select projects"
+        expect(page).not_to have_field "Maximum number of headings in which a user can select projects"
       end
     end
 
-    scenario "Changing name for current locale will update the slug if budget is in draft phase" do
+    scenario "Changing name for current locale will update the slug if budget is in draft phase", :consul do
       group = create(:budget_group, budget: budget, name: "Old English Name")
 
       visit edit_admin_budget_group_path(budget, group)
 
       select "Español", from: "Add language"
-      fill_in "Subcounty name", with: "Spanish name"
-      click_button "Save subcounty"
+      fill_in "Group name", with: "Spanish name"
+      click_button "Save group"
 
-      expect(page).to have_content "Subcounty updated successfully"
+      expect(page).to have_content "Group updated successfully"
 
       visit budget_group_path(budget, id: "old-english-name")
 
@@ -167,10 +157,10 @@ describe "Admin budget groups", :admin do
       visit edit_admin_budget_group_path(budget, group)
 
       select "English", from: "Current language"
-      fill_in "Subcounty name", with: "New English Name"
-      click_button "Save subcounty"
+      fill_in "Group name", with: "New English Name"
+      click_button "Save group"
 
-      expect(page).to have_content "Subcounty updated successfully"
+      expect(page).to have_content "Group updated successfully"
 
       visit budget_group_path(budget, id: "new-english-name")
 
@@ -181,34 +171,34 @@ describe "Admin budget groups", :admin do
   context "Update" do
     let!(:group) { create(:budget_group, budget: budget, name: "All City") }
 
-    scenario "Updates group" do
+    scenario "Updates group", :consul do
       2.times { create(:budget_heading, group: group) }
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Subcounty name", with: "All City"
+      expect(page).to have_field "Group name", with: "All City"
 
-      fill_in "Subcounty name", with: "Districts"
-      select "2", from: "Maximum number of wards in which a user can select projects"
-      click_button "Save subcounty"
+      fill_in "Group name", with: "Districts"
+      select "2", from: "Maximum number of headings in which a user can select projects"
+      click_button "Save group"
 
-      expect(page).to have_content "Subcounty updated successfully"
+      expect(page).to have_content "Group updated successfully"
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Subcounty name", with: "Districts"
-      expect(page).to have_field "Maximum number of wards in which a user can select projects", with: "2"
+      expect(page).to have_field "Group name", with: "Districts"
+      expect(page).to have_field "Maximum number of headings in which a user can select projects", with: "2"
     end
 
-    scenario "Subcounty name is already used" do
+    scenario "Group name is already used", :consul do
       create(:budget_group, budget: budget, name: "Districts")
 
       visit edit_admin_budget_group_path(budget, group)
-      expect(page).to have_field "Subcounty name", with: "All City"
+      expect(page).to have_field "Group name", with: "All City"
 
-      fill_in "Subcounty name", with: "Districts"
-      click_button "Save subcounty"
+      fill_in "Group name", with: "Districts"
+      click_button "Save group"
 
-      expect(page).not_to have_content "Subcounty updated successfully"
-      expect(page).to have_css(".is-invalid-label", text: "Subcounty name")
+      expect(page).not_to have_content "Group updated successfully"
+      expect(page).to have_css(".is-invalid-label", text: "Group name")
       expect(page).to have_css("small.form-error", text: "has already been taken")
     end
   end

@@ -19,26 +19,26 @@ describe "Admin edit translatable records", :admin do
       let(:translatable) { create(:budget_heading) }
       let(:path) { admin_polymorphic_path(translatable, action: :edit) }
 
-      scenario "Maintains existing translations" do
+      scenario "Maintains existing translations", :consul do
         visit path
 
         select "Français", from: "Add language"
-        fill_in "Ward name", with: "Nom en Français"
-        click_button "Save ward"
+        fill_in "Heading name", with: "Nom en Français"
+        click_button "Save heading"
 
-        expect(page).to have_content "Ward updated successfully"
+        expect(page).to have_content "Heading updated successfully"
 
         visit path
 
-        expect(page).to have_field "Ward name", with: "Ward name in English"
+        expect(page).to have_field "Heading name", with: "Heading name in English"
 
         select "Español", from: "Current language"
 
-        expect(page).to have_field "Ward name", with: "Nombre del barrio en español"
+        expect(page).to have_field "Heading name", with: "Nombre de la partida en español"
 
         select "Français", from: "Current language"
 
-        expect(page).to have_field "Ward name", with: "Nom en Français"
+        expect(page).to have_field "Heading name", with: "Nom en Français"
       end
     end
 
@@ -347,7 +347,7 @@ describe "Admin edit translatable records", :admin do
     let(:translatable) { create(:budget_group) }
     let(:path) { edit_admin_budget_group_path(translatable.budget, translatable) }
 
-    scenario "Keeps the other languages" do
+    scenario "Keeps the other languages", :consul do
       visit path
 
       select "Español", from: "Current language"
@@ -355,9 +355,9 @@ describe "Admin edit translatable records", :admin do
 
       expect(page).not_to have_select "Current language", with_options: ["Español"]
 
-      click_button "Save subcounty"
+      click_button "Save group"
 
-      expect(page).to have_content "Subcounty updated successfully"
+      expect(page).to have_content "Group updated successfully"
 
       visit path
 
@@ -451,7 +451,7 @@ describe "Admin edit translatable records", :admin do
     context "For Budget::Phase" do
       let(:translatable) { create(:budget).phases.last }
 
-      scenario "Shows first available fallback" do
+      scenario "Shows first available fallback", :consul do
         translatable.update!({ name_fr: "Name en Français", description_fr: "Phase en Français" })
 
         visit edit_admin_budget_budget_phase_path(translatable.budget, translatable)
@@ -465,7 +465,7 @@ describe "Admin edit translatable records", :admin do
 
         expect(page).to have_content "Changes saved"
 
-        visit budget_path(translatable.budget)
+        visit budgets_path
         click_link "Name en Français"
 
         expect(page).to have_content "Phase en Français"

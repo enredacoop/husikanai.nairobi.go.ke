@@ -108,7 +108,7 @@ describe "Admin geozones", :admin do
     end
   end
 
-  scenario "Show polygons when a heading is associated with a geozone" do
+  scenario "Show polygons when a heading is associated with a geozone", :consul do
     Setting["feature.map"] = true
     geojson = <<~JSON
       {
@@ -135,9 +135,9 @@ describe "Admin geozones", :admin do
     visit edit_admin_budget_group_heading_path(budget, group, heading)
     select "Polygon me!", from: "Scope of operation"
 
-    click_button "Save ward"
+    click_button "Save heading"
 
-    expect(page).to have_content "Ward updated successfully"
+    expect(page).to have_content "Heading updated successfully"
 
     visit budget_path(budget)
 

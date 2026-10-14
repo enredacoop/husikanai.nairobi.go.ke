@@ -18,13 +18,13 @@ describe "Admin budgets", :admin do
       expect(page).to have_content("There are no budgets.")
     end
 
-    scenario "Displaying budgets" do
+    scenario "Displaying budgets", :consul do
       budget = create(:budget, :accepting)
       visit admin_budgets_path
 
       within "tr", text: budget.name do
         expect(page).to have_content "Accepting projects"
-        expect(page).to have_content "Pending: No wards yet"
+        expect(page).to have_content "Pending: No headings yet"
       end
     end
 
@@ -87,10 +87,10 @@ describe "Admin budgets", :admin do
   end
 
   context "Create" do
-    scenario "Create budget - Approval voting with hide money" do
+    scenario "Create budget - Approval voting with hide money", :consul do
       visit admin_budgets_path
       click_button "Create new budget"
-      click_link "Create multiple wards budget"
+      click_link "Create multiple headings budget"
 
       expect(page).to have_select("Final voting style", selected: "Knapsack")
       expect(page).not_to have_css "#budget_hide_money"
@@ -98,7 +98,7 @@ describe "Admin budgets", :admin do
       fill_in "Name", with: "Budget hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to zones"
+      click_button "Continue to groups"
 
       expect(page).to have_content "New participatory budget created successfully!"
       expect(page).to have_content "Budget hide money"
@@ -109,44 +109,53 @@ describe "Admin budgets", :admin do
       expect(page).to have_field "Hide money amount for this budget", checked: true
     end
 
-    scenario "Create a budget with hide money by steps" do
+    scenario "Create a budget with hide money by steps", :consul do
       visit admin_budgets_path
       click_button "Create new budget"
-      click_link "Create multiple wards budget"
+      click_link "Create multiple headings budget"
 
-      fill_in "Name", with: "Multiple wards budget with hide money"
+      fill_in "Name", with: "Multiple headings budget with hide money"
       select "Approval", from: "Final voting style"
       check "Hide money amount for this budget"
-      click_button "Continue to zones"
+      click_button "Continue to groups"
 
       expect(page).to have_content "New participatory budget created successfully!"
-      expect(page).to have_content "There are no subcounties."
+      expect(page).to have_content "There are no groups."
 
-      click_link "Add subcounty"
-      fill_in "Subcounty name", with: "All city"
-      click_button "Create new subcounty"
+      click_button "Add new group"
+      fill_in "Group name", with: "All city"
+      click_button "Create new group"
 
-      expect(page).to have_content "Subcounty created successfully!"
+      expect(page).to have_content "Group created successfully!"
 
-      click_link "Add subcounty"
-      fill_in "Subcounty name", with: "District A"
-      click_button "Create new subcounty"
+      within("#notice") { click_button "Close" }
+      expect(page).not_to have_content "Group created successfully!"
 
-      expect(page).to have_content "Subcounty created successfully!"
-      expect(page).to have_css "tr.group-row", text: "All city"
-      expect(page).to have_css "tr.group-row", text: "District A"
-      expect(page).not_to have_content "There are no subcounties."
+      click_button "Add new group"
+      fill_in "Group name", with: "District A"
+      click_button "Create new group"
 
-      within("tr.group-row", text: "All city") { click_link "Add ward" }
+      expect(page).to have_content "Group created successfully!"
 
-      expect(page).not_to have_field "Money amount"
+      within("table") do
+        expect(page).to have_content "All city"
+        expect(page).to have_content "District A"
+      end
+      expect(page).not_to have_content "There are no groups."
 
-      fill_in "Ward name", with: "All city"
-      click_button "Create new ward"
+      click_link "Continue to headings"
 
-      expect(page).to have_content "Ward created successfully!"
-      expect(page).to have_css "tr.heading-row", text: "All city"
+      expect(page).to have_content "Showing headings from the All city group."
+      expect(page).to have_link "Manage headings from the District A group."
+
+      click_button "Add new heading"
+      fill_in "Heading name", with: "All city"
+      click_button "Create new heading"
+
+      expect(page).to have_content "Heading created successfully!"
+      expect(page).to have_content "All city"
       expect(page).to have_link "Continue to phases"
+      expect(page).not_to have_content "There are no headings."
       expect(page).not_to have_content "Money amount"
       expect(page).not_to have_content "€"
     end
@@ -157,7 +166,6 @@ describe "Admin budgets", :admin do
 
     scenario "Can preview budget before it is published" do
       visit admin_budget_path(budget)
-      open_groups_and_headings
       click_link "Preview"
 
       expect(page).to have_current_path budget_path(budget)
@@ -165,7 +173,6 @@ describe "Admin budgets", :admin do
 
     scenario "Can view a budget after it is published" do
       visit admin_budget_path(budget)
-      open_groups_and_headings
 
       accept_confirm { click_button "Publish budget" }
 
@@ -183,12 +190,11 @@ describe "Admin budgets", :admin do
     let!(:budget) { create(:budget) }
     let(:heading) { create(:budget_heading, budget: budget) }
 
-    scenario "Destroy a budget without investments" do
+    scenario "Destroy a budget without investments", :consul do
       visit admin_budget_path(budget)
-      open_groups_and_headings
 
       message = "Are you sure? " \
-                "This will delete the budget and all its associated boroughs, subcounties and wards. " \
+                "This will delete the budget and all its associated groups and headings. " \
                 "This action cannot be undone."
 
       accept_confirm(message) { click_button "Delete budget" }
@@ -202,8 +208,6 @@ describe "Admin budgets", :admin do
 
       visit admin_budget_path(budget)
 
-      open_groups_and_headings
-
       expect(page).to have_button "Delete budget", disabled: true
       expect(page).to have_content "You cannot delete a budget that has associated investments"
     end
@@ -212,8 +216,6 @@ describe "Admin budgets", :admin do
       create(:poll, budget: budget)
 
       visit admin_budget_path(budget)
-
-      open_groups_and_headings
 
       expect(page).to have_button "Delete budget", disabled: true
       expect(page).to have_content "You cannot delete a budget that has an associated poll"
@@ -229,8 +231,6 @@ describe "Admin budgets", :admin do
         budget.phases.valuating.update!(enabled: false)
 
         visit admin_budget_path(budget)
-
-        open_groups_and_headings
 
         expect(page).to have_content "The configuration of these phases is used for information purposes " \
                                      "only. Its function is to define the phases information displayed " \
@@ -290,7 +290,7 @@ describe "Admin budgets", :admin do
       end
     end
 
-    scenario "Show CTA link in public site if added" do
+    scenario "Show CTA link in public site if added", :consul do
       visit edit_admin_budget_path(budget)
 
       expect(page).to have_content("Main call to action (optional)")
@@ -301,7 +301,7 @@ describe "Admin budgets", :admin do
 
       expect(page).to have_content "Participatory budget updated successfully"
 
-      visit budget_path(budget)
+      visit budgets_path
       expect(page).to have_link("Participate now", href: "https://consuldemocracy.org")
     end
 
@@ -335,15 +335,13 @@ describe "Admin budgets", :admin do
       expect(page).to have_content "New English Name"
     end
 
-    scenario "Hide money active" do
+    scenario "Hide money active", :consul do
       budget_hide_money = create(:budget, :approval, :hide_money)
       group = create(:budget_group, budget: budget_hide_money)
       heading = create(:budget_heading, group: group)
       heading_2 = create(:budget_heading, group: group)
 
       visit admin_budget_path(budget_hide_money)
-
-      open_groups_and_headings
 
       expect(page).to have_content heading.name
       expect(page).to have_content heading_2.name
@@ -465,8 +463,6 @@ describe "Admin budgets", :admin do
 
       visit admin_budget_path(budget)
 
-      open_groups_and_headings
-
       expect(page).not_to have_content "See results"
 
       click_button "Calculate Winner Investments"
@@ -477,8 +473,6 @@ describe "Admin budgets", :admin do
       expect(page).not_to have_content selected.title
 
       visit admin_budget_path(budget)
-
-      open_groups_and_headings
 
       expect(page).not_to have_link "See results"
 

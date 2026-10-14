@@ -20,10 +20,10 @@ describe "Budgets" do
       let!(:heading1) { create(:budget_heading, group: group1) }
       let!(:heading2) { create(:budget_heading, group: group2) }
 
-      scenario "Show normal index with links publishing prices" do
+      scenario "Show normal index with links publishing prices", :consul do
         budget.update!(phase: "publishing_prices")
 
-        visit budget_path(budget)
+        visit budgets_path
 
         within(".budget-subheader") do
           expect(page).to have_content("Publishing projects prices")
@@ -42,59 +42,40 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show the list of published budgets instead of the current budget" do
-      budget = create(:budget, :accepting, name: "Current budget")
-      finished_budget = create(:budget, :finished, name: "Finished budget", results_enabled: true)
-      informing_budget = create(:budget, :informing, name: "Informing budget")
-      drafting_budget = create(:budget, :drafting, name: "Drafting budget")
+    scenario "Show finished budgets list", :consul do
+      budget = create(:budget)
+      finished_budget_1 = create(:budget, :finished)
+      finished_budget_2 = create(:budget, :finished)
+      drafting_budget = create(:budget, :drafting)
 
       visit budgets_path
 
-      expect(page).not_to have_css "#budget_info"
-      expect(page).not_to have_content drafting_budget.name
-      expect(informing_budget.name).to appear_before(finished_budget.name)
-      expect(finished_budget.name).to appear_before(budget.name)
-
-      within("#budget_#{budget.id}") do
-        expect(page).to have_css ".budget-phase", text: /accepting projects/i
-        expect(page).to have_link "See budget", href: budget_path(budget)
-        expect(page).to have_link "See investments", href: budget_investments_path(budget)
-        expect(page).not_to have_link "See results"
+      within("#finished_budgets") do
+        expect(page).to     have_content(finished_budget_1.name)
+        expect(page).to     have_content(finished_budget_2.name)
+        expect(page).not_to have_content(budget.name)
+        expect(page).not_to have_content(drafting_budget.name)
       end
-
-      within("#budget_#{finished_budget.id}") do
-        expect(page).to have_link "See results", href: budget_results_path(finished_budget)
-        expect(page).to have_link "Milestones", href: budget_executions_path(finished_budget)
-      end
-
-      within("#budget_#{informing_budget.id}") do
-        expect(page).to have_link "See budget"
-        expect(page).not_to have_link "See investments"
-      end
-
-      click_link "Current budget"
-
-      expect(page).to have_current_path budget_path(budget)
     end
 
-    scenario "Show headings ordered by name" do
+    scenario "Show headings ordered by name", :consul do
       group = create(:budget_group, budget: budget)
       last_heading = create(:budget_heading, group: group, name: "BBB")
       first_heading = create(:budget_heading, group: group, name: "AAA")
 
-      visit budget_path(budget)
+      visit budgets_path
 
       expect(first_heading.name).to appear_before(last_heading.name)
     end
 
-    scenario "Show groups and headings for missing translations" do
+    scenario "Show groups and headings for missing translations", :consul do
       group1 = create(:budget_group, budget: budget)
       group2 = create(:budget_group, budget: budget)
 
       heading1 = create(:budget_heading, group: group1, price: 1_000_000)
       heading2 = create(:budget_heading, group: group2, price: 2_000_000)
 
-      visit budget_path(budget, locale: :es)
+      visit budgets_path locale: :es
 
       within("#budget_info") do
         expect(page).to have_content group1.name
@@ -106,11 +87,11 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show informing index without links" do
+    scenario "Show informing index without links", :consul do
       budget.update!(phase: "informing")
       heading = create(:budget_heading, budget: budget)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within("#budget_info") do
         expect(page).not_to have_link heading.name
@@ -118,11 +99,11 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show finished index without heading links" do
+    scenario "Show finished index without heading links", :consul do
       budget.update!(phase: "finished")
       heading = create(:budget_heading, budget: budget)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within("#budget_info") do
         expect(page).not_to have_link heading.name
@@ -130,11 +111,11 @@ describe "Budgets" do
       end
     end
 
-    scenario "Hide money on single heading budget" do
+    scenario "Hide money on single heading budget", :consul do
       budget = create(:budget, :finished, :hide_money)
       heading = create(:budget_heading, budget: budget)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within("#budget_info") do
         expect(page).to have_content heading.name
@@ -142,13 +123,13 @@ describe "Budgets" do
       end
     end
 
-    scenario "Hide money on multiple headings budget" do
+    scenario "Hide money on multiple headings budget", :consul do
       budget = create(:budget, :finished, :hide_money)
       heading1 = create(:budget_heading, budget: budget)
       heading2 = create(:budget_heading, budget: budget)
       heading3 = create(:budget_heading, budget: budget)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within("#budget_info") do
         expect(page).to have_content heading1.name
@@ -166,11 +147,11 @@ describe "Budgets" do
       expect(page).to have_content "There are no budgets"
     end
 
-    scenario "Show heading for budget with single heading" do
+    scenario "Show heading for budget with single heading", :consul do
       group = create(:budget_group, budget: budget, name: "Single group")
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       expect(page).not_to have_content "Single group"
 
@@ -180,12 +161,12 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show group and headings for budget with multiple headings" do
+    scenario "Show group and headings for budget with multiple headings", :consul do
       group = create(:budget_group, budget: budget, name: "New group")
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
       create(:budget_heading, group: group, name: "Other new heading", price: 30_000)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within("#groups_and_headings") do
         expect(page).to have_content "New group"
@@ -197,7 +178,7 @@ describe "Budgets" do
     end
   end
 
-  scenario "Index shows only published phases" do
+  scenario "Index shows only published phases", :consul do
     budget.update!(phase: :finished)
     phases = budget.phases
 
@@ -231,7 +212,7 @@ describe "Budgets" do
     phases.finished.update!(starts_at: "21-03-2018", ends_at: "30-03-2018", enabled: true,
                             description: "Description of finished phase")
 
-    visit budget_path(budget)
+    visit budgets_path
 
     expect(page).not_to have_link "Reviewing projects"
     expect(page).not_to have_link "Valuating projects"
@@ -278,40 +259,40 @@ describe "Budgets" do
       Setting["feature.map"] = true
     end
 
-    scenario "Display investment's map location markers" do
+    scenario "Display investment's map location markers", :consul do
       create_list(:budget_investment, 3, :with_map_location, heading: heading)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 3, visible: :all)
       end
     end
 
-    scenario "Display all investment's map location if there are no selected" do
+    scenario "Display all investment's map location if there are no selected", :consul do
       budget.update!(phase: :publishing_prices)
       create_list(:budget_investment, 4, :with_map_location, heading: heading)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 4, visible: :all)
       end
     end
 
-    scenario "Display only selected investment's map location from publishing prices phase" do
+    scenario "Display only selected investment's map location from publishing prices phase", :consul do
       budget.update!(phase: :publishing_prices)
       create_list(:budget_investment, 2, :selected, :with_map_location, heading: heading)
       create_list(:budget_investment, 2, :with_map_location, heading: heading)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within ".map-location" do
         expect(page).to have_css(".map-icon", count: 2, visible: :all)
       end
     end
 
-    scenario "Skip invalid map markers" do
+    scenario "Skip invalid map markers", :consul do
       map_locations = []
 
       investment = create(:budget_investment, heading: heading)
@@ -331,7 +312,7 @@ describe "Budgets" do
 
       allow_any_instance_of(Budgets::MapComponent).to receive(:coordinates).and_return(coordinates)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within ".map-location" do
         expect(page).to have_css ".map-icon", count: 1, visible: :all
@@ -339,11 +320,11 @@ describe "Budgets" do
       end
     end
 
-    scenario "when the marker clustering feature is enabled the map shows clusters instead of markers" do
+    scenario "when the marker clustering feature is enabled the map shows clusters instead of markers", :consul do
       Setting["map.feature.marker_clustering"] = true
       create_list(:budget_investment, 3, :selected, :with_map_location, heading: heading)
 
-      visit budget_path(budget)
+      visit budgets_path
 
       within ".map-location" do
         expect(page).to have_css ".marker-cluster div span", text: "3"
@@ -388,7 +369,7 @@ describe "Budgets" do
       expect(page).to have_link "See results"
     end
 
-    scenario "Does not show the investments list but links to all investments" do
+    scenario "Show investments list", :consul do
       budget = create(:budget, phase: "balloting")
       group = create(:budget_group, budget: budget)
       heading = create(:budget_heading, group: group)
@@ -397,13 +378,16 @@ describe "Budgets" do
 
       visit budget_path(budget)
 
-      expect(page).not_to have_css ".investments-list"
-      expect(page).not_to have_content "List of investments"
+      within(".investments-list") do
+        expect(page).to have_content "List of investments"
+        expect(page).to have_content "PRICE", count: 3
+      end
+
       expect(page).to have_link "See all investments",
                                 href: budget_investments_path(budget)
     end
 
-    scenario "Links to all investments when budget has multiple headings" do
+    scenario "Show investments list when budget has multiple headings", :consul do
       budget = create(:budget, phase: "accepting")
       group = create(:budget_group, budget: budget)
       heading_1 = create(:budget_heading, group: group)
@@ -413,8 +397,7 @@ describe "Budgets" do
 
       visit budget_path(budget)
 
-      expect(page).not_to have_css ".investments-list"
-      expect(page).to have_link "See all investments", href: budget_investments_path(budget)
+      expect(page).to have_css ".investments-list"
     end
 
     scenario "Show supports info on selecting phase" do

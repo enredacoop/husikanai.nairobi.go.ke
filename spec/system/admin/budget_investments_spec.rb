@@ -77,7 +77,7 @@ describe "Admin budget investments", :admin do
       end
     end
 
-    scenario "Filtering by budget heading" do
+    scenario "Filtering by budget heading", :consul do
       group1 = create(:budget_group, name: "Streets", budget: budget)
       group2 = create(:budget_group, name: "Parks", budget: budget)
 
@@ -95,28 +95,28 @@ describe "Admin budget investments", :admin do
       expect(page).to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "Parks: Central Park", from: "Ward"
+      select "Parks: Central Park", from: "Heading"
       click_button "Filter"
 
       expect(page).not_to have_link("Realocate visitors")
       expect(page).not_to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "All wards", from: "Ward"
+      select "All headings", from: "Heading"
       click_button "Filter"
 
       expect(page).to have_link("Realocate visitors")
       expect(page).to have_link("Change name")
       expect(page).to have_link("Plant trees")
 
-      select "Streets: Main Avenue", from: "Ward"
+      select "Streets: Main Avenue", from: "Heading"
       click_button "Filter"
 
       expect(page).to have_link("Realocate visitors")
       expect(page).not_to have_link("Change name")
       expect(page).not_to have_link("Plant trees")
 
-      select "Streets: Mercy Street", from: "Ward"
+      select "Streets: Mercy Street", from: "Heading"
       click_button "Filter"
 
       expect(page).not_to have_link("Realocate visitors")

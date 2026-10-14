@@ -1,0 +1,38 @@
+require "rails_helper"
+
+describe Admin::Budgets::IndexComponent, controller: Admin::BudgetsController do
+  before do
+    allow(vc_test_controller).to receive_messages(valid_filters: ["all"], current_filter: "all")
+  end
+
+  describe "#type" do
+    let(:budget) { create(:budget, name: "With type") }
+
+    it "displays 'single heading' for budgets with one heading" do
+      create(:budget_heading, budget: budget)
+
+      render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
+
+      expect(page.find("thead")).to have_content "Type"
+      expect(page.find("tr", text: "With type")).to have_content "Single ward"
+    end
+
+    it "displays 'multiple headings' for budgets with multiple headings" do
+      2.times { create(:budget_heading, budget: budget) }
+
+      render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
+
+      expect(page.find("thead")).to have_content "Type"
+      expect(page.find("tr", text: "With type")).to have_content "Multiple wards"
+    end
+
+    it "displays 'pending: no headings yet' for budgets without headings" do
+      create(:budget, name: "Without headings")
+
+      render_inline Admin::Budgets::IndexComponent.new(Budget.page(1))
+
+      expect(page.find("thead")).to have_content "Type"
+      expect(page.find("tr", text: "Without headings")).to have_content "Pending: No wards yet"
+    end
+  end
+end

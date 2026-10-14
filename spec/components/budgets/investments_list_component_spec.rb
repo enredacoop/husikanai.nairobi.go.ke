@@ -67,8 +67,8 @@ describe Budgets::InvestmentsListComponent do
   describe "investment list" do
     before { create_list(:budget_investment, 3, :selected, heading: heading, price: 999) }
 
-    it "is not shown in any phase" do
-      Budget::Phase::PHASE_KINDS.each do |phase_name|
+    it "is not shown in the informing or finished phases" do
+      %w[informing finished].each do |phase_name|
         budget.phase = phase_name
 
         render_inline Budgets::InvestmentsListComponent.new(budget)
@@ -76,6 +76,52 @@ describe Budgets::InvestmentsListComponent do
         expect(page).not_to have_content "List of investments"
         expect(page).not_to have_css ".investments-list"
         expect(page).not_to have_css ".budget-investment"
+      end
+    end
+
+    it "is shown without supports nor prices in the accepting phases", :consul do
+      %w[accepting reviewing selecting].each do |phase_name|
+        budget.phase = phase_name
+
+        render_inline Budgets::InvestmentsListComponent.new(budget)
+
+        expect(page).to have_content "List of investments"
+        expect(page).not_to have_content "Supports"
+        expect(page).not_to have_content "Price"
+      end
+    end
+
+    it "is shown with supports in the valuating phase", :consul do
+      budget.phase = "valuating"
+
+      render_inline Budgets::InvestmentsListComponent.new(budget)
+
+      expect(page).to have_content "List of investments"
+      expect(page).to have_content "Supports", count: 3
+      expect(page).not_to have_content "Price"
+    end
+
+    it "is shown with prices in the balloting phases", :consul do
+      %w[publishing_prices balloting reviewing_ballots].each do |phase_name|
+        budget.phase = phase_name
+
+        render_inline Budgets::InvestmentsListComponent.new(budget)
+
+        expect(page).to have_content "List of investments"
+        expect(page).to have_content "Price", count: 3
+        expect(page).not_to have_content "Supports"
+      end
+    end
+
+    it "is rendered for budgets with multiple headings", :consul do
+      create(:budget_heading, budget: budget)
+
+      (Budget::Phase::PHASE_KINDS - %w[informing finished]).each do |phase_name|
+        budget.phase = phase_name
+
+        render_inline Budgets::InvestmentsListComponent.new(budget)
+
+        expect(page).to have_content "List of investments"
       end
     end
   end
@@ -105,15 +151,6 @@ describe Budgets::InvestmentsListComponent do
     context "budget with multiple headings" do
       before { create(:budget_heading, budget: budget) }
 
-      it "is not shown when there are no investments to show in the current phase" do
-        budget.update!(phase: "balloting")
-        Budget::Investment.update_all(selected: false)
-
-        render_inline Budgets::InvestmentsListComponent.new(budget)
-
-        expect(page).not_to have_link "See all investments"
-      end
-
       it "is not shown in the informing or finished phases" do
         %w[informing finished].each do |phase_name|
           budget.phase = phase_name
@@ -124,14 +161,14 @@ describe Budgets::InvestmentsListComponent do
         end
       end
 
-      it "is shown in all other phases" do
+      it "is shown in all other phases", :consul do
         (Budget::Phase::PHASE_KINDS - %w[informing finished]).each do |phase_name|
           budget.phase = phase_name
 
           render_inline Budgets::InvestmentsListComponent.new(budget)
 
           expect(page).to have_link "See all investments",
-                                    href: budget_investments_path(budget)
+                                    href: budget_groups_path(budget)
         end
       end
     end
