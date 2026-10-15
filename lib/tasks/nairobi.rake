@@ -25,6 +25,15 @@ namespace :nairobi do
     puts "Remaining investments: #{Budget::Investment.with_hidden.count}"
   end
 
+  desc "Imports sectors and subsectors: rake nairobi:import_sectors[CSV_PATH]"
+  task :import_sectors, [:path] => :environment do |_, args|
+    importer = Nairobi::SectorsImporter.new(args[:path]).import
+
+    puts "Sectors created: #{importer.sectors_created} | Subsectors created: #{importer.sub_sectors_created}"
+    puts "Sectors total: #{Sector.main.count} | Subsectors total: #{Sector.where.not(parent_id: nil).count}"
+    puts(importer.errors.any? ? ["Errors:", *importer.errors] : "No errors")
+  end
+
   desc "Imports Nairobi projects as winning investments: rake nairobi:import_projects[BUDGET_ID,CSV_PATH]"
   task :import_projects, [:budget_id, :path] => :environment do |_, args|
     budget = Budget.find_by_slug_or_id!(args[:budget_id])
