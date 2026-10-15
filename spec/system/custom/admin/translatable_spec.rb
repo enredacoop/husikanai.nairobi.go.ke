@@ -65,30 +65,4 @@ describe "Admin edit translatable records", :admin do
       expect(page).not_to have_select "Current language", with_options: ["Español"]
     end
   end
-
-  context "Current locale translation does not exist" do
-    context "For Budget::Phase" do
-      let(:translatable) { create(:budget).phases.last }
-
-      scenario "Shows first available fallback" do
-        translatable.update!({ name_fr: "Name en Français", description_fr: "Phase en Français" })
-
-        visit edit_admin_budget_budget_phase_path(translatable.budget, translatable)
-
-        select "English", from: "Current language"
-        click_link "Remove language"
-        select "Español", from: "Current language"
-        click_link "Remove language"
-
-        click_button "Save changes"
-
-        expect(page).to have_content "Changes saved"
-
-        visit budget_path(translatable.budget)
-        click_link "Name en Français"
-
-        expect(page).to have_content "Phase en Français"
-      end
-    end
-  end
 end

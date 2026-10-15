@@ -1327,7 +1327,7 @@ describe "Budget Investments" do
       budget.update(phase: "balloting")
     end
 
-    scenario "Index", :consul do
+    scenario "Index" do
       user = create(:user, :level_two)
       investment1 = create(:budget_investment, :selected, heading: heading, price: 10000)
       investment2 = create(:budget_investment, :selected, heading: heading, price: 20000)

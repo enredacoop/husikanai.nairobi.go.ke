@@ -20,7 +20,7 @@ describe "Budgets" do
       let!(:heading1) { create(:budget_heading, group: group1) }
       let!(:heading2) { create(:budget_heading, group: group2) }
 
-      scenario "Show normal index with links publishing prices", :consul do
+      scenario "Show normal index with links publishing prices" do
         budget.update!(phase: "publishing_prices")
 
         visit budgets_path
@@ -42,7 +42,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show finished budgets list", :consul do
+    scenario "Show finished budgets list" do
       budget = create(:budget)
       finished_budget_1 = create(:budget, :finished)
       finished_budget_2 = create(:budget, :finished)
@@ -58,7 +58,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show headings ordered by name", :consul do
+    scenario "Show headings ordered by name" do
       group = create(:budget_group, budget: budget)
       last_heading = create(:budget_heading, group: group, name: "BBB")
       first_heading = create(:budget_heading, group: group, name: "AAA")
@@ -68,7 +68,7 @@ describe "Budgets" do
       expect(first_heading.name).to appear_before(last_heading.name)
     end
 
-    scenario "Show groups and headings for missing translations", :consul do
+    scenario "Show groups and headings for missing translations" do
       group1 = create(:budget_group, budget: budget)
       group2 = create(:budget_group, budget: budget)
 
@@ -87,7 +87,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show informing index without links", :consul do
+    scenario "Show informing index without links" do
       budget.update!(phase: "informing")
       heading = create(:budget_heading, budget: budget)
 
@@ -99,7 +99,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show finished index without heading links", :consul do
+    scenario "Show finished index without heading links" do
       budget.update!(phase: "finished")
       heading = create(:budget_heading, budget: budget)
 
@@ -111,7 +111,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Hide money on single heading budget", :consul do
+    scenario "Hide money on single heading budget" do
       budget = create(:budget, :finished, :hide_money)
       heading = create(:budget_heading, budget: budget)
 
@@ -123,7 +123,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Hide money on multiple headings budget", :consul do
+    scenario "Hide money on multiple headings budget" do
       budget = create(:budget, :finished, :hide_money)
       heading1 = create(:budget_heading, budget: budget)
       heading2 = create(:budget_heading, budget: budget)
@@ -147,7 +147,7 @@ describe "Budgets" do
       expect(page).to have_content "There are no budgets"
     end
 
-    scenario "Show heading for budget with single heading", :consul do
+    scenario "Show heading for budget with single heading" do
       group = create(:budget_group, budget: budget, name: "Single group")
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
 
@@ -161,7 +161,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show group and headings for budget with multiple headings", :consul do
+    scenario "Show group and headings for budget with multiple headings" do
       group = create(:budget_group, budget: budget, name: "New group")
       create(:budget_heading, group: group, name: "New heading", price: 10_000)
       create(:budget_heading, group: group, name: "Other new heading", price: 30_000)
@@ -178,7 +178,7 @@ describe "Budgets" do
     end
   end
 
-  scenario "Index shows only published phases", :consul do
+  scenario "Index shows only published phases" do
     budget.update!(phase: :finished)
     phases = budget.phases
 
@@ -259,7 +259,7 @@ describe "Budgets" do
       Setting["feature.map"] = true
     end
 
-    scenario "Display investment's map location markers", :consul do
+    scenario "Display investment's map location markers" do
       create_list(:budget_investment, 3, :with_map_location, heading: heading)
 
       visit budgets_path
@@ -269,7 +269,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Display all investment's map location if there are no selected", :consul do
+    scenario "Display all investment's map location if there are no selected" do
       budget.update!(phase: :publishing_prices)
       create_list(:budget_investment, 4, :with_map_location, heading: heading)
 
@@ -280,7 +280,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Display only selected investment's map location from publishing prices phase", :consul do
+    scenario "Display only selected investment's map location from publishing prices phase" do
       budget.update!(phase: :publishing_prices)
       create_list(:budget_investment, 2, :selected, :with_map_location, heading: heading)
       create_list(:budget_investment, 2, :with_map_location, heading: heading)
@@ -292,7 +292,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Skip invalid map markers", :consul do
+    scenario "Skip invalid map markers" do
       map_locations = []
 
       investment = create(:budget_investment, heading: heading)
@@ -320,7 +320,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "when the marker clustering feature is enabled the map shows clusters instead of markers", :consul do
+    scenario "when the marker clustering feature is enabled the map shows clusters instead of markers" do
       Setting["map.feature.marker_clustering"] = true
       create_list(:budget_investment, 3, :selected, :with_map_location, heading: heading)
 

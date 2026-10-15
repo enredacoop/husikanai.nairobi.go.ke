@@ -11,9 +11,6 @@ es:
       index:
         group_filter_all: Todos los subcondados
   budgets:
-    index:
-      see_budget: "Ver presupuesto"
-      see_investments: "Ver proyectos"
     groups:
       investments_link: "Ver todos los proyectos de gasto de %{group}"
     sets:

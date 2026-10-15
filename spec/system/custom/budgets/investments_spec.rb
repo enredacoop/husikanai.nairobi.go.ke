@@ -66,36 +66,4 @@ describe "Budget Investments" do
       expect(page).to have_content "Build a skyscraper"
     end
   end
-
-  context "Balloting Phase" do
-    before do
-      budget.update(phase: "balloting")
-    end
-
-    scenario "Index" do
-      user = create(:user, :level_two)
-      investment1 = create(:budget_investment, :selected, heading: heading, price: 10000)
-      investment2 = create(:budget_investment, :selected, heading: heading, price: 20000)
-
-      login_as(user)
-      visit root_path
-
-      first(:link, "Participatory budgeting").click
-
-      click_link "See investments"
-
-      within("#budget_investment_#{investment1.id}") do
-        expect(page).to have_content investment1.title
-        expect(page).to have_content "€10,000"
-      end
-
-      within("#budget_investment_#{investment2.id}") do
-        expect(page).to have_content investment2.title
-        expect(page).to have_content "€20,000"
-      end
-
-      expect(page).to have_link "Check my votes"
-      expect(page).to have_content "STILL AVAILABLE TO YOU €666,666"
-    end
-  end
 end
