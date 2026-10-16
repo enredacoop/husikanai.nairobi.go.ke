@@ -1,0 +1,12 @@
+.investments-budget-name {
+  font-size: rem-calc(18);
+  font-weight: bold;
+  letter-spacing: 0.02em;
+  margin-bottom: calc($line-height / 2);
+  margin-top: $line-height;
+  text-transform: uppercase;
+
+  a {
+    color: inherit;
+  }
+}
