@@ -151,7 +151,7 @@ describe Budgets::InvestmentsListComponent do
     context "budget with multiple headings" do
       before { create(:budget_heading, budget: budget) }
 
-      it "is not shown in the informing or finished phases" do
+      it "is not shown in the informing or finished phases", :consul do
         %w[informing finished].each do |phase_name|
           budget.phase = phase_name
 

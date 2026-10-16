@@ -24,22 +24,22 @@ describe Budgets::InvestmentsListComponent do
   end
 
   describe "link to see all investments" do
-    before { create_list(:budget_investment, 3, :selected, heading: heading, price: 999) }
-
     context "budget with multiple headings" do
-      before { create(:budget_heading, budget: budget) }
+      before do
+        heading
+        create(:budget_heading, budget: budget)
+      end
 
-      it "is not shown when there are no investments to show in the current phase" do
-        budget.update!(phase: "balloting")
-        Budget::Investment.update_all(selected: false)
+      it "is not shown in the informing phase" do
+        budget.phase = "informing"
 
         render_inline Budgets::InvestmentsListComponent.new(budget)
 
         expect(page).not_to have_link "See all investments"
       end
 
-      it "is shown in all other phases" do
-        (Budget::Phase::PHASE_KINDS - %w[informing finished]).each do |phase_name|
+      it "is shown in all other phases, even without investments" do
+        (Budget::Phase::PHASE_KINDS - ["informing"]).each do |phase_name|
           budget.phase = phase_name
 
           render_inline Budgets::InvestmentsListComponent.new(budget)
