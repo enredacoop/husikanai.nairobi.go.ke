@@ -1,0 +1,14 @@
+.budget-investment-form .investment-form-zone {
+  column-gap: calc($line-height / 2);
+  display: flex;
+  flex-wrap: wrap;
+
+  > div {
+    flex: 0 1 auto;
+  }
+
+  select {
+    min-width: rem-calc(200);
+    width: auto;
+  }
+}

@@ -35,13 +35,14 @@ describe "Budget Investments" do
       visit new_budget_investment_path(budget)
 
       expect(page).not_to have_content("#{heading.name} (#{budget.formatted_heading_price(heading)})")
-      expect(page).to have_select "Ward",
-                                  options: ["",
-                                            "Health: More hospitals",
-                                            "Health: Medical supplies",
-                                            "Education: Schools"]
+      expect(page).to have_select "Subcounty", options: ["", "Education", "Health"]
+      expect(page).to have_select "Ward", options: ["", "Schools", "Medical supplies", "More hospitals"]
 
-      select "Health: Medical supplies", from: "Ward"
+      select "Health", from: "Subcounty"
+
+      expect(page).to have_select "Ward", options: ["", "Medical supplies", "More hospitals"]
+
+      select "Medical supplies", from: "Ward"
 
       fill_in_new_investment_title with: "Build a skyscraper"
       fill_in_ckeditor "Description", with: "I want to live in a high tower over the clouds"
@@ -64,6 +65,40 @@ describe "Budget Investments" do
 
       expect(page).to have_content "1 Investment"
       expect(page).to have_content "Build a skyscraper"
+    end
+
+    scenario "Choosing a ward selects its subcounty" do
+      education = create(:budget_group, budget: budget, name: "Education")
+      create(:budget_heading, group: education, name: "Schools")
+
+      login_as(author)
+
+      visit new_budget_investment_path(budget)
+      select "Schools", from: "Ward"
+
+      expect(page).to have_select "Subcounty", selected: "Education"
+      expect(page).to have_select "Ward", options: ["", "Schools"], selected: "Schools"
+    end
+
+    scenario "Edit with multiple groups selects the subcounty of the ward" do
+      education = create(:budget_group, budget: budget, name: "Education")
+      schools = create(:budget_heading, group: education, name: "Schools")
+      investment = create(:budget_investment, heading: heading, author: author)
+
+      login_as(author)
+
+      visit edit_budget_investment_path(budget, investment)
+
+      expect(page).to have_select "Subcounty", selected: "Health"
+      expect(page).to have_select "Ward", options: ["", "More hospitals"], selected: "More hospitals"
+
+      select "Education", from: "Subcounty"
+      select "Schools", from: "Ward"
+      click_button "Update Investment"
+
+      expect(page).to have_content "Investment project updated successfully"
+      expect(investment.reload.heading).to eq schools
+      expect(investment.group).to eq education
     end
   end
 end

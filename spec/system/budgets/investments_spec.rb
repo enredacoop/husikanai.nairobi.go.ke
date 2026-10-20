@@ -827,7 +827,7 @@ describe "Budget Investments" do
       end
     end
 
-    scenario "Heading options are correctly ordered" do
+    scenario "Heading options are correctly ordered", :consul do
       city_group = create(:budget_group, name: "Toda la ciudad", budget: budget)
       create(:budget_heading, name: "Toda la ciudad", price: 333333, group: city_group)
       create(:budget_heading, name: "More health professionals", price: 999999, group: group)

@@ -28,9 +28,27 @@
 
       child.val(child.find("option[value='" + selected + "']").length ? selected : "");
     },
+    // Selects the parent of the chosen child option, which can belong to
+    // another parent when the child shows all its options
+    selectParent: function(parent) {
+      var parentId = $(parent.data("dependent-select")).find("option:selected").data("parent-id");
+
+      if (parentId !== undefined && String(parent.val()) !== String(parentId)) {
+        parent.val(parentId);
+        App.DependentSelect.filter(parent);
+      }
+    },
     initialize: function() {
       $("[data-dependent-select]").each(function() {
-        App.DependentSelect.filter($(this));
+        var parent = $(this);
+
+        var child = $(parent.data("dependent-select"));
+
+        App.DependentSelect.filter(parent);
+
+        child.off("change.dependentSelect").on("change.dependentSelect", function() {
+          App.DependentSelect.selectParent(parent);
+        });
       }).off("change.dependentSelect").on("change.dependentSelect", function() {
         App.DependentSelect.filter($(this));
       });
