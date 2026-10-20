@@ -29,4 +29,15 @@ describe Budgets::GroupsAndHeadingsComponent do
 
     expect(page).not_to have_link "See all investment projects in Westlands"
   end
+
+  it "links to the groups and headings when the budget is finished" do
+    budget.update!(phase: "finished")
+    heading = create(:budget_heading, group: group, name: "Parklands")
+    create(:budget_heading, group: group)
+
+    render_inline Budgets::GroupsAndHeadingsComponent.new(budget)
+
+    expect(page).to have_link "See all investment projects in Westlands"
+    expect(page).to have_link "Parklands", href: "/budgets/#{budget.id}/investments?heading_id=#{heading.id}"
+  end
 end

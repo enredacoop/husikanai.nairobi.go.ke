@@ -68,4 +68,15 @@ describe Budgets::SetsGroupsAndHeadingsComponent do
     expect(page).to have_css "li.heading", text: "Parklands", visible: :hidden
     expect(page).not_to have_link "Parklands", visible: :all
   end
+
+  it "links to wards when the budget is finished" do
+    budget.update!(phase: "finished")
+    group = create(:budget_group, budget: budget, set: west)
+    heading = create(:budget_heading, group: group, name: "Parklands")
+
+    render_inline Budgets::SetsGroupsAndHeadingsComponent.new(budget)
+
+    expect(page).to have_link "Parklands", href: "/budgets/#{budget.id}/investments?heading_id=#{heading.id}",
+                                           visible: :hidden
+  end
 end

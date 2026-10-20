@@ -29,6 +29,7 @@ Budgets are organized in three geographic levels:
 - **Budgets wizard:** the steps are budget, zones and phases. In the zones step, boroughs, subcounties and wards can be created in one table or imported from a CSV file.
 - **Public budget page:**
   - Each borough is a button that reveals its subcounties and wards.
+  - Wards and subcounties link to their investments in every phase except informing. CONSUL DEMOCRACY also disables these links when the budget is finished.
   - The list of investments is not shown. A "See all investments" button is shown in every phase except informing.
 - **Investments list:**
   - The budget name is shown above the title.

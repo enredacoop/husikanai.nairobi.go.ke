@@ -1,6 +1,27 @@
 require "rails_helper"
 
 describe "Budgets" do
+  context "Index" do
+    scenario "Show finished index with heading links" do
+      budget = create(:budget, :finished)
+      group = create(:budget_group, budget: budget)
+      heading = create(:budget_heading, group: group)
+      create(:budget_heading, group: group)
+      investment = create(:budget_investment, :winner, heading: heading)
+
+      visit budgets_path
+
+      within("#budget_info") do
+        expect(page).to have_link "See all investment projects in #{group.name}"
+
+        click_link heading.name
+      end
+
+      expect(page).to have_current_path budget_investments_path(budget, heading_id: heading.id)
+      expect(page).to have_content investment.title
+    end
+  end
+
   context "Show" do
     before { create(:budget, :selecting) }
 

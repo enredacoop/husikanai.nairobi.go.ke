@@ -44,8 +44,10 @@ class Budgets::SetsGroupsAndHeadingsComponent < ApplicationComponent
       ].join(" · ")
     end
 
+    # Wards link to their investments in every phase but informing, so the
+    # projects of finished budgets can be browsed too
     def links_disabled?
-      budget.informing? || budget.finished?
+      budget.informing?
     end
 
     def price(heading)

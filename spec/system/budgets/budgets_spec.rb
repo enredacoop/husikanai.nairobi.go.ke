@@ -99,7 +99,7 @@ describe "Budgets" do
       end
     end
 
-    scenario "Show finished index without heading links" do
+    scenario "Show finished index without heading links", :consul do
       budget.update!(phase: "finished")
       heading = create(:budget_heading, budget: budget)
 
