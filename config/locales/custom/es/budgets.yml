@@ -28,9 +28,13 @@ es:
         ward: "Barrio"
         all_subcounties: "Todos los subcondados"
         all_wards: "Todos los barrios"
+      form:
+        title: "Proponer un nuevo proyecto"
       index:
         budget_name: "Presupuesto participativo:"
         by_group: "Proyectos de gasto de %{group}"
+        sidebar:
+          create: "Proponer un nuevo proyecto"
       votes:
         confirm_group:
           one: "Sólo puedes apoyar proyectos en %{count} barrio. Si sigues adelante no podrás cambiar la elección de este barrio. ¿Estás seguro/a?"

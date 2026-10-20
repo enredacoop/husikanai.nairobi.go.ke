@@ -28,9 +28,13 @@ en:
         ward: "Ward"
         all_subcounties: "All subcounties"
         all_wards: "All wards"
+      form:
+        title: "Propose a new project"
       index:
         budget_name: "Participatory budget:"
         by_group: "Investment projects in %{group}"
+        sidebar:
+          create: "Propose a new project"
       votes:
         confirm_group:
           one: "You can only support investments in %{count} ward. If you continue you cannot change the election of your ward. Are you sure?"

@@ -16,7 +16,7 @@ describe Budgets::SubheaderComponent do
   describe "when budget is accepting" do
     let(:budget) { create(:budget, :accepting) }
 
-    it "and user is level_two_or_three_verified shows a link to create a new investment" do
+    it "and user is level_two_or_three_verified shows a link to create a new investment", :consul do
       sign_in(create(:user, :level_two))
 
       render_inline Budgets::SubheaderComponent.new(budget)
