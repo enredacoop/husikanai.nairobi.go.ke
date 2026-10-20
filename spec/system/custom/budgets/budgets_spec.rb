@@ -20,6 +20,23 @@ describe "Budgets" do
       expect(page).to have_current_path budget_investments_path(budget, heading_id: heading.id)
       expect(page).to have_content investment.title
     end
+
+    scenario "Finished budgets link to the budget before the results and milestones" do
+      create(:budget)
+      finished_budget = create(:budget, :finished, results_enabled: true)
+
+      visit budgets_path
+
+      within("#budget_#{finished_budget.id}_results") do
+        expect(page).to have_link "See budget", href: budget_path(finished_budget)
+        expect("See budget").to appear_before("See results")
+        expect("See results").to appear_before("Milestones")
+      end
+
+      click_link "See budget"
+
+      expect(page).to have_current_path budget_path(finished_budget)
+    end
   end
 
   context "Show" do

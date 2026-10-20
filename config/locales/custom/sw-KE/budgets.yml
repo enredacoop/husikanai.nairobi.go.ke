@@ -11,6 +11,8 @@ sw-KE:
       index:
         group_filter_all: Kaunti ndogo zote
   budgets:
+    index:
+      see_budget: "Tazama bajeti"
     groups:
       investments_link: "Tazama miradi yote ya uwekezaji katika %{group}"
     sets:
