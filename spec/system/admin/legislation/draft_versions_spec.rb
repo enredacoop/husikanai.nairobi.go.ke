@@ -18,7 +18,7 @@ describe "Admin legislation draft versions", :admin do
   end
 
   context "Create" do
-    scenario "Valid legislation draft version" do
+    scenario "Valid legislation draft version", :consul do
       create(:legislation_process, title: "An example legislation process")
 
       visit admin_root_path
@@ -46,7 +46,7 @@ describe "Admin legislation draft versions", :admin do
   end
 
   context "Update" do
-    scenario "Valid legislation draft version" do
+    scenario "Valid legislation draft version", :consul do
       process = create(:legislation_process, title: "An example legislation process")
       create(:legislation_draft_version, title: "Version 1", process: process)
 

@@ -19,7 +19,7 @@ describe "Admin legislation questions", :admin do
   end
 
   context "Create" do
-    scenario "Valid legislation question" do
+    scenario "Valid legislation question", :consul do
       visit admin_root_path
 
       within("#side_menu") do
@@ -40,7 +40,7 @@ describe "Admin legislation questions", :admin do
   end
 
   context "Update" do
-    scenario "Valid legislation question" do
+    scenario "Valid legislation question", :consul do
       create(:legislation_question, title: "Question 2", description: "Description 2", process: process)
 
       visit admin_root_path

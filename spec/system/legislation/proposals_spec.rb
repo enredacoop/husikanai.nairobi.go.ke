@@ -200,7 +200,7 @@ describe "Legislation Proposals" do
     expect(page).to have_content("-6 votes")
   end
 
-  scenario "Show link to process on show" do
+  scenario "Show link to process on show", :consul do
     create(:legislation_proposal, legislation_process_id: process.id)
 
     visit legislation_process_proposal_path(proposal.process, proposal)

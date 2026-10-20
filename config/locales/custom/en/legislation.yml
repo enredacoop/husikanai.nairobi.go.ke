@@ -1,0 +1,37 @@
+en:
+  admin:
+    legislation:
+      processes:
+        index:
+          title: "Collaborative policy and legislation"
+        new:
+          title: "Create new collaborative policy and legislation process"
+    menu:
+      legislation: "Collaborative Policy and Legislation"
+      site_customization:
+        information_texts_menu:
+          legislation: "Collaborative policy and legislation"
+  layouts:
+    header:
+      collaborative_legislation: "Collaborative policy and legislation"
+  legislation:
+    processes:
+      index:
+        section_header:
+          icon_alt: "Collaborative policy and legislation icon"
+          title: "Collaborative policy and legislation"
+          help: "Help with collaborative policy and legislation"
+        section_footer:
+          title: "Help with collaborative policy and legislation"
+    questions:
+      show:
+        title: "Collaborative policy and legislation process"
+    proposals:
+      process_title: "Collaborative policy and legislation process"
+  settings:
+    process:
+      legislation: "Collaborative Policy and Legislation"
+    sdg:
+      process:
+        legislation: "Related SDG in collaborative policy and legislation"
+        legislation_description: "Allow collaborative policy and legislation to be linked to Sustainable Development Goals"

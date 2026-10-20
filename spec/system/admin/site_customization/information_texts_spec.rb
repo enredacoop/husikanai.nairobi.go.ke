@@ -1,7 +1,7 @@
 require "rails_helper"
 
 describe "Admin custom information texts", :admin do
-  scenario "page is correctly loaded" do
+  scenario "page is correctly loaded", :consul do
     visit admin_site_customization_information_texts_path
 
     click_link "Basic customization"

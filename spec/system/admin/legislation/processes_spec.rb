@@ -48,7 +48,7 @@ describe "Admin collaborative legislation", :admin do
   end
 
   context "Create" do
-    scenario "Valid legislation process" do
+    scenario "Valid legislation process", :consul do
       visit admin_root_path
 
       within("#side_menu") do
@@ -117,7 +117,7 @@ describe "Admin collaborative legislation", :admin do
       expect(page).not_to have_content "Describing the process"
     end
 
-    scenario "Legislation process in draft phase" do
+    scenario "Legislation process in draft phase", :consul do
       visit admin_root_path
 
       within("#side_menu") do
@@ -205,7 +205,7 @@ describe "Admin collaborative legislation", :admin do
              description: "Description of the process")
     end
 
-    scenario "Remove summary text" do
+    scenario "Remove summary text", :consul do
       visit admin_root_path
 
       within("#side_menu") do
@@ -228,7 +228,7 @@ describe "Admin collaborative legislation", :admin do
       expect(page).to have_content "Description of the process"
     end
 
-    scenario "Deactivate draft publication" do
+    scenario "Deactivate draft publication", :consul do
       visit admin_root_path
 
       within("#side_menu") do

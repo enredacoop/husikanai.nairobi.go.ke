@@ -1,0 +1,45 @@
+es:
+  admin:
+    legislation:
+      processes:
+        index:
+          title: "Procesos de políticas y legislación colaborativas"
+        new:
+          title: "Crear nuevo proceso de políticas y legislación colaborativas"
+    menu:
+      legislation: "Políticas y legislación colaborativas"
+      site_customization:
+        information_texts_menu:
+          legislation: "Políticas y legislación colaborativas"
+  layouts:
+    header:
+      collaborative_legislation: "Políticas y legislación colaborativas"
+  legislation:
+    processes:
+      index:
+        section_header:
+          icon_alt: "Icono de políticas y legislación colaborativas"
+          title: "Políticas y legislación colaborativas"
+          help: "Ayuda sobre políticas y legislación colaborativas"
+        section_footer:
+          title: "Ayuda sobre políticas y legislación colaborativas"
+    questions:
+      show:
+        title: "Proceso de políticas y legislación colaborativas"
+    proposals:
+      process_title: "Proceso de políticas y legislación colaborativas"
+  pages:
+    help:
+      menu:
+        processes: "Políticas y legislación colaborativas"
+      processes:
+        title: "Políticas y legislación colaborativas"
+        link: "políticas y legislación colaborativas"
+        feature: "Para participar en las políticas y legislación colaborativas tienes que %{link} y verificar tu cuenta."
+  settings:
+    process:
+      legislation: "Políticas y legislación colaborativas"
+    sdg:
+      process:
+        legislation: "Alineamiento ODS en políticas y legislación colaborativas"
+        legislation_description: "Permitir alineamiento de los Objetivos de Desarrollo Sostenible en políticas y legislación colaborativas"
