@@ -34,6 +34,7 @@ Budgets are organized in three geographic levels:
 - **Investments list:**
   - The budget name is shown above the title.
   - Investments can be filtered by subcounty, and the advanced search has subcounty and ward selects.
+  - In finished budgets, investments can also be sorted by price, unless the budget hides money. CONSUL DEMOCRACY only sorts them randomly in that phase.
 
 ### Projects
 

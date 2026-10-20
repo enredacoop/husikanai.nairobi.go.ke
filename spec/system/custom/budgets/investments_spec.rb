@@ -101,4 +101,26 @@ describe "Budget Investments" do
       expect(investment.group).to eq education
     end
   end
+
+  context "Finished phase" do
+    before { budget.update!(phase: "finished") }
+
+    scenario "Order by price" do
+      low_investment = create(:budget_investment, :winner, heading: heading, price: 10)
+      high_investment = create(:budget_investment, :winner, heading: heading, price: 1000)
+      mid_investment = create(:budget_investment, :winner, heading: heading, price: 100)
+
+      visit budget_investments_path(budget, heading_id: heading.id)
+
+      click_link "by price"
+
+      expect(page).to have_css "a.is-active", text: "by price"
+      expect(page).to have_current_path(/order=price/)
+
+      within "#budget-investments" do
+        expect(high_investment.title).to appear_before(mid_investment.title)
+        expect(mid_investment.title).to appear_before(low_investment.title)
+      end
+    end
+  end
 end
