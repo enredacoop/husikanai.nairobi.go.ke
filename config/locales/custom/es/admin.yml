@@ -106,9 +106,11 @@ es:
           back: "Volver a editar subcondado"
       heading_mode:
         multiple:
+          description: "Crea un proceso con varios barrios, cada uno con su propia cantidad de dinero. Por ejemplo, 25.000.000 KSh para \"Mutuini\", 30.000.000 KSh para \"Ngando\" y 28.000.000 KSh para \"Kilimani\"."
           link: "Crear presupuesto de múltiples barrios"
           title: "Presupuesto de <strong>múltiples barrios</strong>"
         single:
+          description: "Crea un proceso con un único barrio y una única cantidad de dinero. Por ejemplo, 25.000.000 KSh para el barrio."
           link: "Crear presupuesto de barrio único"
           title: "Presupuesto de <strong>barrio único</strong>"
       zones:
@@ -126,5 +128,6 @@ es:
     stats:
       budget_balloting:
         votes_per_heading: "Votos por barrio"
+        participants_per_district: "Participantes por barrio"
       budget_supporting:
         headings: "Barrios"

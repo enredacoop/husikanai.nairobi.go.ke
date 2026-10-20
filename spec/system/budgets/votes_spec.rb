@@ -116,7 +116,7 @@ describe "Votes" do
         group.update(max_votable_headings: 2)
       end
 
-      scenario "From Index" do
+      scenario "From Index", :consul do
         visit budget_investments_path(budget, heading_id: new_york.id)
 
         within("#budget_investment_#{new_york_investment.id}") do
@@ -160,7 +160,7 @@ describe "Votes" do
         end
       end
 
-      scenario "From show" do
+      scenario "From show", :consul do
         visit budget_investment_path(budget, new_york_investment)
 
         accept_confirm { click_button "Support" }
@@ -193,7 +193,7 @@ describe "Votes" do
                                          "Share it!"
       end
 
-      scenario "Confirm message shows the right text" do
+      scenario "Confirm message shows the right text", :consul do
         visit budget_investments_path(budget, heading_id: new_york.id)
         click_button "Support"
 

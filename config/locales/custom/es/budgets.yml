@@ -31,3 +31,16 @@ es:
       index:
         budget_name: "Presupuesto participativo:"
         by_group: "Proyectos de gasto de %{group}"
+      votes:
+        confirm_group:
+          one: "Sólo puedes apoyar proyectos en %{count} barrio. Si sigues adelante no podrás cambiar la elección de este barrio. ¿Estás seguro/a?"
+          other: "Sólo puedes apoyar proyectos en %{count} barrios. Si sigues adelante no podrás cambiar la elección de estos barrios. ¿Estás seguro/a?"
+    results:
+      heading_selection_title: "Por barrio"
+    executions:
+      heading_selection_title: "Por barrio"
+  votes:
+    budget_investments:
+      different_heading_assigned:
+        one: "Sólo puedes apoyar proyectos de gasto de %{count} barrio. Ya has apoyado en %{supported_headings}."
+        other: "Sólo puedes apoyar proyectos de gasto de %{count} barrios. Ya has apoyado en %{supported_headings}."

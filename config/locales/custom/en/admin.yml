@@ -106,9 +106,11 @@ en:
           back: "Go back to edit subcounty"
       heading_mode:
         multiple:
+          description: "Create a process with several wards, each with its own amount of money. For example, KSh 25,000,000 for \"Mutuini\", KSh 30,000,000 for \"Ngando\" and KSh 28,000,000 for \"Kilimani\"."
           link: "Create multiple wards budget"
           title: "<strong>Multiple wards</strong> budget"
         single:
+          description: "Create a process with a single ward and a single amount of money. For example, KSh 25,000,000 for the ward."
           link: "Create single ward budget"
           title: "<strong>Single ward</strong> budget"
       zones:
@@ -126,5 +128,6 @@ en:
     stats:
       budget_balloting:
         votes_per_heading: "Votes per ward"
+        participants_per_district: "Participants per ward"
       budget_supporting:
         headings: "Wards"

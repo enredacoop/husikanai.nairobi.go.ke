@@ -31,3 +31,16 @@ en:
       index:
         budget_name: "Participatory budget:"
         by_group: "Investment projects in %{group}"
+      votes:
+        confirm_group:
+          one: "You can only support investments in %{count} ward. If you continue you cannot change the election of your ward. Are you sure?"
+          other: "You can only support investments in %{count} wards. If you continue you cannot change the election of your wards. Are you sure?"
+    results:
+      heading_selection_title: "By ward"
+    executions:
+      heading_selection_title: "By ward"
+  votes:
+    budget_investments:
+      different_heading_assigned:
+        one: "You can only support investment projects in %{count} ward. You have already supported investments in %{supported_headings}."
+        other: "You can only support investment projects in %{count} wards. You have already supported investments in %{supported_headings}."
