@@ -10,7 +10,7 @@ describe "Legislation Proposals" do
     visit legislation_process_proposal_path(proposal.process, proposal)
 
     within(".process-proposal") do
-      expect(page).to have_content("COLLABORATIVE POLICY AND LEGISLATION PROCESS")
+      expect(page).to have_content("TOPICAL PARTICIPATION PROCESS")
       expect(page).to have_link(process.title)
     end
   end

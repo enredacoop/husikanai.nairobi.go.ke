@@ -3,43 +3,43 @@ es:
     legislation:
       processes:
         index:
-          title: "Procesos de políticas y legislación colaborativas"
+          title: "Procesos de participación temática"
         new:
-          title: "Crear nuevo proceso de políticas y legislación colaborativas"
+          title: "Crear nuevo proceso de participación temática"
     menu:
-      legislation: "Políticas y legislación colaborativas"
+      legislation: "Participación temática"
       site_customization:
         information_texts_menu:
-          legislation: "Políticas y legislación colaborativas"
+          legislation: "Participación temática"
   layouts:
     header:
-      collaborative_legislation: "Políticas y legislación colaborativas"
+      collaborative_legislation: "Participación temática"
   legislation:
     processes:
       index:
         section_header:
-          icon_alt: "Icono de políticas y legislación colaborativas"
-          title: "Políticas y legislación colaborativas"
-          help: "Ayuda sobre políticas y legislación colaborativas"
+          icon_alt: "Icono de participación temática"
+          title: "Participación temática"
+          help: "Ayuda sobre participación temática"
         section_footer:
-          title: "Ayuda sobre políticas y legislación colaborativas"
+          title: "Ayuda sobre participación temática"
     questions:
       show:
-        title: "Proceso de políticas y legislación colaborativas"
+        title: "Proceso de participación temática"
     proposals:
-      process_title: "Proceso de políticas y legislación colaborativas"
+      process_title: "Proceso de participación temática"
   pages:
     help:
       menu:
-        processes: "Políticas y legislación colaborativas"
+        processes: "Participación temática"
       processes:
-        title: "Políticas y legislación colaborativas"
-        link: "políticas y legislación colaborativas"
-        feature: "Para participar en las políticas y legislación colaborativas tienes que %{link} y verificar tu cuenta."
+        title: "Participación temática"
+        link: "participación temática"
+        feature: "Para participar en los procesos de participación temática tienes que %{link} y verificar tu cuenta."
   settings:
     process:
-      legislation: "Políticas y legislación colaborativas"
+      legislation: "Participación temática"
     sdg:
       process:
-        legislation: "Alineamiento ODS en políticas y legislación colaborativas"
-        legislation_description: "Permitir alineamiento de los Objetivos de Desarrollo Sostenible en políticas y legislación colaborativas"
+        legislation: "Alineamiento ODS en participación temática"
+        legislation_description: "Permitir alineamiento de los Objetivos de Desarrollo Sostenible en participación temática"

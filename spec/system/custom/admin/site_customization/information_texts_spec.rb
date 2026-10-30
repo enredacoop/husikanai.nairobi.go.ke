@@ -8,7 +8,7 @@ describe "Admin custom information texts", :admin do
     expect(page).to have_content "Help with debates"
     expect(page).to have_content "Help with proposals"
     expect(page).to have_content "Help with voting"
-    expect(page).to have_content "Help with collaborative policy and legislation"
+    expect(page).to have_content "Help with topical participation"
     expect(page).to have_content "Help with participatory budgets"
 
     within("#information-texts-tabs") { click_link "Debates" }
@@ -27,9 +27,9 @@ describe "Admin custom information texts", :admin do
 
     expect(page).to have_content "Results"
 
-    within("#information-texts-tabs") { click_link "Collaborative policy and legislation" }
+    within("#information-texts-tabs") { click_link "Topical Participation" }
 
-    expect(page).to have_content "Help with collaborative policy and legislation"
+    expect(page).to have_content "Help with topical participation"
 
     within("#information-texts-tabs") { click_link "Budgets" }
 

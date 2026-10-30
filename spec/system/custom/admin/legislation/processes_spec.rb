@@ -6,7 +6,7 @@ describe "Admin collaborative legislation", :admin do
       visit admin_root_path
 
       within("#side_menu") do
-        click_link "Collaborative Policy and Legislation"
+        click_link "Topical Participation"
       end
 
       expect(page).not_to have_content "An example legislation process"
@@ -75,7 +75,7 @@ describe "Admin collaborative legislation", :admin do
       visit admin_root_path
 
       within("#side_menu") do
-        click_link "Collaborative Policy and Legislation"
+        click_link "Topical Participation"
       end
 
       expect(page).not_to have_content "An example legislation process"
@@ -130,7 +130,7 @@ describe "Admin collaborative legislation", :admin do
       visit admin_root_path
 
       within("#side_menu") do
-        click_link "Collaborative Policy and Legislation"
+        click_link "Topical Participation"
       end
 
       within("tr", text: "An example legislation process") { click_link "Edit" }
@@ -153,7 +153,7 @@ describe "Admin collaborative legislation", :admin do
       visit admin_root_path
 
       within("#side_menu") do
-        click_link "Collaborative Policy and Legislation"
+        click_link "Topical Participation"
       end
 
       within("tr", text: "An example legislation process") { click_link "Edit" }
