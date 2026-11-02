@@ -66,6 +66,7 @@ describe Nairobi::ProjectsImporter do
     expect(investment).to be_winner
     expect(investment.primary_progress_bar.percentage).to eq 85
     expect(investment.milestones.last.status.name).to eq "Delayed"
+    expect(investment.milestones.last.translations).not_to be_empty
   end
 
   it "creates the predefined milestone statuses" do

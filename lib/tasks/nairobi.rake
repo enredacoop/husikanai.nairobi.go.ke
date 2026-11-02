@@ -5,6 +5,18 @@ namespace :nairobi do
     puts "Milestone statuses: #{Milestone::Status.pluck(:name).join(", ")}"
   end
 
+  desc "Adds a title translation to milestones without translations, like the admin form does"
+  task add_missing_milestone_translations: :environment do
+    milestones = Milestone.where.missing(:translations)
+    count = milestones.count
+
+    milestones.find_each do |milestone|
+      milestone.update!(title: I18n.l(milestone.created_at, format: :datetime))
+    end
+
+    puts "Milestones updated: #{count}"
+  end
+
   desc "Permanently deletes the investments of a budget, or of all budgets if no budget is given"
   task :destroy_investments, [:budget_id] => :environment do |_, args|
     budget = Budget.find_by_slug_or_id!(args[:budget_id]) if args[:budget_id].present?

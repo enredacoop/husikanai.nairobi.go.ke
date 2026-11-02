@@ -218,7 +218,9 @@ class Nairobi::ProjectsImporter
       last_status = investment.milestones.with_status.order_by_publication_date.last&.status
 
       unless last_status == status
-        investment.milestones.create!(status: status, publication_date: Date.current)
+        investment.milestones.create!(status: status,
+                                      publication_date: Date.current,
+                                      title: I18n.l(Time.current, format: :datetime))
       end
     end
 
