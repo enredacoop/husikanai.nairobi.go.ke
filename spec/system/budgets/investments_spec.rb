@@ -327,7 +327,7 @@ describe "Budget Investments" do
 
       visit budget_investments_path(budget, heading_id: heading.id)
 
-      within(".submenu .is-active") { expect(page).to have_content "random" }
+      within(".submenu .is-active") { expect(page).to have_content "mixed order" }
       order = all(".budget-investment h3").map(&:text)
       expect(order).not_to be_empty
 
@@ -348,9 +348,9 @@ describe "Budget Investments" do
 
       expect(page).to have_css "h2", exact_text: "highest rated"
 
-      click_link "random"
+      click_link "mixed order"
 
-      expect(page).to have_css "h2", exact_text: "random"
+      expect(page).to have_css "h2", exact_text: "mixed order"
 
       visit budget_investments_path(budget, heading_id: heading.id)
       new_order = all(".budget-investment h3").map(&:text)
@@ -541,7 +541,7 @@ describe "Budget Investments" do
       visit budget_investments_path(budget, heading_id: heading.id, filter: filter)
 
       within(".submenu") do
-        expect(page).to have_content "random"
+        expect(page).to have_content "mixed order"
         expect(page).not_to have_content "by price"
         expect(page).not_to have_content "highest rated"
       end

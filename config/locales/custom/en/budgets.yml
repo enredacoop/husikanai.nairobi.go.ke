@@ -35,6 +35,8 @@ en:
       index:
         budget_name: "Participatory budget:"
         by_group: "Investment projects in %{group}"
+        orders:
+          random: "mixed order"
         sidebar:
           create: "Propose a new project"
       votes:
