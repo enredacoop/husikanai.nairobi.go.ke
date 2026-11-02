@@ -49,3 +49,20 @@
     border-right: 2px solid $brand-secondary;
   }
 }
+
+.budget-header {
+  background-color: $brand-secondary;
+  min-height: $line-height * 12;
+  padding-top: $line-height * 2;
+
+  h1 {
+    padding-top: $line-height;
+  }
+
+  .main-link,
+  .main-link:hover,
+  .main-link:focus {
+    background-color: $white;
+    color: $black;
+  }
+}
