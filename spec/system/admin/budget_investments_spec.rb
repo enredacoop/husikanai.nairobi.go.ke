@@ -987,7 +987,7 @@ describe "Admin budget investments", :admin do
       expect(page).not_to have_content("Hide")
     end
 
-    scenario "If budget is finished, investment cannot be edited or valuation comments created" do
+    scenario "If budget is finished, investment can be edited but valuation comments cannot be created" do
       finished_budget = create(:budget, :finished)
       budget_investment = create(:budget_investment,
                                  budget: finished_budget,
@@ -995,8 +995,8 @@ describe "Admin budget investments", :admin do
       visit admin_budget_budget_investments_path(budget_investment.budget)
 
       within_window(window_opened_by { click_link budget_investment.title }) do
-        expect(page).not_to have_link "Edit"
-        expect(page).not_to have_link "Edit classification"
+        expect(page).to have_link "Edit"
+        expect(page).to have_link "Edit classification"
         expect(page).not_to have_link "Edit dossier"
         expect(page).to have_link "Create new milestone"
 

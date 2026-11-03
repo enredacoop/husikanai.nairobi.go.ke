@@ -114,7 +114,7 @@ describe Abilities::Administrator do
   it { should be_able_to(:hide, Budget::Investment) }
 
   it { should be_able_to(:valuate, create(:budget_investment, budget: create(:budget, :valuating))) }
-  it { should_not be_able_to(:admin_update, finished_investment) }
+  it { should be_able_to(:admin_update, finished_investment) }
   it { should_not be_able_to(:valuate, finished_investment) }
   it { should_not be_able_to(:comment_valuation, finished_investment) }
 

@@ -73,7 +73,7 @@ module Abilities
       can [:read, :create, :update, :destroy], Budget::Heading
       can [:hide, :admin_update], Budget::Investment
       can [:valuate, :comment_valuation], Budget::Investment
-      cannot [:admin_update, :valuate, :comment_valuation],
+      cannot [:valuate, :comment_valuation],
              Budget::Investment, budget: { phase: "finished" }
       can [:select, :deselect], Budget::Investment do |investment|
         investment.feasible? && investment.valuation_finished? && !investment.budget.finished?
