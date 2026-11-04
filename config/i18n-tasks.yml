@@ -141,6 +141,7 @@ ignore_unused:
   - "attributes.*"
   - "date.order"
   - "date.formats.month_year"
+  - "settings.*"
   - "unauthorized.*"
   - "admin.officials.level_*"
   - "admin.hidden_comments.index.filter*"
