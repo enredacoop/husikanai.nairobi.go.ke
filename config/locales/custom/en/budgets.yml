@@ -12,6 +12,7 @@ en:
         group_filter_all: All subcounties
   budgets:
     index:
+      milestones: "Project Tracking Tool"
       see_budget: "See budget"
     groups:
       investments_link: "See all investment projects in %{group}"
@@ -50,6 +51,9 @@ en:
     results:
       heading_selection_title: "By ward"
     executions:
+      link: "Project Tracking"
+      page_title: "%{budget} - Project Tracking Tool"
+      heading: "Project Tracking Tool"
       heading_selection_title: "By ward"
   votes:
     budget_investments:

@@ -12,6 +12,7 @@ es:
         group_filter_all: Todos los subcondados
   budgets:
     index:
+      milestones: "Herramienta de seguimiento de proyectos"
       see_budget: "Ver presupuesto"
     groups:
       investments_link: "Ver todos los proyectos de gasto de %{group}"
@@ -48,6 +49,9 @@ es:
     results:
       heading_selection_title: "Por barrio"
     executions:
+      link: "Seguimiento de proyectos"
+      page_title: "%{budget} - Herramienta de seguimiento de proyectos"
+      heading: "Herramienta de seguimiento de proyectos"
       heading_selection_title: "Por barrio"
   votes:
     budget_investments:

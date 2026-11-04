@@ -12,6 +12,7 @@ sw-KE:
         group_filter_all: Kaunti ndogo zote
   budgets:
     index:
+      milestones: "Zana ya Kufuatilia Miradi"
       see_budget: "Tazama bajeti"
     groups:
       investments_link: "Tazama miradi yote ya uwekezaji katika %{group}"
@@ -24,6 +25,10 @@ sw-KE:
       wards:
         one: "Wadi 1"
         other: "Wadi %{count}"
+    executions:
+      link: "Zana ya Kufuatilia Miradi"
+      page_title: "%{budget} - Zana ya Kufuatilia Miradi"
+      heading: "Zana ya Kufuatilia Miradi"
     investments:
       advanced_search:
         subcounty: "Kaunti ndogo"

@@ -36,7 +36,7 @@ describe "Executions" do
     expect(page).to have_content(investment2.title)
     expect(page).to have_content(investment4.title)
 
-    click_link "Milestones"
+    click_link "Project Tracking Tool"
 
     expect(page).not_to have_content(investment2.title)
     expect(page).not_to have_content(investment3.title)
@@ -56,7 +56,7 @@ describe "Executions" do
     expect(page).to have_content(heading.name)
     expect(page).to have_content(empty_heading.name)
 
-    click_link "Milestones"
+    click_link "Project Tracking Tool"
 
     expect(page).to have_content(heading.name)
     expect(page).not_to have_content(empty_heading.name)

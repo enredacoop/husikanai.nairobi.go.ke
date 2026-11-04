@@ -21,7 +21,7 @@ describe "Budgets" do
       expect(page).to have_content investment.title
     end
 
-    scenario "Finished budgets link to the budget before the results and milestones" do
+    scenario "Finished budgets link to the budget before the results and the project tracking tool" do
       create(:budget)
       finished_budget = create(:budget, :finished, results_enabled: true)
 
@@ -30,7 +30,7 @@ describe "Budgets" do
       within("#budget_#{finished_budget.id}_results") do
         expect(page).to have_link "See budget", href: budget_path(finished_budget)
         expect("See budget").to appear_before("See results")
-        expect("See results").to appear_before("Milestones")
+        expect("See results").to appear_before("Project Tracking Tool")
       end
 
       click_link "See budget"
