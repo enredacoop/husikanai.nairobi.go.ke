@@ -27,5 +27,20 @@ describe Budget::Investment do
 
       expect(results).to eq [in_parklands]
     end
+
+    it "filters by sector and sub-sector" do
+      health = create(:sector)
+      clinics = create(:sector, parent: health)
+      hospitals = create(:sector, parent: health)
+      in_clinics = create(:budget_investment, heading: parklands, sector: health, sub_sector: clinics)
+      in_hospitals = create(:budget_investment, heading: parklands, sector: health, sub_sector: hospitals)
+      create(:budget_investment, heading: parklands, sector: create(:sector))
+      create(:budget_investment, heading: parklands)
+
+      expect(budget.investments.apply_filters_and_search(budget, { sector_id: health.id }))
+        .to match_array [in_clinics, in_hospitals]
+      expect(budget.investments.apply_filters_and_search(budget, { sub_sector_id: clinics.id }))
+        .to eq [in_clinics]
+    end
   end
 end

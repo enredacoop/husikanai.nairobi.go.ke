@@ -4,7 +4,7 @@
   </button>
 
   <div>
-    <%= tag.div class: ("search-filters-row" if headings_filters?) do %>
+    <%= tag.div class: ("search-filters-row" if filters_row?) do %>
       <div class="general-search">
         <label for="search">
           <%= t("shared.advanced_search.general") %>
@@ -40,7 +40,7 @@
         </div>
       </div>
 
-      <% if sdg? && !headings_filters? %>
+      <% if sdg? && !filters_row? %>
         <div class="filter">
           <label for="advanced_search_goal"><%= t("shared.advanced_search.goal") %></label>
           <%= select_tag("advanced_search[goal]", goal_options,
@@ -67,6 +67,24 @@
                          include_blank: t("budgets.investments.advanced_search.all_wards"),
                          data: { show_all_when_blank: true } %>
         </div>
+      <% end %>
+
+      <% if sectors_filters? %>
+        <div class="filter sectors-filter">
+          <label for="sector_id"><%= t("budgets.investments.advanced_search.sector") %></label>
+          <%= select_tag "sector_id", sector_options,
+                         include_blank: t("budgets.investments.advanced_search.all_sectors"),
+                         data: ({ dependent_select: "#sub_sector_id" } if sub_sectors_filter?) %>
+        </div>
+
+        <% if sub_sectors_filter? %>
+          <div class="filter sectors-filter">
+            <label for="sub_sector_id"><%= t("budgets.investments.advanced_search.sub_sector") %></label>
+            <%= select_tag "sub_sector_id", sub_sector_options,
+                           include_blank: t("budgets.investments.advanced_search.all_sub_sectors"),
+                           data: { show_all_when_blank: true } %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
 

@@ -6,7 +6,12 @@ class Shared::AdvancedSearchComponent
   private
 
     def expanded?
-      advanced_search.present? || selected_group_id.present? || selected_heading_id.present?
+      advanced_search.present? || selected_group_id.present? || selected_heading_id.present? ||
+        selected_sector_id.present?
+    end
+
+    def filters_row?
+      headings_filters? || sectors_filters?
     end
 
     # Subcounty and ward filters are only shown in the investments of budgets with several wards
@@ -58,5 +63,51 @@ class Shared::AdvancedSearchComponent
       end
 
       grouped_options_for_select(grouped_options, selected_heading_id)
+    end
+
+    def sectors_filters?
+      budget.present? && sectors.any?
+    end
+
+    def sub_sectors_filter?
+      sectors.any? { |sector| sector.sub_sectors.any? }
+    end
+
+    def sectors
+      @sectors ||= Sector.main.includes(:sub_sectors).to_a
+    end
+
+    def selected_sub_sector
+      return if params[:sub_sector_id].blank?
+
+      @selected_sub_sector ||= sectors.flat_map(&:sub_sectors).find do |sub_sector|
+        sub_sector.id.to_s == params[:sub_sector_id].to_s
+      end
+    end
+
+    def selected_sector_id
+      return unless budget
+
+      if params[:sector_id].present?
+        sectors.find { |sector| sector.id.to_s == params[:sector_id].to_s }&.id
+      else
+        selected_sub_sector&.parent_id
+      end
+    end
+
+    def sector_options
+      options_for_select(sectors.map { |sector| [sector.name, sector.id] }, selected_sector_id)
+    end
+
+    def sub_sector_options
+      grouped_options = sectors.select { |sector| sector.sub_sectors.any? }.map do |sector|
+        options = sector.sub_sectors.map do |sub_sector|
+          [sub_sector.name, sub_sector.id, { data: { parent_id: sector.id }}]
+        end
+
+        [sector.name, options]
+      end
+
+      grouped_options_for_select(grouped_options, selected_sub_sector&.id)
     end
 end

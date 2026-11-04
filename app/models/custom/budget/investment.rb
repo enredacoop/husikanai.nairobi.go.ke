@@ -10,6 +10,9 @@ class Budget
     belongs_to :sector, optional: true
     belongs_to :sub_sector, class_name: "Sector", optional: true
 
+    scope :by_sector, ->(sector_id) { where(sector_id: sector_id) }
+    scope :by_sub_sector, ->(sub_sector_id) { where(sub_sector_id: sub_sector_id) }
+
     validates :actual_cost, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
     validate :sector_is_a_main_sector
     validate :sub_sector_belongs_to_sector
@@ -17,10 +20,12 @@ class Budget
 
     def self.apply_filters_and_search(_budget, params, current_filter = nil)
       investments = all
-      investments = investments.send(current_filter)             if current_filter.present?
-      investments = investments.by_group(params[:group_id])      if params[:group_id].present?
-      investments = investments.by_heading(params[:heading_id])  if params[:heading_id].present?
-      investments = investments.search(params[:search])          if params[:search].present?
+      investments = investments.send(current_filter)                  if current_filter.present?
+      investments = investments.by_group(params[:group_id])           if params[:group_id].present?
+      investments = investments.by_heading(params[:heading_id])       if params[:heading_id].present?
+      investments = investments.by_sector(params[:sector_id])         if params[:sector_id].present?
+      investments = investments.by_sub_sector(params[:sub_sector_id]) if params[:sub_sector_id].present?
+      investments = investments.search(params[:search])               if params[:search].present?
       investments = investments.filter_by(params[:advanced_search])
       investments
     end

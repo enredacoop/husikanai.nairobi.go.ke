@@ -30,6 +30,10 @@ es:
         ward: "Barrio"
         all_subcounties: "Todos los subcondados"
         all_wards: "Todos los barrios"
+        sector: "Sector"
+        sub_sector: "Subsector"
+        all_sectors: "Todos los sectores"
+        all_sub_sectors: "Todos los subsectores"
       form:
         title: "Proponer un nuevo proyecto"
       index:

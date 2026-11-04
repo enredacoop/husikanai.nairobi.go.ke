@@ -88,6 +88,66 @@ describe Shared::AdvancedSearchComponent do
     end
   end
 
+  describe "sector filters" do
+    let!(:health) { create(:sector, name: "Health") }
+    let!(:clinics) { create(:sector, parent: health, name: "Clinics") }
+
+    before do
+      create(:sector, name: "Water")
+      create(:sector, parent: health, name: "Hospitals")
+    end
+
+    it "shows sector and sub-sector filters in the investments of a budget" do
+      render_in_investments
+
+      expect(page).to have_select "Sector", options: ["All sectors", "Health", "Water"]
+      expect(page).to have_select "Sub-sector", options: ["All sub-sectors", "Clinics", "Hospitals"]
+      expect(page.find("option", text: "Clinics")["data-parent-id"]).to eq health.id.to_s
+      expect(page).not_to have_css "select option[selected]"
+    end
+
+    it "applies the sub-sector and its sector when filtering by sub-sector" do
+      render_in_investments(sub_sector_id: clinics.id)
+
+      expect(page).to have_select "Sector", selected: "Health"
+      expect(page).to have_select "Sub-sector", selected: "Clinics"
+      expect(page).to have_css "[aria-expanded='true']", visible: :all
+    end
+
+    it "shows the sector filters in budgets with a single ward" do
+      single = create(:budget)
+      create(:budget_heading, budget: single)
+
+      with_request_url(Rails.application.routes.url_helpers.budget_investments_path(single)) do
+        with_controller_class(Budgets::InvestmentsController) do
+          render_inline Shared::AdvancedSearchComponent.new
+        end
+      end
+
+      expect(page).to have_select "Sector"
+      expect(page).not_to have_select "Ward"
+    end
+
+    it "does not show the sub-sector filter when there are no sub-sectors" do
+      Sector.where.not(parent_id: nil).delete_all
+
+      render_in_investments
+
+      expect(page).to have_select "Sector"
+      expect(page).not_to have_select "Sub-sector"
+    end
+
+    it "does not show the sector filters outside budget investments" do
+      with_request_url "/proposals" do
+        with_controller_class(ProposalsController) do
+          render_inline Shared::AdvancedSearchComponent.new
+        end
+      end
+
+      expect(page).not_to have_select "Sector"
+    end
+  end
+
   it "does not show the filters outside budget investments" do
     with_request_url "/proposals" do
       with_controller_class(ProposalsController) do

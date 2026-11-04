@@ -30,6 +30,10 @@ en:
         ward: "Ward"
         all_subcounties: "All subcounties"
         all_wards: "All wards"
+        sector: "Sector"
+        sub_sector: "Sub-sector"
+        all_sectors: "All sectors"
+        all_sub_sectors: "All sub-sectors"
       form:
         title: "Propose a new project"
       index:

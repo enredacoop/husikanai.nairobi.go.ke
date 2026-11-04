@@ -30,6 +30,10 @@ sw-KE:
         ward: "Wadi"
         all_subcounties: "Kaunti ndogo zote"
         all_wards: "Wadi zote"
+        sector: "Sekta"
+        sub_sector: "Sekta ndogo"
+        all_sectors: "Sekta zote"
+        all_sub_sectors: "Sekta ndogo zote"
       index:
         budget_name: "Bajeti shirikishi:"
         by_group: "Miradi ya uwekezaji katika %{group}"
