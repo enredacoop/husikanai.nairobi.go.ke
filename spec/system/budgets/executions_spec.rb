@@ -58,8 +58,9 @@ describe "Executions" do
 
     click_link "Project Tracking"
 
-    expect(page).to have_content(heading.name)
-    expect(page).not_to have_content(empty_heading.name)
+    expect(page).to have_css ".budgets-executions-heading", text: heading.name
+    expect(page).not_to have_css ".budgets-executions-heading", text: empty_heading.name
+    expect(page).to have_link empty_heading.name
   end
 
   scenario "Show message when there are no winning investments with the selected status" do

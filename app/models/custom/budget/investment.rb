@@ -2,6 +2,30 @@ load Rails.root.join("app", "models", "budget", "investment.rb")
 
 class Budget
   class Investment
+    # SQL equivalents of #milestone_status_id, so filtering and counting by
+    # status doesn't need to load every investment.
+    def self.latest_milestone_status_sql
+      published_until = connection.quote(Date.current.end_of_day)
+
+      <<~SQL.squish
+        (SELECT milestones.status_id FROM milestones
+         WHERE milestones.milestoneable_id = budget_investments.id
+         AND milestones.milestoneable_type = 'Budget::Investment'
+         AND milestones.status_id IS NOT NULL
+         AND milestones.publication_date <= #{published_until}
+         ORDER BY milestones.publication_date DESC, milestones.created_at DESC
+         LIMIT 1)
+      SQL
+    end
+
+    def self.with_latest_milestone_status_id(status_id)
+      where("#{latest_milestone_status_sql} = ?", status_id.to_i)
+    end
+
+    def self.count_by_latest_milestone_status
+      group(Arel.sql(latest_milestone_status_sql)).count
+    end
+
     translates :performance_indicator, touch: true
     translates :target, touch: true
     # Globalizable only defines the accessors (title_en...) of the attributes translated before
