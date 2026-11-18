@@ -1,0 +1,7 @@
+es:
+  polls:
+    index:
+      filters:
+        upcoming: "Próximas"
+    upcoming:
+      not_available: "Esta votación todavía no está disponible para votar."

@@ -1,0 +1,7 @@
+en:
+  polls:
+    index:
+      filters:
+        upcoming: "Upcoming"
+    upcoming:
+      not_available: "This poll is not yet available for voting."
